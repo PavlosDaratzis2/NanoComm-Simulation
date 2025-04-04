@@ -142,6 +142,157 @@
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743766469525</Id>
+					<Name><![CDATA[sendingInterval]]></Name>
+					<X>40</X><Y>-260</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[100]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743766487493</Id>
+					<Name><![CDATA[messagesSentT1]]></Name>
+					<X>40</X><Y>-280</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743766582175</Id>
+					<Name><![CDATA[messagesSentT2]]></Name>
+					<X>40</X><Y>-300</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743766602112</Id>
+					<Name><![CDATA[absorbedThisRun]]></Name>
+					<X>40</X><Y>-200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743766621185</Id>
+					<Name><![CDATA[collisionsThisRun]]></Name>
+					<X>40</X><Y>-180</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743766638557</Id>
+					<Name><![CDATA[runIndex]]></Name>
+					<X>40</X><Y>-320</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743766995681</Id>
+					<Name><![CDATA[absorptionRates]]></Name>
+					<X>40</X><Y>-110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double[]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new double[1000]
+]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743767054031</Id>
+					<Name><![CDATA[intervals]]></Name>
+					<X>40</X><Y>-90</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int[]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new int[1000]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743777469194</Id>
+					<Name><![CDATA[simulationEnded]]></Name>
+					<X>-260</X><Y>-70</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[false]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1743779525636</Id>
+					<Name><![CDATA[experimentStep]]></Name>
+					<X>-260</X><Y>-240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 			</Variables>
 			<Events>
 				<Event>
@@ -174,7 +325,9 @@
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[text.setText("Μόρια που απορροφήθηκαν: " + receiver1.moleculesReceived);
+					<Action><![CDATA[
+if (simulationEnded) return;
+text.setText("Μόρια που απορροφήθηκαν: " + receiver1.moleculesReceived);
 text1.setText("Μόρια τύπου 0: " + receiver1.type0Count);
 text2.setText("Μόρια τύπου 1: " + receiver1.type1Count);]]></Action>
 				</Event>
@@ -208,7 +361,10 @@ text2.setText("Μόρια τύπου 1: " + receiver1.type1Count);]]></Action>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[for (int i = 0; i < molecules.size(); i++) {
+					<Action><![CDATA[if (simulationEnded) return;
+
+
+for (int i = 0; i < molecules.size(); i++) {
     Molecule m1 = molecules.get(i);
     
     for (int j = i + 1; j < molecules.size(); j++) {
@@ -259,7 +415,88 @@ text2.setText("Μόρια τύπου 1: " + receiver1.type1Count);]]></Action>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[text3.setText( java.util.Arrays.toString(receiver1.sectorAbsorptions) );]]></Action>
+					<Action><![CDATA[
+if (simulationEnded) return;
+text3.setText( java.util.Arrays.toString(receiver1.sectorAbsorptions) );]]></Action>
+				</Event>
+				<Event>
+					<Id>1743766745138</Id>
+					<Name><![CDATA[nextRun]]></Name>
+					<X>-260</X><Y>-100</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1743766745136</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1743840000000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[20]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[// Προστασία: Αν έχει ήδη τερματιστεί η προσομοίωση, μην κάνεις τίποτα
+if (simulationEnded) return;
+
+// Υπολογισμός απορρόφησης
+int totalSent = messagesSentT1 + messagesSentT2;
+double absorptionRate = (totalSent > 0) ? ((double) absorbedThisRun / totalSent) * 100.0 : 0.0;
+
+// Καταγραφή
+if (runIndex < absorptionRates.length) {
+    absorptionRates[runIndex] = absorptionRate;
+    intervals[runIndex] = sendingInterval;
+}
+runIndex++;
+
+// Reset
+messagesSentT1 = 0;
+messagesSentT2 = 0;
+absorbedThisRun = 0;
+collisionsThisRun = 0;
+
+// Μείωση sendingInterval
+int newInterval = sendingInterval - 5;
+
+// Έλεγχος τερματισμού
+if (newInterval < 5) {
+    // ✅ Τερματισμός με trace
+    trace("🏁 Τερματισμός: Το Sending Interval έφτασε κάτω από 5.\n");
+
+    // Εύρεση καλύτερου
+    double bestRate = -1.0;
+    int bestInterval = -1;
+    for (int i = 0; i < runIndex; i++) {
+        if (absorptionRates[i] > bestRate) {
+            bestRate = absorptionRates[i];
+            bestInterval = intervals[i];
+        }
+    }
+    trace("🏆 Καλύτερο Sending Interval: " + bestInterval + " sec με απορρόφηση " + bestRate + "%\n");
+
+    simulationEnded = true;
+    stop();  // Σταματάει τη simulation
+    return;
+}
+
+// Ενημέρωση sendInterval
+sendingInterval = newInterval;
+transmitter1.sendingInterval = sendingInterval;
+transmitter2.sendingInterval = sendingInterval;]]></Action>
 				</Event>
 			</Events>
 			<AgentLinks>
@@ -315,6 +552,12 @@ text2.setText("Μόρια τύπου 1: " + receiver1.type1Count);]]></Action>
 							<Name><![CDATA[moleculeType]]></Name>
 							<Value Class="CodeValue">
 								<Code><![CDATA[0]]></Code>
+							</Value>
+						</Parameter>
+						<Parameter>
+							<Name><![CDATA[sendingInterval]]></Name>
+							<Value Class="CodeValue">
+								<Code><![CDATA[this.sendingInterval]]></Code>
 							</Value>
 						</Parameter>
 					</Parameters>
@@ -377,6 +620,12 @@ text2.setText("Μόρια τύπου 1: " + receiver1.type1Count);]]></Action>
 								<Code><![CDATA[1]]></Code>
 							</Value>
 						</Parameter>
+						<Parameter>
+							<Name><![CDATA[sendingInterval]]></Name>
+							<Value Class="CodeValue">
+								<Code><![CDATA[this.sendingInterval]]></Code>
+							</Value>
+						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
 					<Replication Class="CodeValue">
@@ -424,6 +673,12 @@ text2.setText("Μόρια τύπου 1: " + receiver1.type1Count);]]></Action>
 						</GenericParameterSubstituteReference>
 					</GenericParameterSubstitute>
 					<Parameters>
+						<Parameter>
+							<Name><![CDATA[mainRef3]]></Name>
+							<Value Class="CodeValue">
+								<Code><![CDATA[this]]></Code>
+							</Value>
+						</Parameter>
 					</Parameters>
 					<ReplicationFlag>false</ReplicationFlag>
 					<Replication Class="CodeValue">
@@ -778,9 +1033,13 @@ text2.setText("Μόρια τύπου 1: " + receiver1.type1Count);]]></Action>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties Width="100" Height="30">
-						<EntryAction><![CDATA[double dx = uniform(-0.5, 0.5);
-double dy = uniform(-0.5, 0.5);
-moveTo(getX() + dx, getY() + dy);]]></EntryAction>
+						<EntryAction><![CDATA[double noiseX = uniform(-0.2, 0.2);
+double noiseY = uniform(-0.2, 0.2);
+
+double targetX = get_Main().receiver1.getX() + noiseX;
+double targetY = get_Main().receiver1.getY() + noiseY;
+
+moveTo(targetX, targetY);]]></EntryAction>
 						<FillColor/>
 					</Properties>
 				</StatechartElement>
@@ -876,6 +1135,26 @@ moveTo(getX() + dx, getY() + dy);]]></EntryAction>
 						<ClassName><![CDATA[Molecule]]></ClassName>
 						<ItemName><![CDATA[statechart]]></ItemName>
 					</StatechartReference>
+					<LineStyle>SOLID</LineStyle>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineZOrder>UNDER_AGENTS</LineZOrder>
+					<LineArrow>NONE</LineArrow>
+					<LineArrowPosition>END</LineArrowPosition>
+				</AgentLink>
+				<AgentLink>
+					<Id>1743770256352</Id>
+					<Name><![CDATA[mainRef]]></Name>
+					<X>30</X><Y>-220</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<HandleReceiveInConnections>false</HandleReceiveInConnections>
+					<AgentLinkType>SINGLE_LINK</AgentLinkType>
+					<AgentReferenceId>1743611988928</AgentReferenceId>
+					<AgentLinkBidirectional>false</AgentLinkBidirectional>
+					<MessageType><![CDATA[Object]]></MessageType>
 					<LineStyle>SOLID</LineStyle>
 					<LineWidth>1</LineWidth>
 					<LineColor>-16777216</LineColor>
@@ -1056,12 +1335,33 @@ moveTo(getX() + dx, getY() + dy);]]></EntryAction>
 						</ParameterEditor>
 					</Properties>                 
 				</Variable>
+				<Variable Class="Parameter">
+					<Id>1743766672520</Id>
+					<Name><![CDATA[sendingInterval]]></Name>
+					<X>20</X><Y>-370</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[double]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1743766672518</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
 			</Variables>
 			<Events>
 				<Event>
 					<Id>1743613721429</Id>
 					<Name><![CDATA[sendMolecule]]></Name>
-					<X>20</X><Y>-310</Y>
+					<X>10</X><Y>-310</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -1088,14 +1388,23 @@ moveTo(getX() + dx, getY() + dy);]]></EntryAction>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[Molecule m = mainRef1.add_molecules();  // ✅ Χωρίς cast
+					<Action><![CDATA[if (main.simulationEnded) return;
+
+Molecule m = mainRef1.add_molecules();  // ✅ Σωστή μέθοδος για population
 m.type = moleculeType;
 m.isAbsorbed = false;
 
-// Ελαφριά τυχαία απόκλιση θέσης για να αποφύγουμε άμεσες συγκρούσεις
+// Ελαφριά τυχαία μετατόπιση θέσης
 double offsetX = uniform(-8, 8);
 double offsetY = uniform(-8, 8);
-m.setXY(getX() + offsetX, getY() + offsetY);]]></Action>
+m.setXY(getX() + offsetX, getY() + offsetY);
+
+// Καταγραφή ποιος transmitter έστειλε
+if (moleculeType == 0) {
+    mainRef1.messagesSentT1++;
+} else if (moleculeType == 1) {
+    mainRef1.messagesSentT2++;
+}]]></Action>
 				</Event>
 			</Events>
 			<AgentLinks>
@@ -1329,6 +1638,27 @@ m.setXY(getX() + offsetX, getY() + offsetY);]]></Action>
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="Parameter">
+					<Id>1743768852384</Id>
+					<Name><![CDATA[mainRef3]]></Name>
+					<X>20</X><Y>-240</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" ModificatorType="STATIC">
+						<Type><![CDATA[Main]]></Type>
+						<UnitType><![CDATA[NONE]]></UnitType>
+						<SdArray>false</SdArray>
+						<ParameterEditor>
+							<Id>1743768852382</Id>
+							<EditorContolType>TEXT_BOX</EditorContolType>
+							<MinSliderValue><![CDATA[0]]></MinSliderValue>
+							<MaxSliderValue><![CDATA[100]]></MaxSliderValue>
+							<DelimeterType>NO_DELIMETER</DelimeterType>
+						</ParameterEditor>
+					</Properties>                 
+				</Variable>
 			</Variables>
 			<Events>
 				<Event>
@@ -1356,30 +1686,48 @@ m.setXY(getX() + offsetX, getY() + offsetY);]]></Action>
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</OccurrenceTime>
 						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
+							<Code><![CDATA[0.1]]></Code>
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[for (int i = 0; i < main.molecules.size(); i++) {
-    Molecule m = main.molecules.get(i);
+					<Action><![CDATA[
+if (main.simulationEnded) return;
+// ➤ DEBUG: Έλεγχος αν συνδέθηκε σωστά ο Main
+if (mainRef3 == null) {
+    trace("⚠️ mainRef3 είναι NULL!\n");
+    return;
+}
 
-    if (!m.isAbsorbed && distanceTo(m) < 1.5) {
+// ➤ DEBUG: Πλήθος μορίων
+trace("🧪 Molecules in Main: " + mainRef3.molecules.size() + "\n");
+
+for (int i = 0; i < mainRef3.molecules.size(); i++) {
+    Molecule m = mainRef3.molecules.get(i);
+    double dist = distanceTo(m);
+
+    trace("👉 Molecule " + i + " distance: " + dist + "\n");
+
+    if (!m.isAbsorbed && dist < 1.5) {
         m.isAbsorbed = true;
-
         moleculesReceived++;
-        if (m.type == 0)
-            type0Count++;
-        else if (m.type == 1)
-            type1Count++;
 
-        // Υπολογισμός γωνίας και τομέα (sector)
+        if (m.type == 0) {
+            type0Count++;
+        } else if (m.type == 1) {
+            type1Count++;
+        }
+
+        // ➕ Καταγραφή απορρόφησης
+        mainRef3.absorbedThisRun++;
+
+        // Υπολογισμός γωνίας και τομέα
         double angle = Math.atan2(m.getY() - getY(), m.getX() - getX());
         if (angle < 0) angle += 2 * Math.PI;
         int sector = (int)(angle / (2 * Math.PI / 32));
-
-        // Αύξηση του μετρητή για τον συγκεκριμένο τομέα
         sectorAbsorptions[sector]++;
+
+        trace("✅ Absorbed Molecule #" + i + " | type=" + m.type + " | sector=" + sector + "\n");
     }
 }]]></Action>
 				</Event>
