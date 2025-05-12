@@ -7,7 +7,7 @@
 <AnyLogicWorkspace WorkspaceVersion="1.9" AnyLogicVersion="8.9.4.202503101138" AlpVersion="8.9.4">
 <Model>
 	<Id>1741955706126</Id>
-	<Name><![CDATA[Biological_Nanonetworks_26 (1)]]></Name>
+	<Name><![CDATA[nanocomm]]></Name>
 	<EngineVersion>6</EngineVersion>
 	<JavaPackageName><![CDATA[biological_nanonetworks_25]]></JavaPackageName>
 	<ModelTimeUnit><![CDATA[Second]]></ModelTimeUnit>
@@ -296,7 +296,7 @@
 					<X>-167</X><Y>-244</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -356,7 +356,7 @@
 					<X>-330</X><Y>20</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
@@ -371,7 +371,7 @@
 					<X>-330</X><Y>50</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
@@ -476,7 +476,7 @@
 					<X>-660</X><Y>30</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -491,7 +491,7 @@
 					<X>-660</X><Y>60</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -506,7 +506,7 @@
 					<X>-660</X><Y>90</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -521,7 +521,7 @@
 					<X>-660</X><Y>120</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -536,7 +536,7 @@
 					<X>-332</X><Y>246</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -551,7 +551,7 @@
 					<X>-338</X><Y>272</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -566,7 +566,7 @@
 					<X>-308</X><Y>297</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -581,7 +581,7 @@
 					<X>-308</X><Y>317</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -593,7 +593,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746968149207</Id>
 					<Name><![CDATA[totalCollisions]]></Name>
-					<X>-660</X><Y>260</Y>
+					<X>-300</X><Y>350</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -628,7 +628,7 @@
 					<X>-320</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties TriggerType="timeout" Mode="cyclic">
 						<Timeout Class="CodeUnitValue">
@@ -659,55 +659,7 @@ datasetType1Absorbed.add(getTime(), absorbedType1SinceLastReport);
 absorbedType0SinceLastReport = 0;
 absorbedType1SinceLastReport = 0;]]></Action>
 				</Event>
-				<Event>
-					<Id>1746968085119</Id>
-					<Name><![CDATA[collisionCheckEvent]]></Name>
-					<X>-660</X><Y>230</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Properties TriggerType="timeout" Mode="cyclic">
-						<Timeout Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</Timeout>
-						<Rate Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
-						</Rate>
-						<Id>1746968085117</Id>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1747036800000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[0.01]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</RecurrenceCode>
-						<Condition><![CDATA[false]]></Condition>
-					</Properties>
-					<Action><![CDATA[checkMoleculesCollisions();]]></Action>
-				</Event>
 			</Events>
-			<Functions>
-				<Function AccessType="default" StaticFunction="false">
-					<ReturnModificator>VOID</ReturnModificator>
-					<ReturnType><![CDATA[double]]></ReturnType>
-					<Id>1746970785722</Id>
-					<Name><![CDATA[checkMoleculesCollisions]]></Name>
-					<X>-660</X><Y>300</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[for (Information_Molecules m : information_Moleculeses) {
-    m.checkCollisions();
-}]]></Body>
-				</Function>
-			</Functions>
 			<AnalysisData>
     			<DataSet>
 					<Id>1742667142322</Id>
@@ -3389,7 +3341,7 @@ If absorbBacteria is true reports the number of bacteria absorbed since last rep
 					<ShowLabel>true</ShowLabel>
 					<Properties Width="100" Height="30">
 						<EntryAction><![CDATA[run();
-checkCollisions();]]></EntryAction>
+]]></EntryAction>
 						<FillColor/>
 					</Properties>
 				</StatechartElement>
@@ -3677,48 +3629,35 @@ newY = curY + sin(toRadians(getIndex()%360));
 moveTo(newX, newY);
 //traceln(time()+ "eimai o "+getIndex() +" kai tumble  "+ heading + " kai pao x --> " + getX() + " y--> "+ getY());
 if (main.collisionsEnabled) {
-    Collection<Information_Molecules> nearby = agentsInRange(main.information_Moleculeses, 2); // π.χ. ακτίνα 2
+    Collection<Information_Molecules> nearby = agentsInRange(main.information_Moleculeses, 2.5);
 
     for (Information_Molecules other : nearby) {
-        if (other == this || other.absorbed || this.absorbed) continue;
+        if (other == this) continue;
 
-        double dist = this.distanceTo(other);
+        double dx = this.getX() - other.getX();
+        double dy = this.getY() - other.getY();
+        double distSquared = dx * dx + dy * dy;
 
-        if (dist < 1.5) {
+        if (distSquared < 2.5 * 2.5) { // Πιο αυστηρό threshold
             main.totalCollisions++;
 
-            // Τυχαία αλλαγή κατεύθυνσης και για τα δύο μόρια
-            double newHeadingThis = uniform(360);
-            double newHeadingOther = uniform(360);
+            // Υπολογισμός διεύθυνσης ανάκρουσης
+            double dist = Math.sqrt(distSquared);
+            if (dist == 0) dist = 0.01;
 
-            this.Heading = newHeadingThis;
-            other.Heading = newHeadingOther;
+            double repelX = dx / dist;
+            double repelY = dy / dist;
+
+            double pushDistance = 1.0;
+
+            // Απώθηση
+            this.setXY(getX() + repelX * pushDistance, getY() + repelY * pushDistance);
+            other.setXY(other.getX() - repelX * pushDistance, other.getY() - repelY * pushDistance);
+
+            // Νέα κατεύθυνση προς την πορεία της απώθησης
+            this.Heading = toDegrees(Math.atan2(repelY, repelX));
+            other.Heading = toDegrees(Math.atan2(-repelY, -repelX));
         }
-    }
-}]]></Body>
-				</Function>
-				<Function AccessType="default" StaticFunction="false">
-					<ReturnModificator>VOID</ReturnModificator>
-					<ReturnType><![CDATA[double]]></ReturnType>
-					<Id>1746968681992</Id>
-					<Name><![CDATA[checkCollisions]]></Name>
-					<X>-661</X><Y>199</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[if (!main.collisionsEnabled || this.absorbed) return;
-
-for (Information_Molecules other : main.information_Moleculeses) {
-    if (other == this || other.absorbed) continue;
-
-    double dist = distanceTo(other);
-    if (dist < 1.0) {
-        main.totalCollisions++;
-        double newHeadingThis = uniform(360);
-        double newHeadingOther = uniform(360);
-        this.Heading = newHeadingThis;
-        other.Heading = newHeadingOther;
     }
 }]]></Body>
 				</Function>
