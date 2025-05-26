@@ -94,7 +94,7 @@
 			<ScaleRuler>
 				<Id>1741955706133</Id>
 				<Name><![CDATA[scale]]></Name>
-				<X>0</X><Y>-150</Y>
+				<X>40</X><Y>-290</Y>
 				<PublicFlag>false</PublicFlag>
 				<PresentationFlag>false</PresentationFlag>
 				<ShowLabel>false</ShowLabel>
@@ -233,7 +233,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1742021637207</Id>
 					<Name><![CDATA[individualThreshold]]></Name>
-					<X>-399</X><Y>-161</Y>
+					<X>-400</X><Y>-190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -241,14 +241,14 @@
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[38]]></Code>
+							<Code><![CDATA[34]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1745591239868</Id>
 					<Name><![CDATA[individualDownThreshold]]></Name>
-					<X>-374</X><Y>-92</Y>
+					<X>-400</X><Y>-170</Y>
 					<Label><X>9</X><Y>-3</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -256,14 +256,14 @@
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[7]]></Code>
+							<Code><![CDATA[9]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1745607409773</Id>
 					<Name><![CDATA[NUMBER_OF_MESSAGES_RECEIVED]]></Name>
-					<X>510</X><Y>70</Y>
+					<X>750</X><Y>40</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -278,7 +278,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1745608408619</Id>
 					<Name><![CDATA[passeddownThresholdA]]></Name>
-					<X>-324</X><Y>-53</Y>
+					<X>-400</X><Y>-150</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -308,7 +308,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1745780581588</Id>
 					<Name><![CDATA[bacteriaPerPulse]]></Name>
-					<X>140</X><Y>270</Y>
+					<X>160</X><Y>490</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -323,7 +323,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746958699297</Id>
 					<Name><![CDATA[totalAbsorbedType0]]></Name>
-					<X>-160</X><Y>-210</Y>
+					<X>740</X><Y>-350</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -338,7 +338,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746958716525</Id>
 					<Name><![CDATA[totalAbsorbedType1]]></Name>
-					<X>-160</X><Y>-180</Y>
+					<X>740</X><Y>-330</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -353,7 +353,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746959912832</Id>
 					<Name><![CDATA[absorbedType0SinceLastReport]]></Name>
-					<X>-330</X><Y>20</Y>
+					<X>-660</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -368,7 +368,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746959928331</Id>
 					<Name><![CDATA[absorbedType1SinceLastReport]]></Name>
-					<X>-330</X><Y>50</Y>
+					<X>-660</X><Y>160</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -383,70 +383,70 @@
 				<Variable Class="PlainVariable">
 					<Id>1746959946693</Id>
 					<Name><![CDATA[thresholdType0_Upper]]></Name>
-					<X>-330</X><Y>80</Y>
+					<X>-660</X><Y>180</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[22]]></Code>
+							<Code><![CDATA[20]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1746959962281</Id>
 					<Name><![CDATA[thresholdType0_Lower]]></Name>
-					<X>-330</X><Y>110</Y>
+					<X>-660</X><Y>200</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[13]]></Code>
+							<Code><![CDATA[5]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1746959978217</Id>
 					<Name><![CDATA[thresholdType1_Upper]]></Name>
-					<X>-330</X><Y>140</Y>
+					<X>-660</X><Y>220</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[22]]></Code>
+							<Code><![CDATA[20]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1746959995008</Id>
 					<Name><![CDATA[thresholdType1_Lower]]></Name>
-					<X>-330</X><Y>170</Y>
+					<X>-660</X><Y>240</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[13]]></Code>
+							<Code><![CDATA[5]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
 					<Id>1746960788513</Id>
 					<Name><![CDATA[messagesReceivedType0]]></Name>
-					<X>80</X><Y>320</Y>
+					<X>630</X><Y>310</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
@@ -458,10 +458,10 @@
 				<Variable Class="PlainVariable">
 					<Id>1746960805951</Id>
 					<Name><![CDATA[messagesReceivedType1]]></Name>
-					<X>360</X><Y>280</Y>
+					<X>370</X><Y>320</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
@@ -533,7 +533,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746964691350</Id>
 					<Name><![CDATA[passedThresholdType2]]></Name>
-					<X>-332</X><Y>246</Y>
+					<X>-660</X><Y>290</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -548,7 +548,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746964706351</Id>
 					<Name><![CDATA[passedDownThresholdType2]]></Name>
-					<X>-338</X><Y>272</Y>
+					<X>-660</X><Y>310</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -563,7 +563,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746964723012</Id>
 					<Name><![CDATA[passedThresholdType3]]></Name>
-					<X>-308</X><Y>297</Y>
+					<X>-660</X><Y>330</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -578,7 +578,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746964723027</Id>
 					<Name><![CDATA[passedDownThresholdType3]]></Name>
-					<X>-308</X><Y>317</Y>
+					<X>-660</X><Y>350</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -593,7 +593,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746968149207</Id>
 					<Name><![CDATA[totalCollisions]]></Name>
-					<X>-300</X><Y>350</Y>
+					<X>740</X><Y>-290</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -608,7 +608,7 @@
 				<Variable Class="PlainVariable">
 					<Id>1746969053995</Id>
 					<Name><![CDATA[collisionsEnabled]]></Name>
-					<X>-295</X><Y>373</Y>
+					<X>740</X><Y>-270</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -616,7 +616,112 @@
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[true]]></Code>
+							<Code><![CDATA[false]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747066758195</Id>
+					<Name><![CDATA[gridSize]]></Name>
+					<X>-660</X><Y>450</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[20]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747066804997</Id>
+					<Name><![CDATA[cols]]></Name>
+					<X>-660</X><Y>480</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[(int)((maxX - minX) / gridSize) + 1]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747066846878</Id>
+					<Name><![CDATA[rows]]></Name>
+					<X>-660</X><Y>510</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[(int)((maxY - minY) / gridSize) + 1]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747066881585</Id>
+					<Name><![CDATA[spatialGrid]]></Name>
+					<X>-660</X><Y>540</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[ArrayList[][]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new ArrayList[cols][rows]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747753826819</Id>
+					<Name><![CDATA[absorbedType0InRange]]></Name>
+					<X>-270</X><Y>430</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747753842656</Id>
+					<Name><![CDATA[absorbedType1InRange]]></Name>
+					<X>-270</X><Y>410</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747927408066</Id>
+					<Name><![CDATA[totalAbsorbedAll]]></Name>
+					<X>740</X><Y>-310</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -625,7 +730,7 @@
 				<Event>
 					<Id>1746960123140</Id>
 					<Name><![CDATA[updateAbsorptionCharts]]></Name>
-					<X>-320</X><Y>200</Y>
+					<X>-660</X><Y>270</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -652,19 +757,171 @@
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[datasetType0Absorbed.add(getTime(), absorbedType0SinceLastReport);
-datasetType1Absorbed.add(getTime(), absorbedType1SinceLastReport);
+					<Action><![CDATA[datasetInRange_Type0.add(getTime(), absorbedType0SinceLastReport);
+datasetInRange_Type1.add(getTime(), absorbedType1SinceLastReport);
 
 // Επαναφορά προσωρινών μετρητών
 absorbedType0SinceLastReport = 0;
 absorbedType1SinceLastReport = 0;]]></Action>
 				</Event>
+				<Event>
+					<Id>1747066936288</Id>
+					<Name><![CDATA[updateSpatialGrid]]></Name>
+					<X>-660</X><Y>570</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1747066936286</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1747123200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[0.01]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[// Καθαρισμός grid
+for (int x = 0; x < cols; x++) {
+    for (int y = 0; y < rows; y++) {
+        if (spatialGrid[x][y] == null)
+            spatialGrid[x][y] = new ArrayList<>();
+        else
+            spatialGrid[x][y].clear();
+    }
+}
+
+// Γέμισμα grid με μόρια
+for (Information_Molecules m : information_Moleculeses) {
+    int col = (int)((m.getX() - minX) / gridSize);
+    int row = (int)((m.getY() - minY) / gridSize);
+
+    if (col >= 0 && col < cols && row >= 0 && row < rows) {
+        spatialGrid[col][row].add(m);
+    }
+}]]></Action>
+				</Event>
+				<Event>
+					<Id>1747753877014</Id>
+					<Name><![CDATA[updateAbsorbedInRange]]></Name>
+					<X>-270</X><Y>380</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1747753877012</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1747814400000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[0.1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[int count0 = 0;
+int count1 = 0;
+
+// Πάρε τον receiver
+REceiver_BioNanomachine receiver = rEceiver_BioNanomachine;
+
+// Για κάθε μόριο στον πληθυσμό
+for (Information_Molecules m : information_Moleculeses) {
+    // Αν είναι απορροφημένο και κοντά στον receiver
+    if (m.absorbed && receiver.distanceTo(m) < 1.5) {
+        if (m.type.equals("0")) count0++;
+        else if (m.type.equals("1")) count1++;
+    }
+}
+
+// Ενημέρωση μεταβλητών για το γράφημα
+absorbedType0InRange = count0;
+absorbedType1InRange = count1;]]></Action>
+				</Event>
 			</Events>
+			<Functions>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1747906913779</Id>
+					<Name><![CDATA[updateBarAbsorptionsTotal]]></Name>
+					<X>80</X><Y>640</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[for (int i = 0; i < 36; i++) {
+    double current = barAbsorptionsTotal.get(i).getValue();
+    double added = rEceiver_BioNanomachine.sectorAbsorptions_Total[i];
+    barAbsorptionsTotal.get(i).setValue(current + added);
+    rEceiver_BioNanomachine.sectorAbsorptions_Total[i] = 0.0; // reset
+}]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1747907983068</Id>
+					<Name><![CDATA[updateBarAbsorptionsType0]]></Name>
+					<X>390</X><Y>660</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[for (int i = 0; i < 36; i++) {
+    double current = barChartAbsorptionsType0.get(i).getValue();
+    double added = rEceiver_BioNanomachine.sectorAbsorptions_Type0[i];
+    barChartAbsorptionsType0.get(i).setValue(current + added);
+    rEceiver_BioNanomachine.sectorAbsorptions_Type0[i] = 0.0; // reset
+}]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1747908005415</Id>
+					<Name><![CDATA[updateBarAbsorptionsType1]]></Name>
+					<X>690</X><Y>660</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[for (int i = 0; i < 36; i++) {
+    double current = barChartAbsorptionsType1.get(i).getValue();
+    double added = rEceiver_BioNanomachine.sectorAbsorptions_Type1[i];
+    barChartAbsorptionsType1.get(i).setValue(current + added);
+    rEceiver_BioNanomachine.sectorAbsorptions_Type1[i] = 0.0; // reset
+}]]></Body>
+				</Function>
+			</Functions>
 			<AnalysisData>
     			<DataSet>
 					<Id>1742667142322</Id>
 					<Name><![CDATA[info_molecules_Inrange]]></Name>
-					<X>90</X><Y>60</Y>
+					<X>-270</X><Y>490</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -689,59 +946,9 @@ absorbedType1SinceLastReport = 0;]]></Action>
 					<SamplesToKeep>200000</SamplesToKeep>
 				</DataSet>
     			<DataSet>
-					<Id>1746950276959</Id>
-					<Name><![CDATA[thresholdUpperDataset]]></Name>
-					<X>550</X><Y>130</Y>
-					<Label><X>15</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>false</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<AutoUpdate>false</AutoUpdate>
-					<RecurrenceProperties>
-						<Id>1746950276957</Id>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1746950400000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</RecurrenceCode>
-					</RecurrenceProperties>
-					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
-				</DataSet>
-    			<DataSet>
-					<Id>1746950280639</Id>
-					<Name><![CDATA[thresholdLowerDataset]]></Name>
-					<X>550</X><Y>160</Y>
-					<Label><X>15</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>false</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<AutoUpdate>false</AutoUpdate>
-					<RecurrenceProperties>
-						<Id>1746950280637</Id>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1746950400000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</RecurrenceCode>
-					</RecurrenceProperties>
-					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
-				</DataSet>
-    			<DataSet>
 					<Id>1746960019236</Id>
-					<Name><![CDATA[datasetType0Absorbed]]></Name>
-					<X>-90</X><Y>80</Y>
+					<Name><![CDATA[datasetInRange_Type0]]></Name>
+					<X>-270</X><Y>470</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -761,12 +968,13 @@ absorbedType1SinceLastReport = 0;]]></Action>
 						</RecurrenceCode>
 					</RecurrenceProperties>
 					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
+					<VerticalAxisExpression><![CDATA[absorbedType0InRange]]></VerticalAxisExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
 				</DataSet>
     			<DataSet>
 					<Id>1746960031139</Id>
-					<Name><![CDATA[datasetType1Absorbed]]></Name>
-					<X>-90</X><Y>110</Y>
+					<Name><![CDATA[datasetInRange_Type1]]></Name>
+					<X>-270</X><Y>450</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>false</PresentationFlag>
@@ -786,114 +994,15 @@ absorbedType1SinceLastReport = 0;]]></Action>
 						</RecurrenceCode>
 					</RecurrenceProperties>
 					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
-				</DataSet>
-    			<DataSet>
-					<Id>1746960039896</Id>
-					<Name><![CDATA[datasetType0ThresholdsUpper]]></Name>
-					<X>-90</X><Y>140</Y>
-					<Label><X>15</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>false</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<AutoUpdate>false</AutoUpdate>
-					<RecurrenceProperties>
-						<Id>1746960039894</Id>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1747036800000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</RecurrenceCode>
-					</RecurrenceProperties>
-					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
-				</DataSet>
-    			<DataSet>
-					<Id>1746960080815</Id>
-					<Name><![CDATA[datasetType0ThresholdsLower]]></Name>
-					<X>-90</X><Y>170</Y>
-					<Label><X>15</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>false</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<AutoUpdate>false</AutoUpdate>
-					<RecurrenceProperties>
-						<Id>1746960080813</Id>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1747036800000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</RecurrenceCode>
-					</RecurrenceProperties>
-					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
-				</DataSet>
-    			<DataSet>
-					<Id>1746960091892</Id>
-					<Name><![CDATA[datasetType1ThresholdsUpper]]></Name>
-					<X>-90</X><Y>200</Y>
-					<Label><X>15</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>false</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<AutoUpdate>false</AutoUpdate>
-					<RecurrenceProperties>
-						<Id>1746960091890</Id>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1747036800000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</RecurrenceCode>
-					</RecurrenceProperties>
-					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
-				</DataSet>
-    			<DataSet>
-					<Id>1746960108077</Id>
-					<Name><![CDATA[datasetType1ThresholdsLower]]></Name>
-					<X>-90</X><Y>230</Y>
-					<Label><X>15</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>false</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<AutoUpdate>false</AutoUpdate>
-					<RecurrenceProperties>
-						<Id>1746960108075</Id>
-						<OccurrenceAtTime>true</OccurrenceAtTime>
-						<OccurrenceDate>1747036800000</OccurrenceDate>
-						<OccurrenceTime Class="CodeUnitValue">
-							<Code><![CDATA[0]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</OccurrenceTime>
-						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</RecurrenceCode>
-					</RecurrenceProperties>
-					<FreezeXAxis>true</FreezeXAxis>
-					<SamplesToKeep>100</SamplesToKeep>
+					<VerticalAxisExpression><![CDATA[absorbedType1InRange]]></VerticalAxisExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
 				</DataSet>
 			</AnalysisData>
 			<AgentLinks>
 				<AgentLink>
 					<Id>1741955706131</Id>
 					<Name><![CDATA[connections]]></Name>
-					<X>50</X><Y>-50</Y>
+					<X>50</X><Y>-240</Y>
 					<Label><X>15</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1034,7 +1143,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
 				<EmbeddedObject>
 					<Id>1746954809857</Id>
 					<Name><![CDATA[transmitter1_BioNanomachine]]></Name>
-					<X>-200</X><Y>-350</Y>
+					<X>-210</X><Y>-350</Y>
 					<Label><X>-95</X><Y>-25</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1170,7 +1279,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
     			<TimePlot>
 					<Id>1742669149972</Id>
 					<Name><![CDATA[plot]]></Name>
-					<X>220</X><Y>20</Y>
+					<X>470</X><Y>20</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1227,7 +1336,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
 						<Title><![CDATA[MOLECULES IN RANGE]]></Title>
 					<Id>1742669151719</Id>
 					<Expression><![CDATA[info_molecules_Inrange]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-65536</Color>
 					<Expression2><![CDATA[0]]></Expression2>
 					<Expression2Flag>false</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
@@ -1237,8 +1346,8 @@ absorbedType1SinceLastReport = 0;]]></Action>
 						<Title><![CDATA[thresholdUpperDataset]]></Title>
 					<Id>1746950336978</Id>
 					<Expression><![CDATA[thresholdUpperDataset]]></Expression>
-					<Color>-65536</Color>
-					<Expression2><![CDATA[37]]></Expression2>
+					<Color>-16776961</Color>
+					<Expression2><![CDATA[34]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
@@ -1247,8 +1356,8 @@ absorbedType1SinceLastReport = 0;]]></Action>
 						<Title><![CDATA[thresholdLowerDataset]]></Title>
 					<Id>1746950437396</Id>
 					<Expression><![CDATA[thresholdLowerDataset]]></Expression>
-					<Color>-65536</Color>
-					<Expression2><![CDATA[7]]></Expression2>
+					<Color>-16776961</Color>
+					<Expression2><![CDATA[9]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
@@ -1261,7 +1370,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
 				<EmbeddedObjectPresentation>
 					<Id>1746954811633</Id>
 					<Name><![CDATA[transmitter1_BioNanomachine_presentation]]></Name>
-					<X>200</X><Y>0</Y>
+					<X>300</X><Y>0</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1279,7 +1388,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
 				<EmbeddedObjectPresentation>
 					<Id>1746954824409</Id>
 					<Name><![CDATA[transmitter2_BioNanomachine_presentation]]></Name>
-					<X>0</X><Y>200</Y>
+					<X>0</X><Y>300</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1297,7 +1406,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
     			<TimePlot>
 					<Id>1746960217440</Id>
 					<Name><![CDATA[Graph_Type0_Absorption]]></Name>
-					<X>290</X><Y>280</Y>
+					<X>560</X><Y>320</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1319,14 +1428,14 @@ absorbedType1SinceLastReport = 0;]]></Action>
 					</RecurrenceProperties>
 					<EmbeddedIcon>false</EmbeddedIcon>
 					<Width>260</Width>
-					<Height>210</Height>
+					<Height>220</Height>
 					<BackgroundColor/>
 					<BorderColor/>
 					<ChartArea>
 						<XOffset>50</XOffset>
 						<YOffset>30</YOffset>
 						<Width>180</Width>
-						<Height>120</Height>
+						<Height>130</Height>
 						<BackgroundColor>-1</BackgroundColor>
 						<BorderColor>-16777216</BorderColor>
 						<GridColor>-12566464</GridColor>
@@ -1350,32 +1459,12 @@ absorbedType1SinceLastReport = 0;]]></Action>
 					<DrawLine>true</DrawLine>
 					<Interpolation>LINEAR</Interpolation>
 					<DatasetExpression>  
-						<Title><![CDATA[Title]]></Title>
+						<Title><![CDATA[datasetType0Absorbed]]></Title>
 					<Id>1746960218854</Id>
-					<Expression><![CDATA[datasetType0Absorbed]]></Expression>
+					<Expression><![CDATA[datasetInRange_Type0]]></Expression>
 					<Color>-65536</Color>
 					<Expression2><![CDATA[0]]></Expression2>
 					<Expression2Flag>false</Expression2Flag>
-						<PointStyle>NONE</PointStyle>
-						<LineWidth>1.0</LineWidth>
-					</DatasetExpression>
-					<DatasetExpression>  
-						<Title><![CDATA[datasetType0ThresholdsUpper]]></Title>
-					<Id>1746960249613</Id>
-					<Expression><![CDATA[datasetType0ThresholdsUpper]]></Expression>
-					<Color>-16777216</Color>
-					<Expression2><![CDATA[20]]></Expression2>
-					<Expression2Flag>true</Expression2Flag>
-						<PointStyle>NONE</PointStyle>
-						<LineWidth>1.0</LineWidth>
-					</DatasetExpression>
-					<DatasetExpression>  
-						<Title><![CDATA[datasetType0ThresholdsLower]]></Title>
-					<Id>1746960265574</Id>
-					<Expression><![CDATA[datasetType0ThresholdsLower]]></Expression>
-					<Color>-16711681</Color>
-					<Expression2><![CDATA[10]]></Expression2>
-					<Expression2Flag>true</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
 					</DatasetExpression>
@@ -1387,7 +1476,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
     			<TimePlot>
 					<Id>1746960299072</Id>
 					<Name><![CDATA[Graph_Type1_Absorption]]></Name>
-					<X>10</X><Y>310</Y>
+					<X>290</X><Y>330</Y>
 					<Label><X>0</X><Y>-10</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -1442,29 +1531,965 @@ absorbedType1SinceLastReport = 0;]]></Action>
 					<DatasetExpression>  
 						<Title><![CDATA[datasetType1Absorbed]]></Title>
 					<Id>1746960301161</Id>
-					<Expression><![CDATA[datasetType1Absorbed]]></Expression>
-					<Color>-16744448</Color>
+					<Expression><![CDATA[datasetInRange_Type1]]></Expression>
+					<Color>-65536</Color>
 					<Expression2><![CDATA[0]]></Expression2>
 					<Expression2Flag>false</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
 					</DatasetExpression>
-					<DatasetExpression>  
-						<Title><![CDATA[datasetType1ThresholdsUpper]]></Title>
-					<Id>1746960338754</Id>
-					<Expression><![CDATA[datasetType1ThresholdsUpper]]></Expression>
+					<SamplesToKeep>100</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[100]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<BarChart>
+					<Id>1747906196949</Id>
+					<Name><![CDATA[barAbsorptionsTotal]]></Name>
+					<X>40</X><Y>690</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1747906196947</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1747987200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[0.1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<DataItem>
+					<Id>1747906197907</Id>
+					<Expression><![CDATA[0.0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 0]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906529824</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 1]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906535103</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 2]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906544885</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 3]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906549514</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 4]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906553576</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 5]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906557485</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 6]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906561593</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 7]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906566724</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[sector 8]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906570218</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 9]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906575327</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 10]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906578918</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 11]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906585145</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 12]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906589757</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 13]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906595055</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 14]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906598780</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 15]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906602836</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 16]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906607454</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[sector 17]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906611266</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 18]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906615567</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 19]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906620116</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 20]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906624145</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 21]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906629310</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 22]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906634151</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 23]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906638626</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 24]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906643015</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 25]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906647150</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[sector 26]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906652620</Id>
+					<Expression><![CDATA[0]]></Expression>
 					<Color>-65281</Color>
-					<Expression2><![CDATA[20]]></Expression2>
+						<Title><![CDATA[sector 27]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906658309</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[sector 28]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906663001</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[sector 29]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906667404</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[sector 30]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906671614</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[sector 31]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906676341</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[sector 32]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906680742</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[sector 33]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906685541</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[sector 34]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747906690268</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[Sector 35]]></Title>
+					</DataItem>
+					<ScaleFromExpression><![CDATA[0]]></ScaleFromExpression>
+					<ScaleToExpression><![CDATA[35]]></ScaleToExpression>
+					<ScaleType>FIXED</ScaleType>
+					<Bars>
+						<Direction>UP</Direction>
+						<RelativeWidth>0.8</RelativeWidth>
+					</Bars>
+    			</BarChart>
+    			<BarChart>
+					<Id>1747908053137</Id>
+					<Name><![CDATA[barChartAbsorptionsType0]]></Name>
+					<X>330</X><Y>690</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1747908053135</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1747987200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[0.1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<DataItem>
+					<Id>1747908056291</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s0]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908081675</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s1]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908093502</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s2]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908104931</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s3]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908110373</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s4]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908117068</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s5]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908123293</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s6]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908130157</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s7]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908137393</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s8]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908142821</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s9]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908148175</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s10]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908153820</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s11]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908160094</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s12]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908165670</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s13]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908170862</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s14]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908176909</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s15]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908183133</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s16]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908190821</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s17]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908196982</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s18]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908203575</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s19]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908206286</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s20]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908209437</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s21]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908212812</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s22]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908230025</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s23]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908233529</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s24]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908236524</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s25]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908239551</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s26]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908259346</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s27]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908262819</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s28]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908266310</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s29]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908270755</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s30]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908274106</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s31]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908277900</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s32]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908283143</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s33]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908286726</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s34]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908328234</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s35]]></Title>
+					</DataItem>
+					<ScaleFromExpression><![CDATA[0]]></ScaleFromExpression>
+					<ScaleToExpression><![CDATA[35]]></ScaleToExpression>
+					<ScaleType>FIXED</ScaleType>
+					<Bars>
+						<Direction>UP</Direction>
+						<RelativeWidth>0.8</RelativeWidth>
+					</Bars>
+    			</BarChart>
+    			<BarChart>
+					<Id>1747908369180</Id>
+					<Name><![CDATA[barChartAbsorptionsType1]]></Name>
+					<X>640</X><Y>690</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1747908369178</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1747987200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[0.1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<DataItem>
+					<Id>1747908369142</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s0]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369143</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s1]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369144</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s2]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369145</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s3]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369146</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s4]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369147</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s5]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369148</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s6]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369149</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s7]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369150</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65536</Color>
+						<Title><![CDATA[s8]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369151</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s9]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369152</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s10]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369153</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s11]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369154</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s12]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369155</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s13]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369156</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s14]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369157</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s15]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369158</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s16]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369159</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16776961</Color>
+						<Title><![CDATA[s17]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369160</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s18]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369161</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s19]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369162</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s20]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369163</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s21]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369164</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s22]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369165</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s23]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369166</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s24]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369167</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s25]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369168</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-16711936</Color>
+						<Title><![CDATA[s26]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369169</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s27]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369170</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s28]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369171</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s29]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369172</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s30]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369173</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s31]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369174</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s32]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369175</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s33]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369176</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s34]]></Title>
+					</DataItem>
+					<DataItem>
+					<Id>1747908369177</Id>
+					<Expression><![CDATA[0]]></Expression>
+					<Color>-65281</Color>
+						<Title><![CDATA[s35]]></Title>
+					</DataItem>
+					<ScaleFromExpression><![CDATA[0]]></ScaleFromExpression>
+					<ScaleToExpression><![CDATA[35]]></ScaleToExpression>
+					<ScaleType>FIXED</ScaleType>
+					<Bars>
+						<Direction>UP</Direction>
+						<RelativeWidth>0.8</RelativeWidth>
+					</Bars>
+    			</BarChart>
+				<Polyline>
+					<Id>1748110509112</Id>
+					<Name><![CDATA[polyline]]></Name>
+					<X>40</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16776961</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-40</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-40</X><Y>40</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>false</Closed>
+				</Polyline>
+				<Text>
+					<Id>1748110937374</Id>
+					<Name><![CDATA[AbsorptionsTotal]]></Name>
+					<X>120</X><Y>680</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[Absorption Total in 36 sectors]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+    			<TimePlot>
+					<Id>1748113460105</Id>
+					<Name><![CDATA[plot1]]></Name>
+					<X>460</X><Y>-390</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1748113460103</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1748160000000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Type1]]></Title>
+					<Id>1748113460900</Id>
+					<Expression><![CDATA[datasetInRange_Type1]]></Expression>
+					<Color>-65536</Color>
+					<Expression2><![CDATA[totalAbsorbedType1]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
 					</DatasetExpression>
 					<DatasetExpression>  
-						<Title><![CDATA[datasetType1ThresholdsLower]]></Title>
-					<Id>1746960355752</Id>
-					<Expression><![CDATA[datasetType1ThresholdsLower]]></Expression>
-					<Color>-10496</Color>
-					<Expression2><![CDATA[10]]></Expression2>
+						<Title><![CDATA[Type0]]></Title>
+					<Id>1748113537483</Id>
+					<Expression><![CDATA[datasetInRange_Type0]]></Expression>
+					<Color>-16711936</Color>
+					<Expression2><![CDATA[totalAbsorbedType0]]></Expression2>
+					<Expression2Flag>true</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[totalAbsorbedAll]]></Title>
+					<Id>1748113699252</Id>
+					<Expression><![CDATA[my_dataset]]></Expression>
+					<Color>-16776961</Color>
+					<Expression2><![CDATA[totalAbsorbedAll]]></Expression2>
 					<Expression2Flag>true</Expression2Flag>
 						<PointStyle>NONE</PointStyle>
 						<LineWidth>1.0</LineWidth>
@@ -1474,6 +2499,48 @@ absorbedType1SinceLastReport = 0;]]></Action>
 					<FillAreaUnderLine>false</FillAreaUnderLine>
 					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
     			</TimePlot>
+				<Text>
+					<Id>1748235990959</Id>
+					<Name><![CDATA[text]]></Name>
+					<X>440</X><Y>680</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[type 0]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
+				<Text>
+					<Id>1748236016710</Id>
+					<Name><![CDATA[text1]]></Name>
+					<X>750</X><Y>680</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<Rotation>0.0</Rotation>
+					<Color>-16777216</Color>
+					<Text><![CDATA[type 1]]></Text>
+					<Font>
+						<Name>SansSerif</Name>
+						<Size>10</Size>
+						<Style>0</Style>
+					</Font>
+					<Alignment>LEFT</Alignment>
+				</Text>
 			</Presentation>
 
 				</Level>
@@ -1498,7 +2565,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
 				<EmbeddedObjectPresentation>
 					<Id>1741956261494</Id>
 					<Name><![CDATA[information_Moleculeses_presentation]]></Name>
-					<X>190</X><Y>-110</Y>
+					<X>190</X><Y>-250</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -2274,6 +3341,51 @@ if (getIndex() == 1) {
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747902815729</Id>
+					<Name><![CDATA[sectorAbsorptions_Total]]></Name>
+					<X>-320</X><Y>-170</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double[]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new double[36]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747902857787</Id>
+					<Name><![CDATA[sectorAbsorptions_Type0]]></Name>
+					<X>-310</X><Y>-120</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double[]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new double[36]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747902902618</Id>
+					<Name><![CDATA[sectorAbsorptions_Type1]]></Name>
+					<X>-310</X><Y>-80</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double[]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new double[36]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1741982341311</Id>
 					<Name><![CDATA[numberofOCCUPIEDreceptorsA]]></Name>
@@ -2404,31 +3516,54 @@ if (getIndex() == 1) {
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</OccurrenceTime>
 						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[0.05]]></Code>
+							<Code><![CDATA[0.01]]></Code>
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[List<Information_Molecules> nearbyMolecules = agentsInRange(main.information_Moleculeses, sensingRadius);
+					<Action><![CDATA[// === 1. ΕΥΡΕΣΗ ΜΟΡΙΩΝ ΚΟΝΤΑ ΣΤΟΝ RECEIVER ===
+List<Information_Molecules> nearbyMolecules = agentsInRange(main.information_Moleculeses, sensingRadius);
 List<Information_Molecules> absorbedMoleculesA = new ArrayList<>();
 
-// Απορρόφηση μορίων
+// === 2. ΑΠΟΡΡΟΦΗΣΗ ΜΟΡΙΩΝ ===
 for (Information_Molecules m : nearbyMolecules) {
     if (!m.absorbed && !m.remove && nearbyMolecules.size() <= main.receptorSize) {
+
+        // 2.1 Σταμάτα το μόριο και σημείωσέ το ως απορροφημένο
         m.stop();
         m.set_absorbed(true);
 
+        // 2.2 ΥΠΟΛΟΓΙΣΜΟΣ ΓΩΝΙΑΣ & ΤΟΜΕΑ (λαμβάνοντας υπόψη τον ανεστραμμένο Y-axis του AnyLogic)
+        double angle = atan2(-(m.getY() - getY()), m.getX() - getX()); // το -dy αντιστρέφει τον άξονα
+        double degrees = toDegrees(angle);
+        if (degrees < 0) degrees += 360;
+        int sector = (int)(degrees / 10.0); // Τομέας από 0 έως 35
+
+        // 2.3 ΕΝΗΜΕΡΩΣΗ ΑΝΑ ΤΟΜΕΑ
+        sectorAbsorptions_Total[sector] += 1.0;
+
         if (m.type.equals("0")) {
+            sectorAbsorptions_Type0[sector] += 1.0;
             main.totalAbsorbedType0++;
             main.absorbedType0SinceLastReport++;
-        } else if (m.type.equals("1")) {
+        } 
+        else if (m.type.equals("1")) {
+            sectorAbsorptions_Type1[sector] += 1.0;
             main.totalAbsorbedType1++;
             main.absorbedType1SinceLastReport++;
         }
+
+        // 2.4 ΕΝΗΜΕΡΩΣΗ ΓΕΝΙΚΗΣ ΑΠΟΡΡΟΦΗΣΗΣ
+        main.totalAbsorbedAll++;
+
+        // 2.5 ΕΝΗΜΕΡΩΣΗ BAR CHARTS αθροιστικά
+        main.updateBarAbsorptionsTotal();
+        main.updateBarAbsorptionsType0();
+        main.updateBarAbsorptionsType1();
     }
 }
 
-// Οπτική αναπαράσταση
+// === 3. ΟΠΤΙΚΗ ΑΝΑΠΑΡΑΣΤΑΣΗ ΑΠΟΡΡΟΦΗΜΕΝΩΝ ΜΟΡΙΩΝ ===
 for (Information_Molecules m : nearbyMolecules) {
     if (m.absorbed) {
         absorbedMoleculesA.add(m);
@@ -2436,7 +3571,7 @@ for (Information_Molecules m : nearbyMolecules) {
     }
 }
 
-// === ΓΕΝΙΚΗ ΑΠΟΡΡΟΦΗΣΗ ===
+// === 4. ΑΝΙΧΝΕΥΣΗ ΣΥΝΟΛΙΚΟΥ ΜΗΝΥΜΑΤΟΣ ===
 if (!main.passedThresholdA && absorbedMoleculesA.size() >= main.individualThreshold) {
     main.passedThresholdA = true;
 }
@@ -2445,12 +3580,11 @@ if (main.passedThresholdA && absorbedMoleculesA.size() <= main.individualDownThr
 }
 if (main.passedThresholdA && main.passeddownThresholdA) {
     main.NUMBER_OF_MESSAGES_RECEIVED++;
-   // traceln("✔️ Message detected (A). Type0: " + main.absorbedType0SinceLastReport + ", Type1: " + main.absorbedType1SinceLastReport);
     main.passedThresholdA = false;
     main.passeddownThresholdA = false;
 }
 
-// === TYPE 0 ===
+// === 5. ΑΝΙΧΝΕΥΣΗ ΜΗΝΥΜΑΤΟΣ TYPE 0 ===
 if (!main.passedThresholdType0 && main.absorbedType0SinceLastReport >= main.thresholdType0_Upper) {
     main.passedThresholdType0 = true;
 }
@@ -2459,16 +3593,13 @@ if (main.passedThresholdType0 && main.absorbedType0SinceLastReport <= main.thres
 }
 if (main.passedThresholdType0 && main.passedDownThresholdType0) {
     main.messagesReceivedType0++;
-    main.datasetType0Absorbed.add(time(), main.messagesReceivedType0);
-   // traceln("📈 Message Type 0 Recorded!");
-
-    // Reset flags + allow detection ξανά
+    main.datasetInRange_Type0.add(time(), main.messagesReceivedType0);
     main.passedThresholdType0 = false;
     main.passedDownThresholdType0 = false;
     main.absorbedType0SinceLastReport = 0;
 }
 
-// === TYPE 1 ===
+// === 6. ΑΝΙΧΝΕΥΣΗ ΜΗΝΥΜΑΤΟΣ TYPE 1 ===
 if (!main.passedThresholdType1 && main.absorbedType1SinceLastReport >= main.thresholdType1_Upper) {
     main.passedThresholdType1 = true;
 }
@@ -2477,20 +3608,15 @@ if (main.passedThresholdType1 && main.absorbedType1SinceLastReport <= main.thres
 }
 if (main.passedThresholdType1 && main.passedDownThresholdType1) {
     main.messagesReceivedType1++;
-    main.datasetType1Absorbed.add(time(), main.messagesReceivedType1);
-    //traceln("📈 Message Type 1 Recorded!");
-
+    main.datasetInRange_Type1.add(time(), main.messagesReceivedType1);
     main.passedThresholdType1 = false;
     main.passedDownThresholdType1 = false;
     main.absorbedType1SinceLastReport = 0;
 }
 
-// DEBUG μεταβλητές
+// === 7. DEBUG & ΚΑΘΑΡΙΣΜΟΣ ===
 absorbedMoleculesSinceLastReportA = absorbedMoleculesA.size();
-if (absorbedMoleculesA.size() == 0) main.passedThresholdA = false;
-
-//traceln("messagesReceivedType0 = " + main.messagesReceivedType0);
-//traceln("messagesReceivedType1 = " + main.messagesReceivedType1);]]></Action>
+if (absorbedMoleculesA.size() == 0) main.passedThresholdA = false;]]></Action>
 				</Event>
 			</Events>
 			<Functions>
@@ -3229,6 +4355,51 @@ If absorbBacteria is true reports the number of bacteria absorbed since last rep
 						<Type><![CDATA[int]]></Type>        
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747066983226</Id>
+					<Name><![CDATA[lastCollisionTime]]></Name>
+					<X>-270</X><Y>-320</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[-10]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747667866283</Id>
+					<Name><![CDATA[lastCollisionTime1]]></Name>
+					<X>310</X><Y>350</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[-1000]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1747668867972</Id>
+					<Name><![CDATA[lastCollisionPartner]]></Name>
+					<X>380</X><Y>390</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[Information_Molecules]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[null]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1742021878927</Id>
 					<Name><![CDATA[remove]]></Name>
@@ -3340,7 +4511,8 @@ If absorbBacteria is true reports the number of bacteria absorbed since last rep
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties Width="100" Height="30">
-						<EntryAction><![CDATA[run();
+						<EntryAction><![CDATA[
+run();
 ]]></EntryAction>
 						<FillColor/>
 					</Properties>
@@ -3573,6 +4745,38 @@ traceln("error");
     main.remove_information_Moleculeses(this);
 }]]></Action>
 				</Event>
+				<Event>
+					<Id>1747663889391</Id>
+					<Name><![CDATA[runContinuously]]></Name>
+					<X>70</X><Y>300</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1747663889389</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1747728000000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[0.01]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[checkCollisions();]]></Action>
+				</Event>
 			</Events>
 			<Functions>
 				<Function AccessType="default" StaticFunction="false">
@@ -3600,63 +4804,193 @@ Heading = newHeading;]]></Body>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[
-double curX = getX();
-double curY = getY();
+					<Body><![CDATA[/**
+ * Κίνηση μορίου Information_Molecule σε κάθε χρονικό βήμα.
+ * Περιλαμβάνει:
+ * - Βασική κίνηση προς το Heading,
+ * - Αντιμετώπιση στατικής κατάστασης (εάν newX == curX),
+ * - Έλεγχο εξόδου από τα όρια και διαγραφή του μορίου,
+ * - Εκτέλεση ελαστικής σύγκρουσης με άλλα μόρια εάν υπάρχουν.
+ */
+
+double curX = getX(); // Τρέχουσα θέση Χ του μορίου
+double curY = getY(); // Τρέχουσα θέση Υ του μορίου
+
+// Υπολογισμός νέας θέσης βάσει του heading
 double newX = curX + cos(toRadians(Heading));
 double newY = curY + sin(toRadians(Heading));
 
-if (newX==curX)
-{
-newX = curX + cos(toRadians(getIndex()%360));
+// === ΕΛΕΓΧΟΣ ΣΤΑΤΙΚΟΥ ΜΟΡΙΟΥ ===
+// Αν το μόριο δεν κινείται (συντεταγμένες δεν αλλάζουν), δώσε του αρχική τυχαία κατεύθυνση
+if (newX == curX) {
+    newX = curX + cos(toRadians(getIndex() % 360));
 }
-if (newY==curY)
-{
-newY = curY + sin(toRadians(getIndex()%360));
+if (newY == curY) {
+    newY = curY + sin(toRadians(getIndex() % 360));
 }
 
+// === ΕΛΕΓΧΟΣ ΕΚΤΟΣ ΟΡΙΩΝ ===
+boolean oobX = newX < main.minX || newX > main.maxX; // Εκτός X
+boolean oobY = newY < main.minY || newY > main.maxY; // Εκτός Y
+if (oobX || oobY) {
+    main.remove_information_Moleculeses(this); // Διαγραφή μορίου από την προσομοίωση
+}
 
+// === ΕΝΗΜΕΡΩΣΗ ΘΕΣΗΣ ===
+moveTo(newX, newY); // Μετακίνηση στη νέα θέση
 
+// === ΕΛΑΣΤΙΚΕΣ ΣΥΓΚΡΟΥΣΕΙΣ ===
+// Εδώ μπορεί να κληθεί η συνάρτηση checkCollisions() για να γίνει έλεγχος ελαστικών συγκρούσεων.
+// Εφόσον το χρησιμοποιείς:
+// checkCollisions();
+// Οι συγκρούσεις εφαρμόζουν περιστροφή ±Φ/2 ως προς τη διχοτόμο της ταχύτητας μεταξύ δύο μορίων.
+]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>VOID</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1747667239274</Id>
+					<Name><![CDATA[checkCollisions]]></Name>
+					<X>420</X><Y>300</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[/**
+ * Συνάρτηση ανίχνευσης και χειρισμού ελαστικών συγκρούσεων μεταξύ μορίων.
+ * Περιλαμβάνει:
+ * 1. Εντοπισμό κοντινών μορίων μέσω spatial grid για βελτιωμένη απόδοση.
+ * 2. Υπολογισμό αποστάσεων και γωνίας μεταξύ μορίων για να διαπιστωθεί εάν υπάρχει σύγκρουση.
+ * 3. Ελαστική αλλαγή πορείας ±Φ/2 με βάση τη διχοτόμο, ή τυχαία ώθηση για αποφυγή ping-pong.
+ * 4. Ενημέρωση headings και μετατόπιση μορίων.
+ */
 
-	// Check if we are going to go out of
-	// bounds. If yes, turn around
-	boolean oobX = newX < main.minX || newX > main.maxX;
-	boolean oobY = newY < main.minY || newY > main.maxY;
-	if (oobX || oobY) {
-		main.remove_information_Moleculeses(this);
-	}
+if (main.collisionsEnabled) { // ✅ Έλεγχος εάν το σύστημα επιτρέπει συγκρούσεις
 
-moveTo(newX, newY);
-//traceln(time()+ "eimai o "+getIndex() +" kai tumble  "+ heading + " kai pao x --> " + getX() + " y--> "+ getY());
-if (main.collisionsEnabled) {
-    Collection<Information_Molecules> nearby = agentsInRange(main.information_Moleculeses, 2.5);
+    // === 1. Λήψη κοντινών μορίων από το spatial grid ===
+    ArrayList<Information_Molecules> nearby = new ArrayList<>(); // Λίστα για τα κοντινά μόρια
 
+    // Υπολογισμός του κελιού (στήλης και γραμμής) στο οποίο βρίσκεται το μόριο
+    int myCol = (int) ((getX() - main.minX) / main.gridSize);
+    int myRow = (int) ((getY() - main.minY) / main.gridSize);
+
+    // Έλεγχος σε γειτονικά κελιά (3x3 περιοχή γύρω από το μόριο)
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            int col = myCol + dx; // Στήλη προς έλεγχο
+            int row = myRow + dy; // Γραμμή προς έλεγχο
+
+            // Έλεγχος ότι το κελί είναι εντός των ορίων του grid
+            if (col >= 0 && col < main.cols && row >= 0 && row < main.rows) {
+                ArrayList<Information_Molecules> cell = main.spatialGrid[col][row]; // Παίρνουμε τα μόρια από αυτό το κελί
+                if (cell != null)
+                    nearby.addAll(cell); // Προσθήκη όλων των μορίων από αυτό το κελί στη λίστα "nearby"
+            }
+        }
+    }
+
+    // === 2. Έλεγχος για συγκρούσεις με τα κοντινά μόρια ===
     for (Information_Molecules other : nearby) {
-        if (other == this) continue;
+        if (other == this) continue; // Αγνόηση του εαυτού
 
+        // Υπολογισμός διαφοράς στις συντεταγμένες μεταξύ των δύο μορίων
         double dx = this.getX() - other.getX();
         double dy = this.getY() - other.getY();
-        double distSquared = dx * dx + dy * dy;
+        double distSquared = dx * dx + dy * dy; // Τετράγωνο της απόστασης (για αποφυγή sqrt)
 
-        if (distSquared < 2.5 * 2.5) { // Πιο αυστηρό threshold
-            main.totalCollisions++;
+        // Αν η απόσταση είναι μικρότερη από 4.5, θεωρούμε ότι υπάρχει σύγκρουση
+        if (distSquared < 4.5 * 4.5) {
+            main.totalCollisions++; // ➕ Ενημέρωση συνολικού αριθμού συγκρούσεων
 
-            // Υπολογισμός διεύθυνσης ανάκρουσης
-            double dist = Math.sqrt(distSquared);
-            if (dist == 0) dist = 0.01;
+            double dist = Math.sqrt(distSquared); // Απόσταση
+            if (dist == 0) dist = 0.01; // Προστασία από διαίρεση με το μηδέν
 
-            double repelX = dx / dist;
-            double repelY = dy / dist;
+            // Μονάδες διεύθυνσης (διανύσματα normal σύγκρουσης)
+            double nx = dx / dist;
+            double ny = dy / dist;
 
-            double pushDistance = 1.0;
+            // Διανύσματα ταχύτητας βάσει Heading
+            double vAx = Math.cos(toRadians(this.Heading));
+            double vAy = Math.sin(toRadians(this.Heading));
+            double vBx = Math.cos(toRadians(other.Heading));
+            double vBy = Math.sin(toRadians(other.Heading));
 
-            // Απώθηση
-            this.setXY(getX() + repelX * pushDistance, getY() + repelY * pushDistance);
-            other.setXY(other.getX() - repelX * pushDistance, other.getY() - repelY * pushDistance);
+            // Εσωτερικό γινόμενο για υπολογισμό γωνίας Φ
+            double dotProduct = vAx * vBx + vAy * vBy;
+            double magA = Math.sqrt(vAx * vAx + vAy * vAy); // Μέτρο ταχύτητας this
+            double magB = Math.sqrt(vBx * vBx + vBy * vBy); // Μέτρο ταχύτητας other
+            if (magA == 0 || magB == 0) continue; // Αγνόηση σταματημένων μορίων
 
-            // Νέα κατεύθυνση προς την πορεία της απώθησης
-            this.Heading = toDegrees(Math.atan2(repelY, repelX));
-            other.Heading = toDegrees(Math.atan2(-repelY, -repelX));
+            double anglePhiRad = Math.acos(dotProduct / (magA * magB)); // Γωνία Φ σε ακτίνια
+            double anglePhiDeg = toDegrees(anglePhiRad); // Φ σε μοίρες
+
+            // === 3. Αν Φ < 30°, απόφυγε το ping-pong με τυχαία ώθηση ===
+            if (anglePhiDeg < 30) {
+                double randAngle1 = uniform(0, 360); // Τυχαία γωνία για το πρώτο μόριο
+                double randAngle2 = randAngle1 + 180; // Αντίθετη κατεύθυνση για το δεύτερο
+                double randPush = 1.0; // Απόσταση ώθησης
+
+                // Εφαρμογή μετατόπισης
+                this.setXY(
+                    this.getX() + randPush * Math.cos(toRadians(randAngle1)),
+                    this.getY() + randPush * Math.sin(toRadians(randAngle1))
+                );
+                other.setXY(
+                    other.getX() + randPush * Math.cos(toRadians(randAngle2)),
+                    other.getY() + randPush * Math.sin(toRadians(randAngle2))
+                );
+
+                // Νέες τυχαίες πορείες για αποφυγή συνεχόμενων συγκρούσεων
+                this.Heading = uniform(0, 360);
+                other.Heading = uniform(0, 360);
+                continue; // Προχώρα στο επόμενο ζεύγος
+            }
+
+            // === 4. Υπολογισμός διχοτόμου της γωνίας Φ ===
+            double mx = vAx + vBx; // Άθροισμα x-συνιστωσών
+            double my = vAy + vBy; // Άθροισμα y-συνιστωσών
+            double magM = Math.sqrt(mx * mx + my * my);
+            if (magM == 0) { // Αν είναι τελείως αντίθετα
+                mx = -ny; my = nx; // Τεχνητή κάθετη διχοτόμος
+                magM = Math.sqrt(mx * mx + my * my);
+            }
+            double bisectorX = mx / magM;
+            double bisectorY = my / magM;
+
+            // Περιστροφή κατά ±Φ/2 γύρω από τη διχοτόμο
+            double angleOffset = anglePhiRad / 2;
+
+            // Νέο διάνυσμα για το πρώτο μόριο (περιστροφή -Φ/2)
+            double newAx = Math.cos(angleOffset) * bisectorX - Math.sin(angleOffset) * bisectorY;
+            double newAy = Math.sin(angleOffset) * bisectorX + Math.cos(angleOffset) * bisectorY;
+
+            // Νέο διάνυσμα για το δεύτερο μόριο (περιστροφή +Φ/2)
+            double newBx = Math.cos(-angleOffset) * bisectorX - Math.sin(-angleOffset) * bisectorY;
+            double newBy = Math.sin(-angleOffset) * bisectorX + Math.cos(-angleOffset) * bisectorY;
+
+            // === 5. Ενημέρωση των headings των μορίων ===
+            this.Heading = toDegrees(Math.atan2(newAy, newAx));
+            other.Heading = toDegrees(Math.atan2(newBy, newBx));
+
+            // === 6. Ήπια ώθηση για απομάκρυνση ===
+            double pushDist = 1.4; // Απόσταση ώθησης
+            this.setXY(this.getX() + newAx * pushDist, this.getY() + newAy * pushDist);
+            other.setXY(other.getX() + newBx * pushDist, other.getY() + newBy * pushDist);
+
+            // === 7. Αν είναι υπερβολικά κοντά, τυχαία μικρή μετατόπιση επιπλέον ===
+            if (dist < 1.2) {
+                double randAngle1 = uniform(0, 360);
+                double randAngle2 = randAngle1 + 180;
+
+                this.setXY(
+                    this.getX() + 0.5 * Math.cos(toRadians(randAngle1)),
+                    this.getY() + 0.5 * Math.sin(toRadians(randAngle1))
+                );
+                other.setXY(
+                    other.getX() + 0.5 * Math.cos(toRadians(randAngle2)),
+                    other.getY() + 0.5 * Math.sin(toRadians(randAngle2))
+                );
+            }
         }
     }
 }]]></Body>
