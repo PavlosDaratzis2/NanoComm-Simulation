@@ -616,7 +616,7 @@
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[false]]></Code>
+							<Code><![CDATA[true]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -722,6 +722,81 @@
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
 							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762543493012</Id>
+					<Name><![CDATA[globalMoleculeSpeed]]></Name>
+					<X>-230</X><Y>620</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[1.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762543521658</Id>
+					<Name><![CDATA[modelDt]]></Name>
+					<X>-230</X><Y>650</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.01]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762616101074</Id>
+					<Name><![CDATA[pxPerMeter]]></Name>
+					<X>-230</X><Y>680</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[10]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762618911175</Id>
+					<Name><![CDATA[targetD]]></Name>
+					<X>-220</X><Y>710</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[35.0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1763245206584</Id>
+					<Name><![CDATA[msdSampleDt]]></Name>
+					<X>870</X><Y>190</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[1.0]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -862,6 +937,83 @@ for (Information_Molecules m : information_Moleculeses) {
 // Ενημέρωση μεταβλητών για το γράφημα
 absorbedType0InRange = count0;
 absorbedType1InRange = count1;]]></Action>
+				</Event>
+				<Event>
+					<Id>1763245238592</Id>
+					<Name><![CDATA[msdEvent]]></Name>
+					<X>880</X><Y>250</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1763245238590</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1763280000000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[msdSampleDt]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[// === ΥΠΟΛΟΓΙΣΜΟΣ MSD(t) ΚΑΙ D(t) ΣΤΟ MAIN ===
+
+// sum r^2 και πλήθος μορίων
+double sumR2 = 0.0;
+int count = 0;
+
+// Διέτρεξε ΟΛΑ τα μόρια του πληθυσμού
+for (Information_Molecules m : information_Moleculeses) {
+
+    // Αν έχει σημαδευτεί για αφαίρεση, αγνόησέ το
+    if (m.remove) 
+        continue;
+
+    // Διαφορά θέσης σε pixels από το origin (transmitter)
+    double dx_px = m.getX() - m.originX;
+    double dy_px = m.getY() - m.originY;
+
+    // Μετατροπή σε μέτρα
+    double dx_m = dx_px / pxPerMeter;
+    double dy_m = dy_px / pxPerMeter;
+
+    // r^2 = x^2 + y^2
+    double r2 = dx_m * dx_m + dy_m * dy_m;
+
+    sumR2 += r2;
+    count++;
+}
+
+// Αν δεν υπάρχουν ενεργά μόρια, μην κάνεις τίποτα
+if (count == 0) 
+    return;
+
+// MSD(t) = <r^2(t)>
+double MSD = sumR2 / count;
+
+// Τρέχων χρόνος προσομοίωσης
+double t = time();
+if (t <= 0)
+    return;
+
+// === ΔΙΑΧΥΣΗ ΣΕ 2D ΜΟΝΤΕΛΟ ΚΙΝΗΣΗΣ ===
+// Για 2D:  MSD = 4 D t  =>  D = MSD / (4 t)
+// (Αν θεωρούσαμε 3D: MSD = 6 D t, αλλά εδώ κινείσαι σε x,y)
+double D = MSD / (4.0 * t);
+// Προαιρετικό debug στην κονσόλα
+traceln(String.format("t=%.2f  MSD=%.5f  D=%.5f", t, MSD, D));]]></Action>
 				</Event>
 			</Events>
 			<Functions>
@@ -2812,10 +2964,21 @@ if (getIndex() == 1) {
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
 					<Action><![CDATA[for (int i = 0; i < main.bacteriaPerPulse; i++) {
+    // Δημιουργία νέου μορίου
     Information_Molecules c = main.add_information_Moleculeses();
-    c.jumpTo(getX(), getY());
-    c.type = moleculeType;   // ✅ Εδώ!
-    //traceln("Transmitter " + getName() + " sent molecule of type " + moleculeType);
+    c.jumpTo(getX(), getY());       // εκπομπή από το σημείο του transmitter
+    c.type = moleculeType;          // διατήρηση του τύπου
+
+    // === ΝΕΕΣ ΓΡΑΜΜΕΣ για υπολογισμό D ===
+    c.originX   = c.getX();         // αποθήκευση θέσης εκπομπής
+    c.originY   = c.getY();
+    c.birthTime = time();           // χρονική στιγμή δημιουργίας
+    // ==============================
+
+    // προαιρετικά: αρχικό heading (αν δεν το ορίζεις αλλού)
+    c.Heading = uniform(360);
+
+    // εκκίνηση της συμπεριφοράς του μορίου
     c.run();
 }]]></Action>
 				</Event>
@@ -3533,11 +3696,48 @@ for (Information_Molecules m : nearbyMolecules) {
         m.stop();
         m.set_absorbed(true);
 
-        // 2.2 ΥΠΟΛΟΓΙΣΜΟΣ ΓΩΝΙΑΣ & ΤΟΜΕΑ (λαμβάνοντας υπόψη τον ανεστραμμένο Y-axis του AnyLogic)
-        double angle = atan2(-(m.getY() - getY()), m.getX() - getX()); // το -dy αντιστρέφει τον άξονα
+        // ============= ΠΑΛΙΟΣ ΥΠΟΛΟΓΙΣΜΟΣ D (ΤΩΡΑ ΑΠΕΝΕΡΓΟΠΟΙΗΜΕΝΟΣ) =============
+        /*
+        double t = time() - m.birthTime;                 // s
+
+        // διαφορά θέσης σε pixels
+        double dx_px = m.getX() - m.originX;
+        double dy_px = m.getY() - m.originY;
+
+        // μετατροπή σε μέτρα
+        double dx_m = dx_px / main.pxPerMeter;
+        double dy_m = dy_px / main.pxPerMeter;
+        double r_m  = Math.sqrt(dx_m*dx_m + dy_m*dy_m);  // m
+
+        if (t > 0) {
+            double D = (r_m * r_m) / (6.0 * t);          // m^2/s
+            traceln(String.format(
+                "Molecule %d  D = %.5f m^2/s  (r=%.3f m, t=%.3f s)",
+                m.getId(), D, r_m, t
+            ));
+        }
+        */
+        // ============= ΤΕΛΟΣ ΠΑΛΙΟΥ ΥΠΟΛΟΓΙΣΜΟΥ D =============
+
+        // (Προαιρετικό debug μόνο για r και t, αν το θες)
+        /*
+        double t = time() - m.birthTime;
+        double dx_px = m.getX() - m.originX;
+        double dy_px = m.getY() - m.originY;
+        double dx_m = dx_px / main.pxPerMeter;
+        double dy_m = dy_px / main.pxPerMeter;
+        double r_m  = Math.sqrt(dx_m*dx_m + dy_m*dy_m);
+        traceln(String.format(
+            "Molecule %d  (r=%.3f m, t=%.3f s)",
+            m.getId(), r_m, t
+        ));
+        */
+
+        // 2.2 ΥΠΟΛΟΓΙΣΜΟΣ ΓΩΝΙΑΣ & ΤΟΜΕΑ (ανεστραμμένος Y του AnyLogic)
+        double angle = atan2(-(m.getY() - getY()), m.getX() - getX());
         double degrees = toDegrees(angle);
         if (degrees < 0) degrees += 360;
-        int sector = (int)(degrees / 10.0); // Τομέας από 0 έως 35
+        int sector = (int)(degrees / 10.0); // 0..35
 
         // 2.3 ΕΝΗΜΕΡΩΣΗ ΑΝΑ ΤΟΜΕΑ
         sectorAbsorptions_Total[sector] += 1.0;
@@ -3546,17 +3746,16 @@ for (Information_Molecules m : nearbyMolecules) {
             sectorAbsorptions_Type0[sector] += 1.0;
             main.totalAbsorbedType0++;
             main.absorbedType0SinceLastReport++;
-        } 
-        else if (m.type.equals("1")) {
+        } else if (m.type.equals("1")) {
             sectorAbsorptions_Type1[sector] += 1.0;
             main.totalAbsorbedType1++;
             main.absorbedType1SinceLastReport++;
         }
 
-        // 2.4 ΕΝΗΜΕΡΩΣΗ ΓΕΝΙΚΗΣ ΑΠΟΡΡΟΦΗΣΗΣ
+        // 2.4 ΓΕΝΙΚΗ ΑΠΟΡΡΟΦΗΣΗ
         main.totalAbsorbedAll++;
 
-        // 2.5 ΕΝΗΜΕΡΩΣΗ BAR CHARTS αθροιστικά
+        // 2.5 ΕΝΗΜΕΡΩΣΗ BAR CHARTS
         main.updateBarAbsorptionsTotal();
         main.updateBarAbsorptionsType0();
         main.updateBarAbsorptionsType1();
@@ -4400,6 +4599,57 @@ If absorbBacteria is true reports the number of bacteria absorbed since last rep
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762543558529</Id>
+					<Name><![CDATA[speed]]></Name>
+					<X>60</X><Y>380</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[main.globalMoleculeSpeed;]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762615869974</Id>
+					<Name><![CDATA[originX]]></Name>
+					<X>550</X><Y>-110</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762615883076</Id>
+					<Name><![CDATA[originY]]></Name>
+					<X>550</X><Y>-80</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1762615901842</Id>
+					<Name><![CDATA[birthTime]]></Name>
+					<X>550</X><Y>-50</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1742021878927</Id>
 					<Name><![CDATA[remove]]></Name>
@@ -4490,19 +4740,6 @@ If absorbBacteria is true reports the number of bacteria absorbed since last rep
 			</Variables>
 			<StatechartElements>
 				<StatechartElement Class="State" ParentState="ROOT_NODE">
-					<Id>1741957876682</Id>
-					<Name><![CDATA[Tumble]]></Name>
-					<X>20</X><Y>80</Y>
-					<Label><X>10</X><Y>10</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>true</ShowLabel>
-					<Properties Width="100" Height="30">
-						<EntryAction><![CDATA[tumble();]]></EntryAction>
-						<FillColor/>
-					</Properties>
-				</StatechartElement>
-				<StatechartElement Class="State" ParentState="ROOT_NODE">
 					<Id>1741957890858</Id>
 					<Name><![CDATA[Run]]></Name>
 					<X>10</X><Y>190</Y>
@@ -4512,7 +4749,6 @@ If absorbBacteria is true reports the number of bacteria absorbed since last rep
 					<ShowLabel>true</ShowLabel>
 					<Properties Width="100" Height="30">
 						<EntryAction><![CDATA[
-run();
 ]]></EntryAction>
 						<FillColor/>
 					</Properties>
@@ -4533,7 +4769,7 @@ run();
 				<StatechartElement Class="EntryPoint" ParentState="ROOT_NODE">
 					<Id>1741957692174</Id>
 					<Name><![CDATA[statechart]]></Name>
-					<X>50</X><Y>30</Y>
+					<X>60</X><Y>140</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -4542,69 +4778,10 @@ run();
 						<Point><X>0</X><Y>0</Y></Point>
 						<Point><X>0</X><Y>50</Y></Point>
 					</Points>
-					<Properties Target="1741957876682">
-						<Action><![CDATA[//jumpTo(10, 20);]]></Action>
-					</Properties>	
-				</StatechartElement>
-				<StatechartElement Class="Transition" ParentState="ROOT_NODE">
-					<Id>1741957915458</Id>
-					<Name><![CDATA[transition]]></Name>
-					<X>40</X><Y>110</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<Points>
-						<Point><X>0</X><Y>0</Y></Point>
-						<Point><X>0</X><Y>80</Y></Point>
-					</Points>
-					<IconOffset>20.0</IconOffset>
-					<Properties Source="1741957876682" Target="1741957890858" Trigger="rate">
-						<Timeout Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</Timeout>
-						<Condition><![CDATA[true]]></Condition>
-						<Rate Class="CodeUnitValue">
-							<Code><![CDATA[1/0.15]]></Code>
-							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
-						</Rate>
-						<MessageType><![CDATA[Object]]></MessageType>
-						<DefaultTransition>true</DefaultTransition>
-						<FilterType><![CDATA[unconditionally]]></FilterType>
-						<EqualsExpression><![CDATA["text"]]></EqualsExpression>
-						<SatisfiesExpression><![CDATA[true]]></SatisfiesExpression>
-					</Properties>	
-				</StatechartElement>
-				<StatechartElement Class="Transition" ParentState="ROOT_NODE">
-					<Id>1741957924427</Id>
-					<Name><![CDATA[transition1]]></Name>
-					<X>70</X><Y>190</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<Points>
-						<Point><X>0</X><Y>0</Y></Point>
-						<Point><X>0</X><Y>-80</Y></Point>
-					</Points>
-					<IconOffset>20.0</IconOffset>
-					<Properties Source="1741957890858" Target="1741957876682" Trigger="rate">
-						<Action><![CDATA[stop();]]></Action>
-						<Timeout Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</Timeout>
-						<Condition><![CDATA[true]]></Condition>
-						<Rate Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
-						</Rate>
-						<MessageType><![CDATA[Object]]></MessageType>
-						<DefaultTransition>true</DefaultTransition>
-						<FilterType><![CDATA[unconditionally]]></FilterType>
-						<EqualsExpression><![CDATA["text"]]></EqualsExpression>
-						<SatisfiesExpression><![CDATA[true]]></SatisfiesExpression>
+					<Properties Target="1741957890858">
+						<Action><![CDATA[//jumpTo(10, 20);
+speed = main.globalMoleculeSpeed;]]></Action>
+						<Logging>false</Logging>
 					</Properties>	
 				</StatechartElement>
 				<StatechartElement Class="Transition" ParentState="ROOT_NODE">
@@ -4627,45 +4804,6 @@ run();
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</Timeout>
 						<Condition><![CDATA[stop_move_indicator && has_done_connection == false]]></Condition>
-						<Rate Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
-						</Rate>
-						<MessageType><![CDATA[Object]]></MessageType>
-						<DefaultTransition>true</DefaultTransition>
-						<FilterType><![CDATA[unconditionally]]></FilterType>
-						<EqualsExpression><![CDATA["text"]]></EqualsExpression>
-						<SatisfiesExpression><![CDATA[true]]></SatisfiesExpression>
-					</Properties>	
-				</StatechartElement>
-				<StatechartElement Class="Transition" ParentState="ROOT_NODE">
-					<Id>1741957961940</Id>
-					<Name><![CDATA[transition3]]></Name>
-					<X>200</X><Y>140</Y>
-					<Label><X>10</X><Y>0</Y></Label>
-					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<Points>
-						<Point><X>0</X><Y>0</Y></Point>
-						<Point><X>-90</X><Y>-30</Y></Point>
-					</Points>
-					<IconOffset>20.0</IconOffset>
-					<Properties Source="1741957899411" Target="1741957876682" Trigger="timeout">
-						<Action><![CDATA[stop_move_indicator = false;
-//List<Receiver> nearbyReceiver = agentsInRange(get_Main().receivers, get_Main().receivers.get(1).sensingRadius);
-if (main.rEceiver_BioNanomachine.numberofOCCUPIEDreceptorsA>0)
-main.rEceiver_BioNanomachine.numberofOCCUPIEDreceptorsA--;
-else
-
-traceln("error");
-//main.numberofOCCUPIEDreceptors--;
-]]></Action>
-						<Timeout Class="CodeUnitValue">
-							<Code><![CDATA[1]]></Code>
-							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
-						</Timeout>
-						<Condition><![CDATA[true]]></Condition>
 						<Rate Class="CodeUnitValue">
 							<Code><![CDATA[1]]></Code>
 							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
@@ -4777,6 +4915,42 @@ traceln("error");
 					</Properties>
 					<Action><![CDATA[checkCollisions();]]></Action>
 				</Event>
+				<Event>
+					<Id>1762543806317</Id>
+					<Name><![CDATA[moveTick]]></Name>
+					<X>190</X><Y>340</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1762543806315</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1762588800000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[main.modelDt]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[// εκτέλεσε βήμα κίνησης ΜΟΝΟ αν είμαστε στο state Run
+if (statechart.isStateActive(Run)) {
+    run();
+}]]></Action>
+					<Logging>false</Logging>
+				</Event>
 			</Events>
 			<Functions>
 				<Function AccessType="default" StaticFunction="false">
@@ -4804,46 +4978,20 @@ Heading = newHeading;]]></Body>
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[/**
- * Κίνηση μορίου Information_Molecule σε κάθε χρονικό βήμα.
- * Περιλαμβάνει:
- * - Βασική κίνηση προς το Heading,
- * - Αντιμετώπιση στατικής κατάστασης (εάν newX == curX),
- * - Έλεγχο εξόδου από τα όρια και διαγραφή του μορίου,
- * - Εκτέλεση ελαστικής σύγκρουσης με άλλα μόρια εάν υπάρχουν.
- */
+					<Body><![CDATA[
+double dt = main.modelDt;
+double step = speed * dt * main.pxPerMeter;
 
-double curX = getX(); // Τρέχουσα θέση Χ του μορίου
-double curY = getY(); // Τρέχουσα θέση Υ του μορίου
+// μικρή τυχαία διακύμανση στη διεύθυνση (0 = καθόλου, 180 = πλήρως τυχαία)
+Heading += uniform(-15, 15);   // π.χ. ±15° τυχαία απόκλιση κάθε tick
 
-// Υπολογισμός νέας θέσης βάσει του heading
-double newX = curX + cos(toRadians(Heading));
-double newY = curY + sin(toRadians(Heading));
+// ενημέρωση θέσης
+double newX = getX() + step * cos(toRadians(Heading));
+double newY = getY() + step * sin(toRadians(Heading));
 
-// === ΕΛΕΓΧΟΣ ΣΤΑΤΙΚΟΥ ΜΟΡΙΟΥ ===
-// Αν το μόριο δεν κινείται (συντεταγμένες δεν αλλάζουν), δώσε του αρχική τυχαία κατεύθυνση
-if (newX == curX) {
-    newX = curX + cos(toRadians(getIndex() % 360));
-}
-if (newY == curY) {
-    newY = curY + sin(toRadians(getIndex() % 360));
-}
+moveTo(newX, newY);
 
-// === ΕΛΕΓΧΟΣ ΕΚΤΟΣ ΟΡΙΩΝ ===
-boolean oobX = newX < main.minX || newX > main.maxX; // Εκτός X
-boolean oobY = newY < main.minY || newY > main.maxY; // Εκτός Y
-if (oobX || oobY) {
-    main.remove_information_Moleculeses(this); // Διαγραφή μορίου από την προσομοίωση
-}
 
-// === ΕΝΗΜΕΡΩΣΗ ΘΕΣΗΣ ===
-moveTo(newX, newY); // Μετακίνηση στη νέα θέση
-
-// === ΕΛΑΣΤΙΚΕΣ ΣΥΓΚΡΟΥΣΕΙΣ ===
-// Εδώ μπορεί να κληθεί η συνάρτηση checkCollisions() για να γίνει έλεγχος ελαστικών συγκρούσεων.
-// Εφόσον το χρησιμοποιείς:
-// checkCollisions();
-// Οι συγκρούσεις εφαρμόζουν περιστροφή ±Φ/2 ως προς τη διχοτόμο της ταχύτητας μεταξύ δύο μορίων.
 ]]></Body>
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
@@ -5096,9 +5244,9 @@ if (main.collisionsEnabled) { // ✅ Έλεγχος εάν το σύστημα �
 	</Frame>
 	<Database>
 		<Id>1741955706127</Id>
-		<Logging>false</Logging>
+		<Logging>true</Logging>
 		<AutoExport>false</AutoExport>
-		<ShutdownCompact>false</ShutdownCompact>
+		<ShutdownCompact>true</ShutdownCompact>
 		<ImportSettings>
 		</ImportSettings>
 		<ExportSettings>
