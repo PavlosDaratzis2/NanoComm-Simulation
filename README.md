@@ -1,97 +1,106 @@
-# NanoCommSim
+ NanoCommSim (AnyLogic) — Molecular Communication Simulation
 
-**NanoCommSim** is a molecular communication simulation project built using AnyLogic. It models a biological nanonetwork consisting of two transmitters and a single receiver, allowing the study of absorption behavior, molecule collisions, message recognition, and the impact of geometry and transmission frequency on communication efficiency.
+This repository contains my AnyLogic simulation of molecular (diffusion-based) communication between a Transmitter and a Receiver. The idea is simple: the transmitter releases a pulse of molecules, the receiver observes a signal (“molecules in range”), performs an automatic calibration on the first pulse, and then detects messages using two thresholds (URT/LRT).
 
----
+✅ Defaults in this repo
+	•	Feedback is OFF by default 🚫↩️
+	•	Receiver sectors = 20 🧩 (dynamic, but default is 20)
+	•	Threshold lines are ON 📈✅
 
-## 📌 Project Overview
+⸻
 
-This simulation explores how information molecules are transmitted and absorbed in nanoscale biological environments.
+🔍 What the simulation does
+	•	The Transmitter emits a pulse of molecules (bacteriaPerPulse).
+	•	Molecules diffuse through the environment.
+	•	The Receiver has a sensing/absorption area and continuously measures:
+	•	Molecules in Range = how many molecules are currently inside the receiver’s sensing radius.
+	•	The receiver:
+	•	calibrates thresholds during the first pulse
+	•	detects messages using URT/LRT afterwards
 
-### Key Features:
-- Two Transmitters emitting molecules (Type 0 and Type 1)
-- One Receiver agent absorbing molecules and recording detailed statistics
-- Geometric configurations at **90° and 180°**
-- Optional **elastic collisions** between molecules
-- Circular absorption tracking in **36 angular sectors**
-- Dynamic **sending intervals** (from 100s to 30s)
-- Message detection via **upper/lower threshold** system
+⸻
 
----
+📊 The signal used (important)
 
-## 🧪 Experimental Scenarios
+The detection signal is the instantaneous signal:
 
-The project compares 4 main configurations:
+Molecules in Range = molecules currently inside the receiver sensing radius.
 
-| Scenario                  | Collisions | Total Absorption | Notes                                      |
-|--------------------------|------------|------------------|---------------------------------------------|
-| 90° without collisions   | No         | High             | Symmetrical and efficient absorption        |
-| 90° with collisions      | Yes        | Reduced          | Significant interference and message loss   |
-| 180° without collisions  | No         | High             | Linear coverage with lateral concentration  |
-| 180° with collisions     | Yes        | Reduced          | Randomized paths and irregular absorption   |
+This is the same signal shown in the plot (not cumulative absorbed molecules).
 
-Message recognition experiments were also conducted by:
-- Adjusting **sending frequency** (shorter intervals)
-- Using **threshold logic** to detect valid molecular pulses
-- Measuring the number of correctly detected messages over time
+⸻
 
----
+🛠️ Auto-Calibration (first pulse only)
 
-## 📊 Visualization
+As soon as the receiver starts seeing molecules (winAbs0 > 0), calibration begins.
 
-The simulation includes real-time visual elements:
-- Line plots showing total and per-type absorption over time
-- Bar charts of absorption per sector (0°–360° split into 36 sectors)
-- Time-based plots of in-range molecules for threshold detection
-- Collision counter and message detection statistics
+During calibration:
+	•	we collect samples (tRel, y)
+	•	we compute the maximum value of the first pulse signal (maxY)
+	•	thresholds are set “paper-style”:
+	•	URT = round(0.9 × maxY)
+	•	LRT = round(URT / 3)
 
----
+You’ll see logs in the console like:
+	•	CALIBRATION START ...
+	•	CALIBRATION DONE ... URT... LRT... maxY...
 
-## ⚙️ Technologies Used
+⸻
 
-- **AnyLogic** (agent-based simulation environment)
-- **Java** (internal code logic for events, movement, and detection)
-- **Python + Matplotlib** *(optional)* for data visualization if exporting CSV
+✅ Message Detection (URT/LRT)
 
----
+After calibration:
+	•	If the signal rises above URT → message START detected 🚀
+	•	Later, when it falls below LRT → message END detected ✅
+	•	On END:
+	•	NUMBER_OF_MESSAGES_RECEIVED++ increments 📩
+	•	(optional) feedback logic can be triggered — but in this repo it’s disabled by default.
 
-## 📁 Structure
+⸻
 
-- `Main` – Simulation environment setup and global parameters
-- `Transmitter` – Agent emitting molecules of a given type
-- `Information_Molecule` – Mobile agent with optional collision behavior
-- `Receiver` – Tracks absorbed molecules and detects messages
-- `Charts & Events` – Show real-time simulation metrics
+🧩 Receiver Sectors (default: 20)
 
----
+The receiver is divided into sectors (default = 20).
+This is used to track where molecules are being absorbed (spatial distribution around the receiver).
 
-## 🚀 How to Run
+⚙️ You can change the number of sectors anytime (20 → 36 → 8 etc.), but the default setup is 20.
 
-1. Open the project in **AnyLogic (University or Professional Edition)**
-2. Click **Run** from the Main class
-3. Adjust parameters in the GUI (e.g. `sendingInterval`, `collisionsEnabled`)
-4. View live charts and absorption counters
+⸻
 
----
+🚫 Feedback (Receiver → Transmitter) — OFF by default
 
-## 🔍 Future Improvements
+There is logic for feedback molecules from receiver to transmitter, but:
 
-- Multi-receiver support
-- Molecule degradation and timed disappearance
-- More advanced message encoding schemes
-- Automatic threshold tuning via learning
+Feedback is OFF by default to keep the simulation simpler and lighter.
 
----
+If you want to enable it later, you can toggle it (without deleting code).
 
-## 📄 License
+⸻
 
-This project is open for academic and research use.  
-You may fork, cite, or modify it with proper attribution.
+▶️ How to run
+	1.	Open the project in AnyLogic.
+	2.	Run Main.
+	3.	Default parameters you’ll start with:
+	•	receiver sectors = 20
+	•	threshold lines = ON
+	•	feedback = OFF
+	4.	Watch:
+	•	the Molecules in Range plot 📈
+	•	URT/LRT lines (horizontal)
+	•	console logs for calibration and detection
 
----
+⸻
 
-## 👨‍💻 Author
+🧪 Notes / Debugging tips
+	•	If maxY in the console seems higher than what you visually notice:
+	•	verify the plot is showing the same signal used for calibration (e.g., winAbs0).
+	•	For a message to be counted:
+	•	it must cross URT upward
+	•	then later cross LRT downward
 
-**[Pavlos Daratzis]**  
-Department of Informatics, Aristotle University of Thessaloniki  
-Field of Interest: Biological Nanonetworks & Molecular Communications
+⸻
+
+👤 Author
+
+Pavlos Dar 🇬🇷
+Aristotle University of Thessaloniki (AUTH) — Informatics
