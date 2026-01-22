@@ -18,6 +18,69 @@
 		<ActiveObjectClass>
 			<Id>1741955706130</Id>
 			<Name><![CDATA[Main]]></Name>
+			<StartupCode><![CDATA[// ====== SETUP CSV EXPORT (wide format) ======
+
+int S = rEceiver_BioNanomachine.numSectors;
+if (S <= 0) S = 20;
+
+// (1) Βεβαιώσου ότι τα arrays έχουν σωστό μήκος
+if (countType0_dt == null || countType0_dt.length != S) {
+    countType0_dt = new int[S];
+}
+if (sumType0_all == null || sumType0_all.length != S) {
+    sumType0_all = new int[S];
+}
+
+// (2) Μηδενισμοί
+for (int s = 0; s < S; s++) {
+    countType0_dt[s] = 0;
+    sumType0_all[s] = 0;
+}
+
+// (3) Start χρόνου παραθύρου
+tWindowStart = time();
+
+// (4) Άνοιγμα writer
+try {
+    csvOut = new java.io.PrintWriter(
+        new java.io.BufferedWriter(
+            new java.io.FileWriter(csvFile, false)   // overwrite
+        )
+    );
+
+    // Header: tStart,tEnd,s0..s(S-1),total
+    String header = "tStart,tEnd";
+    for (int s = 0; s < S; s++) header += ",s" + s;
+    header += ",total";
+
+    csvOut.println(header);
+    csvOut.flush();
+
+} catch (Exception e) {
+    traceln("CSV OPEN ERROR: " + e);
+    csvOut = null;
+}
+
+traceln("CSV path = " + csvFile.getAbsolutePath());]]></StartupCode>
+			<DestroyCode><![CDATA[if (csvOut == null) return;
+if (sumType0_all == null) return;
+
+int S = sumType0_all.length;
+
+int grandTotal = 0;
+
+// TOTAL στη στήλη tStart, κενό στη στήλη tEnd, μετά αμέσως sectors
+String footer = "TOTAL,";   // ✅ ΜΟΝΟ 1 κενό κελί (tEnd)
+
+for (int s = 0; s < S; s++) {
+    footer += "," + sumType0_all[s];
+    grandTotal += sumType0_all[s];
+}
+
+footer += "," + grandTotal; // τελευταία στήλη: overall total
+
+csvOut.println(footer);
+csvOut.flush();]]></DestroyCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1741955706135</Id>
@@ -1016,6 +1079,141 @@
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769111951313</Id>
+					<Name><![CDATA[dtSec]]></Name>
+					<X>-510</X><Y>1070</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.5]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769111964918</Id>
+					<Name><![CDATA[countType0_dt]]></Name>
+					<X>-510</X><Y>1100</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int[]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new int[ rEceiver_BioNanomachine.numSectors ]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769111999052</Id>
+					<Name><![CDATA[csvReady]]></Name>
+					<X>-510</X><Y>1130</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[false]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769112036987</Id>
+					<Name><![CDATA[csvHeaderWritten]]></Name>
+					<X>-510</X><Y>1160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[false]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769112055901</Id>
+					<Name><![CDATA[csvOut]]></Name>
+					<X>-510</X><Y>1040</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[java.io.PrintWriter]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[null]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769112816296</Id>
+					<Name><![CDATA[tWindowStart]]></Name>
+					<X>-570</X><Y>1480</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769112838778</Id>
+					<Name><![CDATA[csvFile]]></Name>
+					<X>-570</X><Y>1510</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[java.io.File]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new java.io.File("sector_counts_dt.csv")]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769113117397</Id>
+					<Name><![CDATA[dtExport]]></Name>
+					<X>-570</X><Y>1540</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.5]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769113791453</Id>
+					<Name><![CDATA[sumType0_all]]></Name>
+					<X>-390</X><Y>1100</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int[]]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new int[ rEceiver_BioNanomachine.numSectors ]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 			</Variables>
 			<Events>
 				<Event>
@@ -1554,6 +1752,190 @@ targetD = D;
 					<Action><![CDATA[text2.setText("time = " + String.format("%.2f", time()));
 text3.setText("time = " + String.format("%.2f", time()));]]></Action>
 				</Event>
+				<Event>
+					<Id>1769109708332</Id>
+					<Name><![CDATA[dtTick]]></Name>
+					<X>-730</X><Y>1120</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1769109708330</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[0.5]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[// γράφουμε στο plot πόσα Type0 ήρθαν ανά sector στο τελευταίο Δt
+dsS0.add( time(), rEceiver_BioNanomachine.countType0_dt[0] );
+dsS1.add( time(), rEceiver_BioNanomachine.countType0_dt[1] );
+dsS2.add( time(), rEceiver_BioNanomachine.countType0_dt[2] );
+dsS3.add( time(), rEceiver_BioNanomachine.countType0_dt[3] );
+dsS4.add( time(), rEceiver_BioNanomachine.countType0_dt[4] );
+dsS5.add( time(), rEceiver_BioNanomachine.countType0_dt[5] );
+dsS6.add( time(), rEceiver_BioNanomachine.countType0_dt[6] );
+dsS7.add( time(), rEceiver_BioNanomachine.countType0_dt[7] );
+dsS8.add( time(), rEceiver_BioNanomachine.countType0_dt[8] );
+dsS9.add( time(), rEceiver_BioNanomachine.countType0_dt[9] );
+dsS10.add( time(), rEceiver_BioNanomachine.countType0_dt[10] );
+dsS11.add( time(), rEceiver_BioNanomachine.countType0_dt[11] );
+dsS12.add( time(), rEceiver_BioNanomachine.countType0_dt[12] );
+dsS13.add( time(), rEceiver_BioNanomachine.countType0_dt[13] );
+dsS14.add( time(), rEceiver_BioNanomachine.countType0_dt[14] );
+dsS15.add( time(), rEceiver_BioNanomachine.countType0_dt[15] );
+dsS16.add( time(), rEceiver_BioNanomachine.countType0_dt[16] );
+dsS17.add( time(), rEceiver_BioNanomachine.countType0_dt[17] );
+dsS18.add( time(), rEceiver_BioNanomachine.countType0_dt[18] );
+dsS19.add( time(), rEceiver_BioNanomachine.countType0_dt[19] );
+
+// reset για το επόμενο Δt
+for (int s = 0; s < rEceiver_BioNanomachine.numSectors; s++) {
+    rEceiver_BioNanomachine.countType0_dt[s] = 0;
+}]]></Action>
+				</Event>
+				<Event>
+					<Id>1769112709560</Id>
+					<Name><![CDATA[event1]]></Name>
+					<X>-570</X><Y>1440</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1769112709558</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[dtExport]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[if (csvOut == null) return;
+if (countType0_dt == null) return;
+
+int S = countType0_dt.length;
+
+double tStart = tWindowStart;
+double tEnd   = time();
+
+int totalThisWindow = 0;
+
+// Row: tStart,tEnd,s0..s(S-1),total
+String row = "" + tStart + "," + tEnd;
+
+for (int s = 0; s < S; s++) {
+    row += "," + countType0_dt[s];
+    totalThisWindow += countType0_dt[s];
+}
+
+row += "," + totalThisWindow;
+
+csvOut.println(row);
+csvOut.flush();
+
+// reset για επόμενο Δt
+for (int s = 0; s < S; s++) countType0_dt[s] = 0;
+
+tWindowStart = tEnd;]]></Action>
+				</Event>
+				<Event>
+					<Id>1769119558256</Id>
+					<Name><![CDATA[event2]]></Name>
+					<X>-410</X><Y>1440</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties TriggerType="timeout" Mode="cyclic">
+						<Timeout Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</Timeout>
+						<Rate Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="RateUnits"><![CDATA[PER_SECOND]]></Unit>
+						</Rate>
+						<Id>1769119558254</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[dtExport]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+						<Condition><![CDATA[false]]></Condition>
+					</Properties>
+					<Action><![CDATA[// ====== dtTick: κάθε Δt γράφει ένα sample ανά sector στο plot ======
+
+int S = rEceiver_BioNanomachine.numSectors;
+if (S <= 0) S = 20;
+
+// Ασφάλεια: αν για κάποιο λόγο δεν έχουν αρχικοποιηθεί
+if (countType0_dt == null || countType0_dt.length != S) {
+    countType0_dt = new int[S];
+}
+
+// 1) γράφουμε sample στα datasets (ένα ανά sector)
+for (int s = 0; s < S; s++) {
+
+    // Εδώ ΚΑΝΕ mapping στα dsS0..dsS19 (επειδή τα έχεις ως ξεχωριστά objects)
+    if      (s == 0)  dsS0.add(time(), countType0_dt[s]);
+    else if (s == 1)  dsS1.add(time(), countType0_dt[s]);
+    else if (s == 2)  dsS2.add(time(), countType0_dt[s]);
+    else if (s == 3)  dsS3.add(time(), countType0_dt[s]);
+    else if (s == 4)  dsS4.add(time(), countType0_dt[s]);
+    else if (s == 5)  dsS5.add(time(), countType0_dt[s]);
+    else if (s == 6)  dsS6.add(time(), countType0_dt[s]);
+    else if (s == 7)  dsS7.add(time(), countType0_dt[s]);
+    else if (s == 8)  dsS8.add(time(), countType0_dt[s]);
+    else if (s == 9)  dsS9.add(time(), countType0_dt[s]);
+    else if (s == 10) dsS10.add(time(), countType0_dt[s]);
+    else if (s == 11) dsS11.add(time(), countType0_dt[s]);
+    else if (s == 12) dsS12.add(time(), countType0_dt[s]);
+    else if (s == 13) dsS13.add(time(), countType0_dt[s]);
+    else if (s == 14) dsS14.add(time(), countType0_dt[s]);
+    else if (s == 15) dsS15.add(time(), countType0_dt[s]);
+    else if (s == 16) dsS16.add(time(), countType0_dt[s]);
+    else if (s == 17) dsS17.add(time(), countType0_dt[s]);
+    else if (s == 18) dsS18.add(time(), countType0_dt[s]);
+    else if (s == 19) dsS19.add(time(), countType0_dt[s]);
+
+    // 2) reset για το επόμενο Δt
+    countType0_dt[s] = 0;
+}]]></Action>
+				</Event>
 			</Events>
 			<Functions>
 				<Function AccessType="default" StaticFunction="false">
@@ -1720,6 +2102,506 @@ for (int i = 0; i < n; i++) {
 					<FreezeXAxis>true</FreezeXAxis>
 					<VerticalAxisExpression><![CDATA[absorbedType1InRange]]></VerticalAxisExpression>
 					<SamplesToKeep>200000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109739799</Id>
+					<Name><![CDATA[dsS0]]></Name>
+					<X>-730</X><Y>1150</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109739797</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109768293</Id>
+					<Name><![CDATA[dsS1]]></Name>
+					<X>-730</X><Y>1180</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109768291</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109778106</Id>
+					<Name><![CDATA[dsS2]]></Name>
+					<X>-730</X><Y>1210</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109778104</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109787596</Id>
+					<Name><![CDATA[dsS3]]></Name>
+					<X>-730</X><Y>1230</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109787594</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109798378</Id>
+					<Name><![CDATA[dsS4]]></Name>
+					<X>-730</X><Y>1250</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109798376</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109808649</Id>
+					<Name><![CDATA[dsS5]]></Name>
+					<X>-730</X><Y>1270</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109808647</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109818714</Id>
+					<Name><![CDATA[dsS6]]></Name>
+					<X>-730</X><Y>1300</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109818712</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109827498</Id>
+					<Name><![CDATA[dsS7]]></Name>
+					<X>-730</X><Y>1330</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109827496</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109836265</Id>
+					<Name><![CDATA[dsS8]]></Name>
+					<X>-730</X><Y>1360</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109836263</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109844293</Id>
+					<Name><![CDATA[dsS9]]></Name>
+					<X>-730</X><Y>1390</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109844291</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109852306</Id>
+					<Name><![CDATA[dsS10]]></Name>
+					<X>-730</X><Y>1420</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109852304</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109861142</Id>
+					<Name><![CDATA[dsS11]]></Name>
+					<X>-730</X><Y>1450</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109861140</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109870910</Id>
+					<Name><![CDATA[dsS12]]></Name>
+					<X>-730</X><Y>1480</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109870908</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109880675</Id>
+					<Name><![CDATA[dsS13]]></Name>
+					<X>-730</X><Y>1510</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109880673</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109889079</Id>
+					<Name><![CDATA[dsS14]]></Name>
+					<X>-730</X><Y>1540</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109889077</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109897108</Id>
+					<Name><![CDATA[dsS15]]></Name>
+					<X>-730</X><Y>1570</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109897106</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109905847</Id>
+					<Name><![CDATA[dsS16]]></Name>
+					<X>-730</X><Y>1600</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109905845</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109917475</Id>
+					<Name><![CDATA[dsS17]]></Name>
+					<X>-730</X><Y>1630</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109917473</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109926928</Id>
+					<Name><![CDATA[dsS18]]></Name>
+					<X>-730</X><Y>1660</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109926926</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
+				</DataSet>
+    			<DataSet>
+					<Id>1769109935766</Id>
+					<Name><![CDATA[dsS19]]></Name>
+					<X>-730</X><Y>1680</Y>
+					<Label><X>15</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>false</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<AutoUpdate>false</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109935764</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<FreezeXAxis>true</FreezeXAxis>
+					<SamplesToKeep>20000</SamplesToKeep>
 				</DataSet>
 			</AnalysisData>
 			<AgentLinks>
@@ -3605,6 +4487,266 @@ for (int i = 0; i < n; i++) {
 					</Font>
 					<Alignment>LEFT</Alignment>
 				</Text>
+    			<TimePlot>
+					<Id>1769109993016</Id>
+					<Name><![CDATA[plot2]]></Name>
+					<X>-600</X><Y>1170</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1769109993014</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[s0]]></Title>
+					<Id>1769109994283</Id>
+					<Expression><![CDATA[dsS0]]></Expression>
+					<Color>-2354116</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s1]]></Title>
+					<Id>1769110025647</Id>
+					<Expression><![CDATA[dsS1]]></Expression>
+					<Color>-10496</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s2]]></Title>
+					<Id>1769110044650</Id>
+					<Expression><![CDATA[dsS2]]></Expression>
+					<Color>-6632142</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s3]]></Title>
+					<Id>1769110057645</Id>
+					<Expression><![CDATA[dsS3]]></Expression>
+					<Color>-14774017</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s4]]></Title>
+					<Id>1769110072142</Id>
+					<Expression><![CDATA[dsS4]]></Expression>
+					<Color>-3137392</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s5]]></Title>
+					<Id>1769110074953</Id>
+					<Expression><![CDATA[dsS5]]></Expression>
+					<Color>-32944</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s6]]></Title>
+					<Id>1769110077615</Id>
+					<Expression><![CDATA[dsS6]]></Expression>
+					<Color>-13447886</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s7]]></Title>
+					<Id>1769110080309</Id>
+					<Expression><![CDATA[dsS7]]></Expression>
+					<Color>-9404272</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s8]]></Title>
+					<Id>1769110083217</Id>
+					<Expression><![CDATA[dsS8]]></Expression>
+					<Color>-7667573</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s9]]></Title>
+					<Id>1769110086608</Id>
+					<Expression><![CDATA[dsS9]]></Expression>
+					<Color>-23296</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s10]]></Title>
+					<Id>1769110089856</Id>
+					<Expression><![CDATA[dsS10]]></Expression>
+					<Color>-4343957</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s11]]></Title>
+					<Id>1769110093215</Id>
+					<Expression><![CDATA[dsS11]]></Expression>
+					<Color>-12004916</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s12]]></Title>
+					<Id>1769110272494</Id>
+					<Expression><![CDATA[dsS12]]></Expression>
+					<Color>-8097537</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s13]]></Title>
+					<Id>1769110276564</Id>
+					<Expression><![CDATA[dsS13]]></Expression>
+					<Color>-60269</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s14]]></Title>
+					<Id>1769110280618</Id>
+					<Expression><![CDATA[dsS14]]></Expression>
+					<Color>-29696</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s15]]></Title>
+					<Id>1769110285284</Id>
+					<Expression><![CDATA[dsS15]]></Expression>
+					<Color>-12799119</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s16]]></Title>
+					<Id>1769110289979</Id>
+					<Expression><![CDATA[dsS16]]></Expression>
+					<Color>-9807155</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s17]]></Title>
+					<Id>1769110294891</Id>
+					<Expression><![CDATA[dsS17]]></Expression>
+					<Color>-2987746</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s18]]></Title>
+					<Id>1769110300142</Id>
+					<Expression><![CDATA[dsS18]]></Expression>
+					<Color>-2448096</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<DatasetExpression>  
+						<Title><![CDATA[s19]]></Title>
+					<Id>1769110311251</Id>
+					<Expression><![CDATA[dsS19]]></Expression>
+					<Color>-16728065</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>100</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[100]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
 			</Presentation>
 
 				</Level>
@@ -4389,7 +5531,8 @@ sectorAbsorptions_Type1  = new double[numSectors];
 
 sectorArrivalTimeSum     = new double[numSectors];
 sectorArrivalCount       = new int[numSectors];
-cumSectorCount_Type0 = new int[numSectors];]]></StartupCode>
+cumSectorCount_Type0 = new int[numSectors];
+countType0_dt = new int[numSectors];]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1741955927182</Id>
@@ -4753,6 +5896,21 @@ cumSectorCount_Type0 = new int[numSectors];]]></StartupCode>
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769109155046</Id>
+					<Name><![CDATA[countType0_dt]]></Name>
+					<X>40</X><Y>300</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int []]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new int[numSectors]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1741982341311</Id>
 					<Name><![CDATA[numberofOCCUPIEDreceptorsA]]></Name>
@@ -4888,11 +6046,22 @@ cumSectorCount_Type0 = new int[numSectors];]]></StartupCode>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[// === 1. ΕΥΡΕΣΗ ΜΟΡΙΩΝ ΚΟΝΤΑ ΣΤΟΝ RECEIVER ===
+					<Action><![CDATA[// ==========================================================
+//  ABSORB MOLECULES (Receiver)  —  Type0 only for Δt counts
+//  - Αγνοεί F0 (feedback)
+//  - Capacity limit receptorSize μετράει ΜΟΝΟ DATA
+//  - Υπολογίζει sector με γωνία
+//  - Ενημερώνει counters, plots, message detection
+//  - ΝΕΟ: main.countType0_dt[sector] += 1 (arrivals ανά Δt)
+// ==========================================================
+
+
+// === 1) Βρες μόρια κοντά στον receiver ===
 List<Information_Molecules> nearbyMolecules = agentsInRange(main.information_Moleculeses, sensingRadius);
 List<Information_Molecules> absorbedMoleculesA = new ArrayList<>();
 
-// === 1b. FIX: Μέτρα ΜΟΝΟ τα DATA (όχι F0) για τον περιορισμό receptorSize ===
+
+// === 1b) Μέτρα ΜΟΝΟ DATA (όχι F0) για capacity check ===
 int dataNearbyCount = 0;
 for (Information_Molecules x : nearbyMolecules) {
     if (x.type == null || !x.type.trim().equals("F0")) {
@@ -4900,67 +6069,76 @@ for (Information_Molecules x : nearbyMolecules) {
     }
 }
 
-// === 2. ΑΠΟΡΡΟΦΗΣΗ ΜΟΡΙΩΝ ===
+
+// === 2) Απορρόφηση μορίων ===
 for (Information_Molecules m : nearbyMolecules) {
 
-    // Αγνόησε feedback molecules (Rx→Tx)
+    // 2.0 Αγνόησε feedback (F0)
     if (m.type != null && m.type.trim().equals("F0")) {
         continue;
     }
 
-    // Περιορισμός capacity: βασίζεται ΜΟΝΟ σε DATA
+    // 2.1 Capacity: βασίζεται ΜΟΝΟ σε DATA
     if (!m.absorbed && !m.remove && dataNearbyCount <= main.receptorSize) {
 
-        // 2.1 Σταμάτα το μόριο και σημείωσέ το ως απορροφημένο
+        // 2.2 Απορρόφηση
         m.stop();
         m.set_absorbed(true);
 
-        // 2.2 ΥΠΟΛΟΓΙΣΜΟΣ ΓΩΝΙΑΣ & ΤΟΜΕΑ (ανεστραμμένος Y του AnyLogic)
+        // 2.3 Υπολογισμός sector από γωνία (AnyLogic Y inverted)
         double angle   = atan2(-(m.getY() - getY()), m.getX() - getX());
         double degrees = toDegrees(angle);
         if (degrees < 0) degrees += 360;
 
         double sectorWidth = 360.0 / numSectors;
-        int sector = (int)(degrees / sectorWidth);   // 0..numSectors-1
+        int sector = (int) (degrees / sectorWidth);   // 0..numSectors-1
 
         if (sector < 0) sector = 0;
         if (sector >= numSectors) sector = numSectors - 1;
 
-        // 2.3 ΧΡΟΝΟΣ ΑΦΙΞΗΣ
-        double t = time() - m.birthTime;
-        if (t > 0) {
-            sectorArrivalTimeSum[sector] += t;
+        // 2.4 Χρόνος άφιξης
+        double tArr = time() - m.birthTime;
+        if (tArr > 0) {
+            sectorArrivalTimeSum[sector] += tArr;
             sectorArrivalCount[sector]   += 1;
         }
 
-        // 2.4 ΑΠΟΡΡΟΦΗΣΕΙΣ ΑΝΑ ΤΟΜΕΑ
+        // 2.5 Συνολικές απορροφήσεις ανά sector (όλα τα DATA μαζί)
         sectorAbsorptions_Total[sector] += 1.0;
 
-        // DATA είναι type="0" (κρατάμε το traceln για debug)
+        // 2.6 Αν το μόριο είναι Type0 ("0")
         if (m.type != null && m.type.trim().equals("0")) {
-            cumSectorCount_Type0[sector] += 1;
-            main.absorbedType0SinceLastReport++;
 
-           // traceln("ABSORB t=" + time()
-            //        + " type=[" + m.type + "]"
-            //        + " sector=" + sector
-             //       + " cumSectorCount_Type0[" + sector + "]=" + cumSectorCount_Type0[sector]);
+            // cumulatives (για feedback distribution κλπ)
+            cumSectorCount_Type0[sector] += 1;
+
+            // αυτά τα χρησιμοποιείς για threshold detection Type0
+            main.absorbedType0SinceLastReport++;
+             // ✅ arrivals μέσα στο τρέχον Δt (για export ανά Δt)
+    		main.countType0_dt[sector] += 1;
+
+   			 // ✅ συνολικό άθροισμα για ΟΛΗ τη simulation (για footer TOTAL)
+    		main.sumType0_all[sector] += 1;
+
+            // ✅ ΝΕΟ: arrivals Type0 μέσα στο τρέχον Δt (για CSV/Heatmap)
+            // Αυτό το array ΠΡΕΠΕΙ να υπάρχει στη Main:
+            // int[] countType0_dt;
+            main.countType0_dt[sector] += 1;
         }
 
-        // 2.5 ΓΕΝΙΚΗ ΑΠΟΡΡΟΦΗΣΗ
+        // 2.7 Γενικό counter
         main.totalAbsorbedAll++;
 
-        // 2.6 ΕΝΗΜΕΡΩΣΗ γραφημάτων
+        // 2.8 Update bar charts (όπως τα έχεις ήδη)
         main.updateBarAbsorptionsTotal();
         main.updateBarAbsorptionsType0();
-        main.updateBarAbsorptionsType1(); // το αφήνουμε όπως είναι (αν υπάρχει ακόμα)
-
-        // 2.7 ΕΝΗΜΕΡΩΣΗ arrival-time bar
+        main.updateBarAbsorptionsType1(); // αν υπάρχει ακόμα
         main.updateBarArrivalTime();
     }
 }
 
-// === 3. ΟΠΤΙΚΗ ΑΝΑΠΑΡΑΣΤΑΣΗ ΑΠΟΡΡΟΦΗΜΕΝΩΝ ΜΟΡΙΩΝ ===
+
+// === 3) Οπτικοποίηση απορροφημένων ===
 for (Information_Molecules m : nearbyMolecules) {
     if (m.absorbed) {
         absorbedMoleculesA.add(m);
@@ -4968,7 +6146,8 @@ for (Information_Molecules m : nearbyMolecules) {
     }
 }
 
-// === 4. ΑΝΙΧΝΕΥΣΗ ΣΥΝΟΛΙΚΟΥ ΜΗΝΥΜΑΤΟΣ ===
+
+// === 4) Ανίχνευση "συνολικού μηνύματος" (A) ===
 if (!main.passedThresholdA && absorbedMoleculesA.size() >= main.individualThreshold) {
     main.passedThresholdA = true;
 }
@@ -4981,7 +6160,8 @@ if (main.passedThresholdA && main.passeddownThresholdA) {
     main.passeddownThresholdA = false;
 }
 
-// === 5. ΑΝΙΧΝΕΥΣΗ ΜΗΝΥΜΑΤΟΣ TYPE 0 ===
+
+// === 5) Ανίχνευση μηνύματος Type0 (με thresholds) ===
 if (!main.passedThresholdType0 && main.absorbedType0SinceLastReport >= main.thresholdType0_Upper) {
     main.passedThresholdType0 = true;
 }
@@ -4990,17 +6170,19 @@ if (main.passedThresholdType0 && main.absorbedType0SinceLastReport <= main.thres
 }
 if (main.passedThresholdType0 && main.passedDownThresholdType0) {
 
-    // ΔΕΝ στέλνουμε από εδώ — στέλνουμε από event κάθε 20s
+    // ΔΕΝ στέλνουμε feedback εδώ — το κάνεις από event
     // sendCumulativeFeedback0();
 
     main.messagesReceivedType0++;
     main.datasetInRange_Type0.add(time(), main.messagesReceivedType0);
+
     main.passedThresholdType0 = false;
     main.passedDownThresholdType0 = false;
     main.absorbedType0SinceLastReport = 0;
 }
 
-// === 6. (TYPE 1 block) το αφήνουμε όπως είναι αν υπάρχει ακόμα στο project ===
+
+// === 6) Type1 detection (το αφήνουμε όπως είναι αν υπάρχει ακόμα) ===
 if (!main.passedThresholdType1 && main.absorbedType1SinceLastReport >= main.thresholdType1_Upper) {
     main.passedThresholdType1 = true;
 }
@@ -5008,19 +6190,24 @@ if (main.passedThresholdType1 && main.absorbedType1SinceLastReport <= main.thres
     main.passedDownThresholdType1 = true;
 }
 if (main.passedThresholdType1 && main.passedDownThresholdType1) {
+
     main.messagesReceivedType1++;
     main.datasetInRange_Type1.add(time(), main.messagesReceivedType1);
+
     main.passedThresholdType1 = false;
     main.passedDownThresholdType1 = false;
     main.absorbedType1SinceLastReport = 0;
 }
 
-// === 7. DEBUG & ΚΑΘΑΡΙΣΜΟΣ ===
-absorbedMoleculesSinceLastReportA = absorbedMoleculesA.size();
-if (absorbedMoleculesA.size() == 0)
-    main.passedThresholdA = false;
 
-// === 8. UPDATE ARRIVAL BAR ===
+// === 7) Cleanup / debug flags ===
+absorbedMoleculesSinceLastReportA = absorbedMoleculesA.size();
+if (absorbedMoleculesA.size() == 0) {
+    main.passedThresholdA = false;
+}
+
+
+// === 8) Update arrival bar (το έχεις ήδη) ===
 main.updateBarArrivalTime();]]></Action>
 				</Event>
 				<Event>
