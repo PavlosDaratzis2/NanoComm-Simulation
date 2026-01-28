@@ -752,7 +752,7 @@ csvOut.flush();]]></DestroyCode>
 					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
-						<Type><![CDATA[int]]></Type>        
+						<Type><![CDATA[double]]></Type>        
 						<InitialValue Class="CodeValue">
 							<Code><![CDATA[0]]></Code>
 						</InitialValue>
@@ -842,7 +842,7 @@ csvOut.flush();]]></DestroyCode>
 					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
-						<Type><![CDATA[int]]></Type>        
+						<Type><![CDATA[double]]></Type>        
 						<InitialValue Class="CodeValue">
 							<Code><![CDATA[0]]></Code>
 						</InitialValue>
@@ -1214,6 +1214,66 @@ csvOut.flush();]]></DestroyCode>
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769597971967</Id>
+					<Name><![CDATA[yFilt0]]></Name>
+					<X>220</X><Y>-420</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769597981597</Id>
+					<Name><![CDATA[alpha0]]></Name>
+					<X>220</X><Y>-390</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[0.25]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769598364895</Id>
+					<Name><![CDATA[yFilt0_init]]></Name>
+					<X>220</X><Y>-360</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[false]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769605126463</Id>
+					<Name><![CDATA[absorptionShapeId]]></Name>
+					<X>240</X><Y>230</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[2]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 			</Variables>
 			<Events>
 				<Event>
@@ -1328,7 +1388,7 @@ for (Information_Molecules m : information_Moleculeses) {
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</OccurrenceTime>
 						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[0.1]]></Code>
+							<Code><![CDATA[0.01]]></Code>
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
@@ -1342,13 +1402,32 @@ for (Information_Molecules m : information_Moleculeses) {
 // ---- 0) Track current run N dynamically ----
 if (currentNtx0 <= 0) currentNtx0 = -1;
 
-// ---- 1) Build signal using *MOLECULES IN RANGE* (as shown in the plot) ----
-int yNow = rEceiver_BioNanomachine.reportMoleculesA();  // current molecules in range (Type0, excluding F0 in Receiver code)
-winAbs0 = yNow;
+// ---- 1) Raw signal: molecules in range (integer) ----
+int yRaw = rEceiver_BioNanomachine.reportMoleculesA(); // raw integer count
+winAbs0 = (double) yRaw;                               // store raw as double
 
-// Expose to monitors/plots (optional)
-absorbedType0InRange = winAbs0;
+// ---- 1b) EWMA smoothing (gives fractional values like 11.66) ----
+// IMPORTANT: initialize filter the first time, αλλιώς ξεκινάει από 0 και κάνει περίεργα
+if (!yFilt0_init) {
+    yFilt0 = winAbs0;
+    yFilt0_init = true;
+} else {
+    // EWMA: yFilt = alpha*yRaw + (1-alpha)*yFilt
+    yFilt0 = alpha0 * winAbs0 + (1.0 - alpha0) * yFilt0;
+}
+
+// Αυτό είναι ΤΟ ΣΗΜΑ που χρησιμοποιεί το detection
+double ySignal = yFilt0;
+
+// Expose to monitors/plots
+// Αν absorbedType0InRange είναι double -> αυτό είναι ΟΚ:
+absorbedType0InRange = ySignal;
+
+// Αν absorbedType0InRange είναι int, τότε ΑΝΤΙ για την από πάνω γραμμή βάλε:
+// absorbedType0InRange = (int) Math.round(ySignal);
+
 absorbedType1InRange = 0;
+
 
 // ---- 2) AUTO-CALIBRATION on the FIRST pulse ----
 if (!thresholdsReady && !calibrating && winAbs0 > 0) {
@@ -1356,205 +1435,49 @@ if (!thresholdsReady && !calibrating && winAbs0 > 0) {
     calibrating = true;
     calibrationStartTime = time();
 
-    // lock the N used in THIS run
     currentNtx0 = bacteriaPerPulse;
 
-    // diffusion delay proxy (paper): td = r^2/(6D)
     double r_m = transmitter1_BioNanomachine.distanceTo(rEceiver_BioNanomachine) / pxPerMeter;
-    double D_est = targetD; // updated by msdEvent
+    double D_est = targetD;
     double td = (D_est > 0) ? (r_m * r_m) / (6.0 * D_est) : 0;
 
-    // use td directly (no 2.5*td)
     if (td > 0) calibrationTmax = td;
     else        calibrationTmax = 80.0;
 
-    // reset dataset that stores (tRel, y)
     datasetInRange_Type0.reset();
 
-    // reset state machine flags
     passedUpConcType0 = false;
     passedDownConcType0 = false;
 
     traceln("CALIBRATION START t=" + time()
             + "  Ntx=" + currentNtx0
-            + "  win=" + windowSizeSec + "s"
-            + "  D_est=" + D_est
-            + "  r_m=" + r_m
-            + "  td=" + td
+            + "  alpha0=" + alpha0
             + "  Tmax=" + calibrationTmax);
 }
 
-// Collect calibration samples
 if (calibrating) {
 
     double tRel = time() - calibrationStartTime;
-    datasetInRange_Type0.add(tRel, winAbs0);
+
+    // store the SAME signal we detect on (filtered)
+    datasetInRange_Type0.add(tRel, ySignal);
 
     if (tRel >= calibrationTmax) {
 
-        // ===== helper (polynomial regression) =====
-        class PRHelper {
-
-            double[] polyFit(double[] t, double[] y, int deg) {
-
-                int n = deg + 1;
-                double[][] A = new double[n][n];
-                double[]    b = new double[n];
-
-                for (int i = 0; i < n; i++) {
-                    for (int j = 0; j < n; j++) {
-                        double s = 0;
-                        for (int k = 0; k < t.length; k++) s += Math.pow(t[k], i + j);
-                        A[i][j] = s;
-                    }
-                    double sb = 0;
-                    for (int k = 0; k < t.length; k++) sb += y[k] * Math.pow(t[k], i);
-                    b[i] = sb;
-                }
-
-                // Gaussian elimination (partial pivot)
-                for (int p = 0; p < n; p++) {
-                    int max = p;
-                    for (int i = p + 1; i < n; i++) {
-                        if (Math.abs(A[i][p]) > Math.abs(A[max][p])) max = i;
-                    }
-                    double[] tmp = A[p]; A[p] = A[max]; A[max] = tmp;
-                    double tb = b[p]; b[p] = b[max]; b[max] = tb;
-
-                    double piv = A[p][p];
-                    if (Math.abs(piv) < 1e-12) return new double[n];
-
-                    for (int j = p; j < n; j++) A[p][j] /= piv;
-                    b[p] /= piv;
-
-                    for (int i = p + 1; i < n; i++) {
-                        double factor = A[i][p];
-                        for (int j = p; j < n; j++) A[i][j] -= factor * A[p][j];
-                        b[i] -= factor * b[p];
-                    }
-                }
-
-                double[] x = new double[n];
-                for (int i = n - 1; i >= 0; i--) {
-                    double s = b[i];
-                    for (int j = i + 1; j < n; j++) s -= A[i][j] * x[j];
-                    x[i] = s;
-                }
-                return x;
-            }
-
-            double eval(double[] c, double x) {
-                double y = 0, xp = 1;
-                for (int i = 0; i < c.length; i++) { y += c[i] * xp; xp *= x; }
-                return y;
-            }
-
-            double mse(double[] t, double[] y, double[] c) {
-                double s = 0;
-                for (int k = 0; k < t.length; k++) {
-                    double e = y[k] - eval(c, t[k]);
-                    s += e * e;
-                }
-                return s / Math.max(1, t.length);
-            }
-
-            java.util.ArrayList<Double> localMaximaTimes(double[] c, double t0, double t1) {
-                java.util.ArrayList<Double> peaks = new java.util.ArrayList<>();
-                int N = 2000;
-                double dt = (t1 - t0) / N;
-
-                double prev = eval(c, t0);
-                double curr = eval(c, t0 + dt);
-
-                for (int i = 2; i < N; i++) {
-                    double x = t0 + i * dt;
-                    double next = eval(c, x);
-                    if (curr > prev && curr > next) peaks.add(t0 + (i - 1) * dt);
-                    prev = curr;
-                    curr = next;
-                }
-                return peaks;
-            }
-        }
-
-        PRHelper H = new PRHelper();
-
         int M = datasetInRange_Type0.size();
-        if (M < 20) {
+        if (M < 5) {
             traceln("CALIBRATION: not enough samples (M=" + M + ")");
+            calibrating = false;
         } else {
 
-            // load samples
-            double[] tArr = new double[M];
-            double[] yArr = new double[M];
             double maxY = 0;
-
             for (int i = 0; i < M; i++) {
-                tArr[i] = datasetInRange_Type0.getX(i);
-                yArr[i] = datasetInRange_Type0.getY(i);
-                if (yArr[i] > maxY) maxY = yArr[i];
+                double yy = datasetInRange_Type0.getY(i);
+                if (yy > maxY) maxY = yy;
             }
 
-            // adaptive order selection (paper idea)
-            int dMin = 2, dMax = 6;
-            double eta = 0.02;
-
-            double prevMSE = Double.POSITIVE_INFINITY;
-            int dStar = dMax;
-
-            for (int d = dMin; d <= dMax; d++) {
-                double[] c = H.polyFit(tArr, yArr, d);
-                double mse = H.mse(tArr, yArr, c);
-
-                if (d > dMin) {
-                    double improvement = (prevMSE - mse) / Math.max(1e-9, prevMSE);
-                    if (improvement < eta) { dStar = d - 1; break; }
-                }
-                prevMSE = mse;
-            }
-
-            // fit degree-6 on full data to find peaks
-            double[] c6 = H.polyFit(tArr, yArr, 6);
-
-            double Tmax = tArr[M - 1];
-            java.util.ArrayList<Double> peaks = H.localMaximaTimes(c6, 0, Tmax);
-
-            // trimming point: 2nd peak if exists; otherwise keep full window
-            double tCut = Tmax;
-            if (peaks.size() >= 2) tCut = peaks.get(1);
-
-            // build trimmed arrays
-            int M2 = 0;
-            for (int i = 0; i < M; i++) if (tArr[i] <= tCut) M2++;
-
-            double[] tTrim = new double[M2];
-            double[] yTrim = new double[M2];
-
-            int idx = 0;
-            for (int i = 0; i < M; i++) {
-                if (tArr[i] <= tCut) {
-                    tTrim[idx] = tArr[i];
-                    yTrim[idx] = yArr[i];
-                    idx++;
-                }
-            }
-
-            // refit on trimmed data (diagnostics)
-            double[] cRef = H.polyFit(tTrim, yTrim, 6);
-
-            // --------------------------
-            // PAPER-STYLE CHANGE YOU ASKED:
-            // URT = round(0.9 * maxY)  (NOT int-cast that truncates!)
-            // --------------------------
-            double urtDouble = 0.9 * maxY;
-
-            // DEBUG (optional)
-            traceln("DEBUG maxY=" + maxY);
-            traceln("DEBUG 0.9*maxY=" + urtDouble);
-            traceln("DEBUG (int)(0.9*maxY)=" + (int)urtDouble);
-            traceln("DEBUG round(0.9*maxY)=" + (int)Math.round(urtDouble));
-
-            int URT = (int) Math.round(urtDouble);   // <-- IMPORTANT CASTING FIX
+            // URT = round(0.9 * maxY)
+            int URT = (int) Math.round(0.9 * maxY);
             if (URT < 2) URT = 2;
 
             int LRT = (int) Math.round(URT / 3.0);
@@ -1568,35 +1491,36 @@ if (calibrating) {
             calibrating = false;
 
             traceln("CALIBRATION DONE t=" + time()
-                    + "  Ntx=" + currentNtx0
-                    + "  URT" + currentNtx0 + "=" + URT
-                    + "  LRT" + currentNtx0 + "=" + LRT
-                    + "  maxY=" + maxY
-                    + "  d*=" + dStar
-                    + "  peaks=" + peaks.size()
-                    + "  tCut=" + tCut);
+                    + "  URT=" + URT
+                    + "  LRT=" + LRT
+                    + "  maxY(filtered)=" + maxY);
         }
     }
 }
 
-// ---- 3) MESSAGE DETECTION (URT/LRT) + FEEDBACK SEND ----
+
+// ---- 3) MESSAGE DETECTION (URT/LRT) ----
 if (thresholdsReady) {
 
-    int y = winAbs0;
-    int upper = thresholdType0_Upper;
-    int lower = thresholdType0_Lower;
+    double y = ySignal;
+
+    double upper = (double) thresholdType0_Upper;
+    double lower = (double) thresholdType0_Lower;
 
     if (!passedUpConcType0 && y >= upper) {
         passedUpConcType0 = true;
-        traceln(">>> START detected at t=" + time() + " (y=" + y + ")");
+        traceln(">>> START detected at t=" + time()
+                + " (yFilt=" + y + ", yRaw=" + yRaw + ")");
     }
 
     if (passedUpConcType0 && y <= lower) {
-        traceln(">>> END-OF-MSG detected at t=" + time() + " (y=" + y + ") -> SENDING FEEDBACK");
+        traceln(">>> END-OF-MSG detected at t=" + time()
+                + " (yFilt=" + y + ", yRaw=" + yRaw + ")");
         NUMBER_OF_MESSAGES_RECEIVED++;
+
+        // feedback (αν το θες OFF-by-default, βάλε εδώ if(flag))
         rEceiver_BioNanomachine.sendCumulativeFeedback0();
 
-        // Reset sector profile so feedback represents the NEXT message
         for (int s = 0; s < rEceiver_BioNanomachine.numSectors; s++) {
             rEceiver_BioNanomachine.cumSectorCount_Type0[s] = 0;
         }
@@ -5532,7 +5456,36 @@ sectorAbsorptions_Type1  = new double[numSectors];
 sectorArrivalTimeSum     = new double[numSectors];
 sectorArrivalCount       = new int[numSectors];
 cumSectorCount_Type0 = new int[numSectors];
-countType0_dt = new int[numSectors];]]></StartupCode>
+countType0_dt = new int[numSectors];
+// --- absorption geometry init ---
+absorbR = inRangeRadiusPx;   // το ίδιο R που είχες πριν (π.χ. 40 px)
+
+// Square with SAME AREA as circle of radius R:
+// Area(circle)=πR^2, Area(square)=side^2 => side=R*sqrt(π)
+squareHalfSide = 0.5 * absorbR * Math.sqrt(Math.PI);
+
+// Candidate radius that surely contains the whole square (to get candidates fast):
+// half diagonal = halfSide*sqrt(2)
+squareSearchR = squareHalfSide * Math.sqrt(2.0);
+// =========================================
+// Equilateral Triangle with SAME AREA as circle of radius absorbR
+// Area(circle) = π R^2
+// Area(triangle) = (sqrt(3)/4) * s^2
+// => s = sqrt( 4A / sqrt(3) )
+// =========================================
+double A = Math.PI * absorbR * absorbR;
+
+triSide   = Math.sqrt( (4.0 * A) / Math.sqrt(3.0) );
+triHeight = (Math.sqrt(3.0) / 2.0) * triSide;
+
+// Candidate radius for triangle (distance from centroid to vertex)
+// For equilateral triangle: Rcircum = s / sqrt(3)
+triSearchR = triSide / Math.sqrt(3.0);
+traceln("[TRI] absorbR=" + absorbR
+  + " A=" + A
+  + " triSide=" + triSide
+  + " triHeight=" + triHeight
+  + " triSearchR=" + triSearchR);]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1741955927182</Id>
@@ -5911,6 +5864,117 @@ countType0_dt = new int[numSectors];]]></StartupCode>
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769602085822</Id>
+					<Name><![CDATA[halfSideAbsorb]]></Name>
+					<X>-190</X><Y>-260</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769602094989</Id>
+					<Name><![CDATA[searchRadiusAbsorb]]></Name>
+					<X>-190</X><Y>-230</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769602418366</Id>
+					<Name><![CDATA[useSquareAbsorption]]></Name>
+					<X>-190</X><Y>-200</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[boolean]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[true]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769605191238</Id>
+					<Name><![CDATA[absorbR]]></Name>
+					<X>-180</X><Y>-310</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769605202523</Id>
+					<Name><![CDATA[squareHalfSide]]></Name>
+					<X>-100</X><Y>-310</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769605211562</Id>
+					<Name><![CDATA[squareSearchR]]></Name>
+					<X>-300</X><Y>-310</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769606364458</Id>
+					<Name><![CDATA[triSide]]></Name>
+					<X>-310</X><Y>-270</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769606376984</Id>
+					<Name><![CDATA[triHeight]]></Name>
+					<X>-310</X><Y>-250</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769606386198</Id>
+					<Name><![CDATA[triSearchR]]></Name>
+					<X>-310</X><Y>-230</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[double]]></Type>        
+					</Properties>
+				</Variable>
 				<Variable Class="Parameter">
 					<Id>1741982341311</Id>
 					<Name><![CDATA[numberofOCCUPIEDreceptorsA]]></Name>
@@ -6047,21 +6111,38 @@ countType0_dt = new int[numSectors];]]></StartupCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
 					<Action><![CDATA[// ==========================================================
-//  ABSORB MOLECULES (Receiver)  —  Type0 only for Δt counts
-//  - Αγνοεί F0 (feedback)
-//  - Capacity limit receptorSize μετράει ΜΟΝΟ DATA
-//  - Υπολογίζει sector με γωνία
-//  - Ενημερώνει counters, plots, message detection
-//  - ΝΕΟ: main.countType0_dt[sector] += 1 (arrivals ανά Δt)
+//  ABSORB MOLECULES (Receiver)
+//  - Supports absorption geometry: CIRCLE / SQUARE / TRIANGLE
+//    via: main.absorptionShapeId
+//      0 = circle, 1 = square, 2 = equilateral triangle
+//  - Uses helper functions in Receiver:
+//      double getCandidateRadius()
+//      boolean isInsideAbsorption(double x, double y)
+//
+//  Keeps your existing logic:
+//  - ignores F0 (feedback)
+//  - capacity limit receptorSize counts ONLY DATA
+//  - sectors computed by angle (same as before)
+//  - updates counters, plots, message detection
+//  - Δt export counters: main.countType0_dt[sector]
+//  - total sums: main.sumType0_all[sector]
 // ==========================================================
 
 
-// === 1) Βρες μόρια κοντά στον receiver ===
-List<Information_Molecules> nearbyMolecules = agentsInRange(main.information_Moleculeses, sensingRadius);
-List<Information_Molecules> absorbedMoleculesA = new ArrayList<>();
+// === 1) SELECT CANDIDATES NEAR RECEIVER (depends on geometry) ===
+double candR = getCandidateRadius();
+List<Information_Molecules> candidates = agentsInRange(main.information_Moleculeses, candR);
+
+// Filter candidates strictly inside the current absorption shape
+List<Information_Molecules> nearbyMolecules = new ArrayList<>();
+for (Information_Molecules m : candidates) {
+    if (isInsideAbsorption(m.getX(), m.getY())) {
+        nearbyMolecules.add(m);
+    }
+}
 
 
-// === 1b) Μέτρα ΜΟΝΟ DATA (όχι F0) για capacity check ===
+// === 1b) Measure ONLY DATA (not F0) for receptorSize capacity ===
 int dataNearbyCount = 0;
 for (Information_Molecules x : nearbyMolecules) {
     if (x.type == null || !x.type.trim().equals("F0")) {
@@ -6070,75 +6151,73 @@ for (Information_Molecules x : nearbyMolecules) {
 }
 
 
-// === 2) Απορρόφηση μορίων ===
+// === 2) ABSORB MOLECULES ===
+List<Information_Molecules> absorbedMoleculesA = new ArrayList<>();
+
 for (Information_Molecules m : nearbyMolecules) {
 
-    // 2.0 Αγνόησε feedback (F0)
+    // 2.0 Ignore feedback molecules (Rx→Tx)
     if (m.type != null && m.type.trim().equals("F0")) {
         continue;
     }
 
-    // 2.1 Capacity: βασίζεται ΜΟΝΟ σε DATA
+    // 2.1 Capacity: based ONLY on DATA molecules
     if (!m.absorbed && !m.remove && dataNearbyCount <= main.receptorSize) {
 
-        // 2.2 Απορρόφηση
+        // 2.2 Absorb molecule
         m.stop();
         m.set_absorbed(true);
 
-        // 2.3 Υπολογισμός sector από γωνία (AnyLogic Y inverted)
+        // 2.3 Compute angle & sector (AnyLogic inverted Y)
         double angle   = atan2(-(m.getY() - getY()), m.getX() - getX());
         double degrees = toDegrees(angle);
         if (degrees < 0) degrees += 360;
 
         double sectorWidth = 360.0 / numSectors;
-        int sector = (int) (degrees / sectorWidth);   // 0..numSectors-1
+        int sector = (int)(degrees / sectorWidth); // 0..numSectors-1
 
         if (sector < 0) sector = 0;
         if (sector >= numSectors) sector = numSectors - 1;
 
-        // 2.4 Χρόνος άφιξης
+        // 2.4 Arrival time
         double tArr = time() - m.birthTime;
         if (tArr > 0) {
             sectorArrivalTimeSum[sector] += tArr;
             sectorArrivalCount[sector]   += 1;
         }
 
-        // 2.5 Συνολικές απορροφήσεις ανά sector (όλα τα DATA μαζί)
+        // 2.5 Total absorptions per sector (all DATA)
         sectorAbsorptions_Total[sector] += 1.0;
 
-        // 2.6 Αν το μόριο είναι Type0 ("0")
+        // 2.6 If molecule is Type0 ("0")
         if (m.type != null && m.type.trim().equals("0")) {
 
-            // cumulatives (για feedback distribution κλπ)
+            // cumulative sector profile (used for feedback distribution)
             cumSectorCount_Type0[sector] += 1;
 
-            // αυτά τα χρησιμοποιείς για threshold detection Type0
+            // threshold detection counter (in-range logic)
             main.absorbedType0SinceLastReport++;
-             // ✅ arrivals μέσα στο τρέχον Δt (για export ανά Δt)
-    		main.countType0_dt[sector] += 1;
 
-   			 // ✅ συνολικό άθροισμα για ΟΛΗ τη simulation (για footer TOTAL)
-    		main.sumType0_all[sector] += 1;
-
-            // ✅ ΝΕΟ: arrivals Type0 μέσα στο τρέχον Δt (για CSV/Heatmap)
-            // Αυτό το array ΠΡΕΠΕΙ να υπάρχει στη Main:
-            // int[] countType0_dt;
+            // Δt export counter (arrivals within current Δt)
             main.countType0_dt[sector] += 1;
+
+            // global total sum for whole simulation (footer TOTAL)
+            main.sumType0_all[sector] += 1;
         }
 
-        // 2.7 Γενικό counter
+        // 2.7 Global absorbed counter
         main.totalAbsorbedAll++;
 
-        // 2.8 Update bar charts (όπως τα έχεις ήδη)
+        // 2.8 Update charts (as you already have)
         main.updateBarAbsorptionsTotal();
         main.updateBarAbsorptionsType0();
-        main.updateBarAbsorptionsType1(); // αν υπάρχει ακόμα
+        main.updateBarAbsorptionsType1(); // keep if still exists
         main.updateBarArrivalTime();
     }
 }
 
 
-// === 3) Οπτικοποίηση απορροφημένων ===
+// === 3) VISUALIZE absorbed molecules ===
 for (Information_Molecules m : nearbyMolecules) {
     if (m.absorbed) {
         absorbedMoleculesA.add(m);
@@ -6147,7 +6226,7 @@ for (Information_Molecules m : nearbyMolecules) {
 }
 
 
-// === 4) Ανίχνευση "συνολικού μηνύματος" (A) ===
+// === 4) TOTAL MESSAGE detection (A) ===
 if (!main.passedThresholdA && absorbedMoleculesA.size() >= main.individualThreshold) {
     main.passedThresholdA = true;
 }
@@ -6161,7 +6240,7 @@ if (main.passedThresholdA && main.passeddownThresholdA) {
 }
 
 
-// === 5) Ανίχνευση μηνύματος Type0 (με thresholds) ===
+// === 5) TYPE0 message detection (thresholds) ===
 if (!main.passedThresholdType0 && main.absorbedType0SinceLastReport >= main.thresholdType0_Upper) {
     main.passedThresholdType0 = true;
 }
@@ -6170,7 +6249,7 @@ if (main.passedThresholdType0 && main.absorbedType0SinceLastReport <= main.thres
 }
 if (main.passedThresholdType0 && main.passedDownThresholdType0) {
 
-    // ΔΕΝ στέλνουμε feedback εδώ — το κάνεις από event
+    // feedback send is NOT here (you do it from event)
     // sendCumulativeFeedback0();
 
     main.messagesReceivedType0++;
@@ -6182,7 +6261,7 @@ if (main.passedThresholdType0 && main.passedDownThresholdType0) {
 }
 
 
-// === 6) Type1 detection (το αφήνουμε όπως είναι αν υπάρχει ακόμα) ===
+// === 6) TYPE1 block (keep as-is if exists) ===
 if (!main.passedThresholdType1 && main.absorbedType1SinceLastReport >= main.thresholdType1_Upper) {
     main.passedThresholdType1 = true;
 }
@@ -6200,14 +6279,14 @@ if (main.passedThresholdType1 && main.passedDownThresholdType1) {
 }
 
 
-// === 7) Cleanup / debug flags ===
+// === 7) Cleanup ===
 absorbedMoleculesSinceLastReportA = absorbedMoleculesA.size();
 if (absorbedMoleculesA.size() == 0) {
     main.passedThresholdA = false;
 }
 
 
-// === 8) Update arrival bar (το έχεις ήδη) ===
+// === 8) Update arrival bar (already in your project) ===
 main.updateBarArrivalTime();]]></Action>
 				</Event>
 				<Event>
@@ -6291,21 +6370,24 @@ If absorbBacteria is true reports the number of bacteria absorbed since last rep
 					<PublicFlag>false</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
-					<Body><![CDATA[
+					<Body><![CDATA[int cand = 0, inside = 0;
+double candR = getCandidateRadius();
 
-    int cnt = 0;
+for (Information_Molecules m : agentsInRange(main.information_Moleculeses, candR)) {
+    if (m.type != null && m.type.trim().equals("F0")) continue;
+    cand++;
+    if (isInsideAbsorption(m.getX(), m.getY())) inside++;
+}
 
-    // Μετράμε ΜΕ ΤΟ ΙΔΙΟ radius του circle: 40 px
-    for (Information_Molecules m : agentsInRange(main.information_Moleculeses, inRangeRadiusPx)) {
-
-        // Αν έχεις feedback μόρια τύπου F0 και δεν θες να μετριούνται:
-        if ("F0".equals(m.type)) continue;
-
-        cnt++;
-    }
-
-    return cnt;
-]]></Body>
+/*traceln("shapeId=" + main.absorptionShapeId
+        + " candR=" + candR
+        + " triSide=" + triSide
+        + " triH=" + triHeight
+        + " triSearchR=" + triSearchR
+        + " cand=" + cand
+        + " inside=" + inside);
+*/
+return inside;]]></Body>
 				</Function>
 				<Function AccessType="default" StaticFunction="false">
 					<ReturnModificator>VOID</ReturnModificator>
@@ -6480,6 +6562,99 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
         + " sumCum=" + sumCum
         + " t=" + time());]]></Body>
 				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[boolean]]></ReturnType>
+					<Id>1769602134049</Id>
+					<Name><![CDATA[isInsideAbsorption]]></Name>
+					<X>-40</X><Y>-230</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[x]]></Name>
+						<Type><![CDATA[double]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[y]]></Name>
+						<Type><![CDATA[double]]></Type>
+					</Parameter>
+					<Body><![CDATA[ 
+
+    double dx = x - getX();
+    double dy = y - getY();
+
+    int id = main.absorptionShapeId;
+
+    // =========================
+    // 0) CIRCLE
+    // =========================
+    if (id == 0) {
+        return (dx*dx + dy*dy) <= (absorbR*absorbR);
+    }
+
+    // =========================
+    // 1) SQUARE (centered)
+    // =========================
+    if (id == 1) {
+        return Math.abs(dx) <= squareHalfSide && Math.abs(dy) <= squareHalfSide;
+    }
+
+    // =========================
+    // 2) EQUILATERAL TRIANGLE (centered)
+    // κορυφές: (-s/2, +h/3), (+s/2, +h/3), (0, -2h/3)
+    // =========================
+    if (id == 2) {
+
+        double s = triSide;
+        double h = triHeight;
+
+        double x0 = dx;
+        double y0 = dy;
+
+        // vertical bounds
+        if (y0 >  h/3.0) return false;
+        if (y0 < -2.0*h/3.0) return false;
+
+        double rt3 = Math.sqrt(3.0);
+
+        // side lines
+        //double yLeft  =  rt3*(x0 + s/2.0) - 2.0*h/3.0;
+        //double yRight = -rt3*(x0 - s/2.0) - 2.0*h/3.0;
+        double yLeft  = -rt3 * x0 - 2.0*h/3.0;
+   		double yRight =  rt3 * x0 - 2.0*h/3.0;
+        
+
+        if (y0 < yLeft)  return false;
+        if (y0 < yRight) return false;
+
+        return true;
+    }
+
+    // fallback
+    return false;
+]]></Body>
+				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[double]]></ReturnType>
+					<Id>1769605427368</Id>
+					<Name><![CDATA[getCandidateRadius]]></Name>
+					<X>-40</X><Y>-260</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Body><![CDATA[// 0 = CIRCLE, 1 = SQUARE equal-area
+    int id = main.absorptionShapeId;
+
+    if (id == 0) return absorbR;
+    if (id == 1) return squareSearchR;
+	if (id == 2) return triSearchR;     // triangle
+    // default fallback
+    return absorbR;]]></Body>
+				</Function>
 			</Functions>
 			<AgentLinks>
 				<AgentLink>
@@ -6538,28 +6713,6 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 					<LevelVisibility>DIM_NON_CURRENT</LevelVisibility>
 
 			<Presentation>
-				<Oval>
-					<Id>1741962641395</Id>
-					<Name><![CDATA[oval]]></Name>
-					<X>0</X><Y>0</Y>
-					<Label><X>0</X><Y>0</Y></Label>
-					<PublicFlag>true</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
-					<ShowLabel>false</ShowLabel>
-					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
-					<EmbeddedIcon>false</EmbeddedIcon>
-					<Z>0</Z>
-					<ZHeight>10</ZHeight>
-					<LineWidth>1</LineWidth>
-					<LineColor>-16777216</LineColor>
-					<LineMaterial>null</LineMaterial>
-					<LineStyle>SOLID</LineStyle>
-					<RadiusX>40</RadiusX>
-					<RadiusY>40</RadiusY>
-					<Rotation>0.0</Rotation>
-					<FillColor>-1</FillColor>
-					<FillMaterial>null</FillMaterial>
-				</Oval>
 				<Group>
 					<Id>1741955927203</Id>
 					<Name><![CDATA[factory]]></Name>
@@ -6993,7 +7146,50 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 			</Presentation>
 
 				</Group>
+				<Polyline>
+					<Id>1769606992398</Id>
+					<Name><![CDATA[polyline]]></Name>
+					<X>-53.85</X><Y>31.1</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>1</LineWidth>
+					<LineColor>-16777216</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor/>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>107.7</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>53.9</X><Y>-93.3</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
 			</Presentation>
+
+				</Level>
+				<Level>
+					<Id>1769607182647</Id>
+					<Name><![CDATA[level1]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<Z>0</Z>
+					<LevelVisibility>DIM_NON_CURRENT</LevelVisibility>
+
 
 				</Level>
 			</Presentation>
