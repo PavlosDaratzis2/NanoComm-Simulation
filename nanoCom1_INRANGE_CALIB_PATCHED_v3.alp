@@ -24,17 +24,17 @@ int S = rEceiver_BioNanomachine.numSectors;
 if (S <= 0) S = 20;
 
 // (1) Βεβαιώσου ότι τα arrays έχουν σωστό μήκος
-if (countType0_dt == null || countType0_dt.length != S) {
-    countType0_dt = new int[S];
-}
 if (sumType0_all == null || sumType0_all.length != S) {
     sumType0_all = new int[S];
+}
+if (prevSumType0_all == null || prevSumType0_all.length != S) {
+    prevSumType0_all = new int[S];
 }
 
 // (2) Μηδενισμοί
 for (int s = 0; s < S; s++) {
-    countType0_dt[s] = 0;
     sumType0_all[s] = 0;
+    prevSumType0_all[s] = 0;
 }
 
 // (3) Start χρόνου παραθύρου
@@ -44,7 +44,7 @@ tWindowStart = time();
 try {
     csvOut = new java.io.PrintWriter(
         new java.io.BufferedWriter(
-            new java.io.FileWriter(csvFile, false)   // overwrite
+            new java.io.FileWriter(csvFile, false) // overwrite
         )
     );
 
@@ -69,8 +69,8 @@ int S = sumType0_all.length;
 
 int grandTotal = 0;
 
-// TOTAL στη στήλη tStart, κενό στη στήλη tEnd, μετά αμέσως sectors
-String footer = "TOTAL,";   // ✅ ΜΟΝΟ 1 κενό κελί (tEnd)
+// TOTAL στη στήλη tStart, κενό στη στήλη tEnd, μετά sectors
+String footer = "TOTAL,"; // αφήνει κενό το tEnd
 
 for (int s = 0; s < S; s++) {
     footer += "," + sumType0_all[s];
@@ -389,7 +389,7 @@ csvOut.flush();]]></DestroyCode>
 					<X>740</X><Y>-350</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
@@ -404,7 +404,7 @@ csvOut.flush();]]></DestroyCode>
 					<X>740</X><Y>-330</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
@@ -674,7 +674,7 @@ csvOut.flush();]]></DestroyCode>
 					<X>740</X><Y>-270</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[boolean]]></Type>        
@@ -854,7 +854,7 @@ csvOut.flush();]]></DestroyCode>
 					<X>740</X><Y>-310</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
@@ -929,7 +929,7 @@ csvOut.flush();]]></DestroyCode>
 					<X>870</X><Y>190</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[double]]></Type>        
@@ -1274,6 +1274,21 @@ csvOut.flush();]]></DestroyCode>
 						</InitialValue>
 					</Properties>
 				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1770296431458</Id>
+					<Name><![CDATA[prevSumType0_all]]></Name>
+					<X>-260</X><Y>160</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int []]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[new int [20]]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
 			</Variables>
 			<Events>
 				<Event>
@@ -1536,7 +1551,7 @@ if (thresholdsReady) {
 					<X>880</X><Y>250</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties TriggerType="timeout" Mode="cyclic">
 						<Timeout Class="CodeUnitValue">
@@ -1649,7 +1664,7 @@ targetD = D;
 					<X>120</X><Y>1000</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>false</PublicFlag>
-					<PresentationFlag>true</PresentationFlag>
+					<PresentationFlag>false</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Properties TriggerType="timeout" Mode="cyclic">
 						<Timeout Class="CodeUnitValue">
@@ -1758,15 +1773,17 @@ for (int s = 0; s < rEceiver_BioNanomachine.numSectors; s++) {
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</OccurrenceTime>
 						<RecurrenceCode Class="CodeUnitValue">
-							<Code><![CDATA[dtExport]]></Code>
+							<Code><![CDATA[dtExport
+//0.01]]></Code>
 							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
 					<Action><![CDATA[if (csvOut == null) return;
-if (countType0_dt == null) return;
+if (sumType0_all == null) return;
+if (prevSumType0_all == null) return;
 
-int S = countType0_dt.length;
+int S = sumType0_all.length;
 
 double tStart = tWindowStart;
 double tEnd   = time();
@@ -1777,8 +1794,14 @@ int totalThisWindow = 0;
 String row = "" + tStart + "," + tEnd;
 
 for (int s = 0; s < S; s++) {
-    row += "," + countType0_dt[s];
-    totalThisWindow += countType0_dt[s];
+    int dtCount = sumType0_all[s] - prevSumType0_all[s];
+    if (dtCount < 0) dtCount = 0; // safety (δεν θα έπρεπε να συμβεί)
+
+    row += "," + dtCount;
+    totalThisWindow += dtCount;
+
+    // update snapshot για το επόμενο παράθυρο
+    prevSumType0_all[s] = sumType0_all[s];
 }
 
 row += "," + totalThisWindow;
@@ -1786,9 +1809,7 @@ row += "," + totalThisWindow;
 csvOut.println(row);
 csvOut.flush();
 
-// reset για επόμενο Δt
-for (int s = 0; s < S; s++) countType0_dt[s] = 0;
-
+// νέο παράθυρο
 tWindowStart = tEnd;]]></Action>
 				</Event>
 				<Event>
@@ -3076,25 +3097,25 @@ for (int i = 0; i < n; i++) {
 					<DataItem>
 					<Id>1747906553576</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-65536</Color>
+					<Color>-16776961</Color>
 						<Title><![CDATA[sector 5]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906557485</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-65536</Color>
+					<Color>-16776961</Color>
 						<Title><![CDATA[sector 6]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906561593</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-65536</Color>
+					<Color>-16776961</Color>
 						<Title><![CDATA[sector 7]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906566724</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-65536</Color>
+					<Color>-16776961</Color>
 						<Title><![CDATA[sector 8]]></Title>
 					</DataItem>
 					<DataItem>
@@ -3106,158 +3127,62 @@ for (int i = 0; i < n; i++) {
 					<DataItem>
 					<Id>1747906575327</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-16711936</Color>
 						<Title><![CDATA[sector 10]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906578918</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-16711936</Color>
 						<Title><![CDATA[sector 11]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906585145</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-16711936</Color>
 						<Title><![CDATA[sector 12]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906589757</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-16711936</Color>
 						<Title><![CDATA[sector 13]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906595055</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-16711936</Color>
 						<Title><![CDATA[sector 14]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906598780</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-4565549</Color>
 						<Title><![CDATA[sector 15]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906602836</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-4565549</Color>
 						<Title><![CDATA[sector 16]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906607454</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16776961</Color>
+					<Color>-4565549</Color>
 						<Title><![CDATA[sector 17]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906611266</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
+					<Color>-4565549</Color>
 						<Title><![CDATA[sector 18]]></Title>
 					</DataItem>
 					<DataItem>
 					<Id>1747906615567</Id>
 					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
+					<Color>-4565549</Color>
 						<Title><![CDATA[sector 19]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906620116</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
-						<Title><![CDATA[sector 20]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906624145</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
-						<Title><![CDATA[sector 21]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906629310</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
-						<Title><![CDATA[sector 22]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906634151</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
-						<Title><![CDATA[sector 23]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906638626</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
-						<Title><![CDATA[sector 24]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906643015</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
-						<Title><![CDATA[sector 25]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906647150</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-16711936</Color>
-						<Title><![CDATA[sector 26]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906652620</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 27]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906658309</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 28]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906663001</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 29]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906667404</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 30]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906671614</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 31]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906676341</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 32]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906680742</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 33]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906685541</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[sector 34]]></Title>
-					</DataItem>
-					<DataItem>
-					<Id>1747906690268</Id>
-					<Expression><![CDATA[0]]></Expression>
-					<Color>-65281</Color>
-						<Title><![CDATA[Sector 35]]></Title>
 					</DataItem>
 					<ScaleFromExpression><![CDATA[0]]></ScaleFromExpression>
 					<ScaleToExpression><![CDATA[35]]></ScaleToExpression>
@@ -3853,7 +3778,7 @@ for (int i = 0; i < n; i++) {
 					<Z>0</Z>
 					<Rotation>0.0</Rotation>
 					<Color>-16777216</Color>
-					<Text><![CDATA[Absorption Total in 36 sectors]]></Text>
+					<Text><![CDATA[Absorption Total in 20 sectors]]></Text>
 					<Font>
 						<Name>SansSerif</Name>
 						<Size>10</Size>
@@ -6124,14 +6049,14 @@ traceln("[TRI] absorbR=" + absorbR
 //  - capacity limit receptorSize counts ONLY DATA
 //  - sectors computed by angle (same as before)
 //  - updates counters, plots, message detection
-//  - Δt export counters: main.countType0_dt[sector]
-//  - total sums: main.sumType0_all[sector]
+//  - TOTAL sums: main.sumType0_all[sector] (used for CSV footer TOTAL)
 // ==========================================================
 
 
 // === 1) SELECT CANDIDATES NEAR RECEIVER (depends on geometry) ===
 double candR = getCandidateRadius();
-List<Information_Molecules> candidates = agentsInRange(main.information_Moleculeses, candR);
+List<Information_Molecules> candidates =
+        agentsInRange(main.information_Moleculeses, candR);
 
 // Filter candidates strictly inside the current absorption shape
 List<Information_Molecules> nearbyMolecules = new ArrayList<>();
@@ -6198,11 +6123,11 @@ for (Information_Molecules m : nearbyMolecules) {
             // threshold detection counter (in-range logic)
             main.absorbedType0SinceLastReport++;
 
-            // Δt export counter (arrivals within current Δt)
-            main.countType0_dt[sector] += 1;
-
-            // global total sum for whole simulation (footer TOTAL)
-            main.sumType0_all[sector] += 1;
+            // IMPORTANT: This is the ONLY counter we need for CSV correctness
+            // (Event export will compute Δt by difference from previous snapshot)
+            if (main.sumType0_all != null && sector >= 0 && sector < main.sumType0_all.length) {
+                main.sumType0_all[sector] += 1;
+            }
         }
 
         // 2.7 Global absorbed counter
@@ -6234,7 +6159,7 @@ if (main.passedThresholdA && absorbedMoleculesA.size() <= main.individualDownThr
     main.passeddownThresholdA = true;
 }
 if (main.passedThresholdA && main.passeddownThresholdA) {
-    main.NUMBER_OF_MESSAGES_RECEIVED++;
+    // main.NUMBER_OF_MESSAGES_RECEIVED++;
     main.passedThresholdA = false;
     main.passeddownThresholdA = false;
 }
