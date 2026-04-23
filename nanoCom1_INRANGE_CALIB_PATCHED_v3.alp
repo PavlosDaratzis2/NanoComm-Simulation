@@ -23,7 +23,7 @@
 int S = rEceiver_BioNanomachine.numSectors;
 if (S <= 0) S = 20;
 
-// (1) Βεβαιώσου ότι τα arrays έχουν σωστό μήκος
+// (1) Ensure arrays have the correct length
 if (sumType0_all == null || sumType0_all.length != S) {
     sumType0_all = new int[S];
 }
@@ -31,16 +31,16 @@ if (prevSumType0_all == null || prevSumType0_all.length != S) {
     prevSumType0_all = new int[S];
 }
 
-// (2) Μηδενισμοί
+// (2) Reset values
 for (int s = 0; s < S; s++) {
     sumType0_all[s] = 0;
     prevSumType0_all[s] = 0;
 }
 
-// (3) Start χρόνου παραθύρου
+// (3) Start of time window
 tWindowStart = time();
 
-// (4) Άνοιγμα writer
+// (4) Open writer
 try {
     csvOut = new java.io.PrintWriter(
         new java.io.BufferedWriter(
@@ -69,15 +69,15 @@ int S = sumType0_all.length;
 
 int grandTotal = 0;
 
-// TOTAL στη στήλη tStart, κενό στη στήλη tEnd, μετά sectors
-String footer = "TOTAL,"; // αφήνει κενό το tEnd
+// TOTAL in tStart column, empty tEnd column, then sectors
+String footer = "TOTAL,"; // leaves tEnd empty
 
 for (int s = 0; s < S; s++) {
     footer += "," + sumType0_all[s];
     grandTotal += sumType0_all[s];
 }
 
-footer += "," + grandTotal; // τελευταία στήλη: overall total
+footer += "," + grandTotal; // last column: overall total
 
 csvOut.println(footer);
 csvOut.flush();]]></DestroyCode>
@@ -1324,7 +1324,7 @@ csvOut.flush();]]></DestroyCode>
 					<Action><![CDATA[datasetInRange_Type0.add(getTime(), absorbedType0SinceLastReport);
 datasetInRange_Type1.add(getTime(), absorbedType1SinceLastReport);
 
-// Επαναφορά προσωρινών μετρητών
+// Reset temporary counters
 absorbedType0SinceLastReport = 0;
 absorbedType1SinceLastReport = 0;]]></Action>
 				</Event>
@@ -1358,7 +1358,7 @@ absorbedType1SinceLastReport = 0;]]></Action>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[// Καθαρισμός grid
+					<Action><![CDATA[// Clear grid
 for (int x = 0; x < cols; x++) {
     for (int y = 0; y < rows; y++) {
         if (spatialGrid[x][y] == null)
@@ -1368,7 +1368,7 @@ for (int x = 0; x < cols; x++) {
     }
 }
 
-// Γέμισμα grid με μόρια
+// Populate grid with molecules
 for (Information_Molecules m : information_Moleculeses) {
     int col = (int)((m.getX() - minX) / gridSize);
     int row = (int)((m.getY() - minY) / gridSize);
@@ -1422,7 +1422,7 @@ int yRaw = rEceiver_BioNanomachine.reportMoleculesA(); // raw integer count
 winAbs0 = (double) yRaw;                               // store raw as double
 
 // ---- 1b) EWMA smoothing (gives fractional values like 11.66) ----
-// IMPORTANT: initialize filter the first time, αλλιώς ξεκινάει από 0 και κάνει περίεργα
+// IMPORTANT: initialize filter the first time, otherwise it starts from 0 and behaves unexpectedly
 if (!yFilt0_init) {
     yFilt0 = winAbs0;
     yFilt0_init = true;
@@ -1431,14 +1431,14 @@ if (!yFilt0_init) {
     yFilt0 = alpha0 * winAbs0 + (1.0 - alpha0) * yFilt0;
 }
 
-// Αυτό είναι ΤΟ ΣΗΜΑ που χρησιμοποιεί το detection
+// This is THE SIGNAL used for detection
 double ySignal = yFilt0;
 
 // Expose to monitors/plots
-// Αν absorbedType0InRange είναι double -> αυτό είναι ΟΚ:
+// If absorbedType0InRange is double -> this is OK:
 absorbedType0InRange = ySignal;
 
-// Αν absorbedType0InRange είναι int, τότε ΑΝΤΙ για την από πάνω γραμμή βάλε:
+// If absorbedType0InRange is int, use this instead of the line above:
 // absorbedType0InRange = (int) Math.round(ySignal);
 
 absorbedType1InRange = 0;
@@ -1533,7 +1533,7 @@ if (thresholdsReady) {
                 + " (yFilt=" + y + ", yRaw=" + yRaw + ")");
         NUMBER_OF_MESSAGES_RECEIVED++;
 
-        // feedback (αν το θες OFF-by-default, βάλε εδώ if(flag))
+        // feedback (if you want it OFF-by-default, add an if(flag) check here)
         rEceiver_BioNanomachine.sendCumulativeFeedback0();
 
         for (int s = 0; s < rEceiver_BioNanomachine.numSectors; s++) {
@@ -1575,24 +1575,24 @@ if (thresholdsReady) {
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[// === ΥΠΟΛΟΓΙΣΜΟΣ MSD(t) ΚΑΙ D(t) ΣΤΟ MAIN ===
+					<Action><![CDATA[// === COMPUTE MSD(t) AND D(t) IN MAIN ===
 
-// sum r^2 και πλήθος μορίων
+// sum r^2 and molecule count
 double sumR2 = 0.0;
 int count = 0;
 
-// Διέτρεξε ΟΛΑ τα μόρια του πληθυσμού
+// Iterate over ALL molecules in the population
 for (Information_Molecules m : information_Moleculeses) {
 
-    // Αν έχει σημαδευτεί για αφαίρεση, αγνόησέ το
+    // If marked for removal, skip it
     if (m.remove) 
         continue;
 
-    // Διαφορά θέσης σε pixels από το origin (transmitter)
+    // Position difference in pixels from the origin (transmitter)
     double dx_px = m.getX() - m.originX;
     double dy_px = m.getY() - m.originY;
 
-    // Μετατροπή σε μέτρα
+    // Convert to meters
     double dx_m = dx_px / pxPerMeter;
     double dy_m = dy_px / pxPerMeter;
 
@@ -1603,25 +1603,25 @@ for (Information_Molecules m : information_Moleculeses) {
     count++;
 }
 
-// Αν δεν υπάρχουν ενεργά μόρια, μην κάνεις τίποτα
+// If no active molecules exist, do nothing
 if (count == 0) 
     return;
 
 // MSD(t) = <r^2(t)>
 double MSD = sumR2 / count;
 
-// Τρέχων χρόνος προσομοίωσης
+// Current simulation time
 double t = time();
 if (t <= 0)
     return;
 
-// === ΔΙΑΧΥΣΗ ΣΕ 2D ΜΟΝΤΕΛΟ ΚΙΝΗΣΗΣ ===
-// Για 2D:  MSD = 4 D t  =>  D = MSD / (4 t)
-// (Αν θεωρούσαμε 3D: MSD = 6 D t, αλλά εδώ κινείσαι σε x,y)
+// === DIFFUSION IN 2D MOTION MODEL ===
+// For 2D: MSD = 4 D t  =>  D = MSD / (4 t)
+// (For 3D it would be: MSD = 6 D t, but here motion is in x,y only)
 double D = MSD / (4.0 * t);
-// Προαιρετικό debug στην κονσόλα
+// Optional debug output to console
 targetD = D;
-// Προαιρετικό debug στην κονσόλα
+// Optional debug output to console
 //traceln(String.format("t=%.2f  MSD=%.5f  D=%.5f", t, MSD, D));]]></Action>
 				</Event>
 				<Event>
@@ -1721,7 +1721,7 @@ text3.setText("time = " + String.format("%.2f", time()));]]></Action>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[// γράφουμε στο plot πόσα Type0 ήρθαν ανά sector στο τελευταίο Δt
+					<Action><![CDATA[// Write to plot how many Type0 molecules arrived per sector in the last dt
 dsS0.add( time(), rEceiver_BioNanomachine.countType0_dt[0] );
 dsS1.add( time(), rEceiver_BioNanomachine.countType0_dt[1] );
 dsS2.add( time(), rEceiver_BioNanomachine.countType0_dt[2] );
@@ -1743,7 +1743,7 @@ dsS17.add( time(), rEceiver_BioNanomachine.countType0_dt[17] );
 dsS18.add( time(), rEceiver_BioNanomachine.countType0_dt[18] );
 dsS19.add( time(), rEceiver_BioNanomachine.countType0_dt[19] );
 
-// reset για το επόμενο Δt
+// Reset for the next dt
 for (int s = 0; s < rEceiver_BioNanomachine.numSectors; s++) {
     rEceiver_BioNanomachine.countType0_dt[s] = 0;
 }]]></Action>
@@ -1795,12 +1795,12 @@ String row = "" + tStart + "," + tEnd;
 
 for (int s = 0; s < S; s++) {
     int dtCount = sumType0_all[s] - prevSumType0_all[s];
-    if (dtCount < 0) dtCount = 0; // safety (δεν θα έπρεπε να συμβεί)
+    if (dtCount < 0) dtCount = 0; // safety (should not happen)
 
     row += "," + dtCount;
     totalThisWindow += dtCount;
 
-    // update snapshot για το επόμενο παράθυρο
+    // update snapshot for the next window
     prevSumType0_all[s] = sumType0_all[s];
 }
 
@@ -1809,7 +1809,7 @@ row += "," + totalThisWindow;
 csvOut.println(row);
 csvOut.flush();
 
-// νέο παράθυρο
+// start new window
 tWindowStart = tEnd;]]></Action>
 				</Event>
 				<Event>
@@ -1842,20 +1842,20 @@ tWindowStart = tEnd;]]></Action>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[// ====== dtTick: κάθε Δt γράφει ένα sample ανά sector στο plot ======
+					<Action><![CDATA[// ====== dtTick: writes one sample per sector to the plot every dt ======
 
 int S = rEceiver_BioNanomachine.numSectors;
 if (S <= 0) S = 20;
 
-// Ασφάλεια: αν για κάποιο λόγο δεν έχουν αρχικοποιηθεί
+// Safety: re-initialize if arrays are missing or wrong length
 if (countType0_dt == null || countType0_dt.length != S) {
     countType0_dt = new int[S];
 }
 
-// 1) γράφουμε sample στα datasets (ένα ανά sector)
+// 1) Write sample to datasets (one per sector)
 for (int s = 0; s < S; s++) {
 
-    // Εδώ ΚΑΝΕ mapping στα dsS0..dsS19 (επειδή τα έχεις ως ξεχωριστά objects)
+    // Map sector index to individual dataset objects dsS0..dsS19
     if      (s == 0)  dsS0.add(time(), countType0_dt[s]);
     else if (s == 1)  dsS1.add(time(), countType0_dt[s]);
     else if (s == 2)  dsS2.add(time(), countType0_dt[s]);
@@ -1877,7 +1877,7 @@ for (int s = 0; s < S; s++) {
     else if (s == 18) dsS18.add(time(), countType0_dt[s]);
     else if (s == 19) dsS19.add(time(), countType0_dt[s]);
 
-    // 2) reset για το επόμενο Δt
+    // 2) Reset for the next dt
     countType0_dt[s] = 0;
 }]]></Action>
 				</Event>
@@ -1949,7 +1949,7 @@ for (int i = 0; i < n; i++) {
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[
 
-    int n = rEceiver_BioNanomachine.numSectors;   // 10 ή 36 κλπ.
+    int n = rEceiver_BioNanomachine.numSectors;   // e.g. 10, 20, 36
 
     for (int i = 0; i < n; i++) {
 
@@ -4596,6 +4596,1406 @@ for (int i = 0; i < n; i++) {
 					<FillAreaUnderLine>false</FillAreaUnderLine>
 					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
     			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000001</Id>
+					<Name><![CDATA[plotSector0]]></Name>
+					<X>-1800</X><Y>1700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000002</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 0 - Absorption]]></Title>
+					<Id>1780000000003</Id>
+					<Expression><![CDATA[dsS0]]></Expression>
+					<Color>-16711936</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000004</Id>
+					<Name><![CDATA[plotSector1]]></Name>
+					<X>-1500</X><Y>1700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000005</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 1 - Absorption]]></Title>
+					<Id>1780000000006</Id>
+					<Expression><![CDATA[dsS1]]></Expression>
+					<Color>-16776961</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000007</Id>
+					<Name><![CDATA[plotSector2]]></Name>
+					<X>-1200</X><Y>1700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000008</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 2 - Absorption]]></Title>
+					<Id>1780000000009</Id>
+					<Expression><![CDATA[dsS2]]></Expression>
+					<Color>-65536</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000010</Id>
+					<Name><![CDATA[plotSector3]]></Name>
+					<X>-900</X><Y>1700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000011</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 3 - Absorption]]></Title>
+					<Id>1780000000012</Id>
+					<Expression><![CDATA[dsS3]]></Expression>
+					<Color>-16744448</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000013</Id>
+					<Name><![CDATA[plotSector4]]></Name>
+					<X>-1800</X><Y>1950</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000014</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 4 - Absorption]]></Title>
+					<Id>1780000000015</Id>
+					<Expression><![CDATA[dsS4]]></Expression>
+					<Color>-8388608</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000016</Id>
+					<Name><![CDATA[plotSector5]]></Name>
+					<X>-1500</X><Y>1950</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000017</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 5 - Absorption]]></Title>
+					<Id>1780000000018</Id>
+					<Expression><![CDATA[dsS5]]></Expression>
+					<Color>-16711681</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000019</Id>
+					<Name><![CDATA[plotSector6]]></Name>
+					<X>-1200</X><Y>1950</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000020</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 6 - Absorption]]></Title>
+					<Id>1780000000021</Id>
+					<Expression><![CDATA[dsS6]]></Expression>
+					<Color>-32768</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000022</Id>
+					<Name><![CDATA[plotSector7]]></Name>
+					<X>-900</X><Y>1950</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000023</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 7 - Absorption]]></Title>
+					<Id>1780000000024</Id>
+					<Expression><![CDATA[dsS7]]></Expression>
+					<Color>-8355712</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000025</Id>
+					<Name><![CDATA[plotSector8]]></Name>
+					<X>-1800</X><Y>2200</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000026</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 8 - Absorption]]></Title>
+					<Id>1780000000027</Id>
+					<Expression><![CDATA[dsS8]]></Expression>
+					<Color>-4194304</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000028</Id>
+					<Name><![CDATA[plotSector9]]></Name>
+					<X>-1500</X><Y>2200</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000029</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 9 - Absorption]]></Title>
+					<Id>1780000000030</Id>
+					<Expression><![CDATA[dsS9]]></Expression>
+					<Color>-16744576</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000031</Id>
+					<Name><![CDATA[plotSector10]]></Name>
+					<X>-1200</X><Y>2200</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000032</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 10 - Absorption]]></Title>
+					<Id>1780000000033</Id>
+					<Expression><![CDATA[dsS10]]></Expression>
+					<Color>-16728064</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000034</Id>
+					<Name><![CDATA[plotSector11]]></Name>
+					<X>-900</X><Y>2200</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000035</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 11 - Absorption]]></Title>
+					<Id>1780000000036</Id>
+					<Expression><![CDATA[dsS11]]></Expression>
+					<Color>-8388480</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000037</Id>
+					<Name><![CDATA[plotSector12]]></Name>
+					<X>-1800</X><Y>2450</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000038</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 12 - Absorption]]></Title>
+					<Id>1780000000039</Id>
+					<Expression><![CDATA[dsS12]]></Expression>
+					<Color>-4194368</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000040</Id>
+					<Name><![CDATA[plotSector13]]></Name>
+					<X>-1500</X><Y>2450</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000041</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 13 - Absorption]]></Title>
+					<Id>1780000000042</Id>
+					<Expression><![CDATA[dsS13]]></Expression>
+					<Color>-12517376</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000043</Id>
+					<Name><![CDATA[plotSector14]]></Name>
+					<X>-1200</X><Y>2450</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000044</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 14 - Absorption]]></Title>
+					<Id>1780000000045</Id>
+					<Expression><![CDATA[dsS14]]></Expression>
+					<Color>-16744193</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000046</Id>
+					<Name><![CDATA[plotSector15]]></Name>
+					<X>-900</X><Y>2450</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000047</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 15 - Absorption]]></Title>
+					<Id>1780000000048</Id>
+					<Expression><![CDATA[dsS15]]></Expression>
+					<Color>-16711808</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000049</Id>
+					<Name><![CDATA[plotSector16]]></Name>
+					<X>-1800</X><Y>2700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000050</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 16 - Absorption]]></Title>
+					<Id>1780000000051</Id>
+					<Expression><![CDATA[dsS16]]></Expression>
+					<Color>-65281</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000052</Id>
+					<Name><![CDATA[plotSector17]]></Name>
+					<X>-1500</X><Y>2700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000053</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 17 - Absorption]]></Title>
+					<Id>1780000000054</Id>
+					<Expression><![CDATA[dsS17]]></Expression>
+					<Color>-12582657</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000055</Id>
+					<Name><![CDATA[plotSector18]]></Name>
+					<X>-1200</X><Y>2700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000056</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 18 - Absorption]]></Title>
+					<Id>1780000000057</Id>
+					<Expression><![CDATA[dsS18]]></Expression>
+					<Color>-8421377</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
+    			<TimePlot>
+					<Id>1780000000058</Id>
+					<Name><![CDATA[plotSector19]]></Name>
+					<X>-900</X><Y>2700</Y>
+					<Label><X>0</X><Y>-10</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<AutoUpdate>true</AutoUpdate>
+					<RecurrenceProperties>
+						<Id>1780000000059</Id>
+						<OccurrenceAtTime>true</OccurrenceAtTime>
+						<OccurrenceDate>1769155200000</OccurrenceDate>
+						<OccurrenceTime Class="CodeUnitValue">
+							<Code><![CDATA[0]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</OccurrenceTime>
+						<RecurrenceCode Class="CodeUnitValue">
+							<Code><![CDATA[1]]></Code>
+							<Unit Class="TimeUnits"><![CDATA[SECOND]]></Unit>
+						</RecurrenceCode>
+					</RecurrenceProperties>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Width>260</Width>
+					<Height>210</Height>
+					<BackgroundColor/>
+					<BorderColor/>
+					<ChartArea>
+						<XOffset>50</XOffset>
+						<YOffset>30</YOffset>
+						<Width>180</Width>
+						<Height>120</Height>
+						<BackgroundColor>-1</BackgroundColor>
+						<BorderColor>-16777216</BorderColor>
+						<GridColor>-12566464</GridColor>
+					</ChartArea>
+					<Legend>
+						<Place>SOUTH</Place>
+						<TextColor>-16777216</TextColor>
+						<Size>30</Size>
+					</Legend>
+					<Labels>
+						<HorLabelsPosition>DEFAULT</HorLabelsPosition>
+						<VerLabelsPosition>DEFAULT</VerLabelsPosition>
+						<TextColor>-12566464</TextColor>
+					</Labels>
+					<ShowLegend>true</ShowLegend>
+					<TimeWindowsMovementType>MOVEMENT_WITH_TIME</TimeWindowsMovementType>		
+					<TimeWindowUnits>MODEL_TIME_UNIT</TimeWindowUnits>
+					<VerScaleFromExpression><![CDATA[0]]></VerScaleFromExpression>
+					<VerScaleToExpression><![CDATA[1]]></VerScaleToExpression>
+					<VerScaleType>AUTO</VerScaleType>
+					<DrawLine>true</DrawLine>
+					<Interpolation>LINEAR</Interpolation>
+					<DatasetExpression>  
+						<Title><![CDATA[Sector 19 - Absorption]]></Title>
+					<Id>1780000000060</Id>
+					<Expression><![CDATA[dsS19]]></Expression>
+					<Color>-16760576</Color>
+					<Expression2><![CDATA[0]]></Expression2>
+					<Expression2Flag>false</Expression2Flag>
+						<PointStyle>NONE</PointStyle>
+						<LineWidth>1.0</LineWidth>
+					</DatasetExpression>
+					<SamplesToKeep>200000</SamplesToKeep>
+					<TimeWindowExpression><![CDATA[200]]></TimeWindowExpression>
+					<FillAreaUnderLine>false</FillAreaUnderLine>
+					<LabelFormat>MODEL_TIME_UNITS</LabelFormat>
+    			</TimePlot>
 			</Presentation>
 
 				</Level>
@@ -4942,21 +6342,21 @@ if (getIndex() == 1) {
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
 					<Action><![CDATA[for (int i = 0; i < main.bacteriaPerPulse; i++) {
-    // Δημιουργία νέου μορίου
+    // Create new molecule
     Information_Molecules c = main.add_information_Moleculeses();
-    c.jumpTo(getX(), getY());       // εκπομπή από το σημείο του transmitter
-    c.type = moleculeType;          // διατήρηση του τύπου
+    c.jumpTo(getX(), getY());       // emit from transmitter position
+    c.type = moleculeType;          // preserve molecule type
 
-    // === ΝΕΕΣ ΓΡΑΜΜΕΣ για υπολογισμό D ===
-    c.originX   = c.getX();         // αποθήκευση θέσης εκπομπής
+    // === Store origin for D computation ===
+    c.originX   = c.getX();         // store emission position
     c.originY   = c.getY();
-    c.birthTime = time();           // χρονική στιγμή δημιουργίας
-    // ==============================
+    c.birthTime = time();           // store creation time
+    // ==========================================
 
-    // προαιρετικά: αρχικό heading (αν δεν το ορίζεις αλλού)
+    // Optional: initial heading (if not set elsewhere)
     c.Heading = uniform(360);
 
-    // εκκίνηση της συμπεριφοράς του μορίου
+    // Start molecule behavior
     c.run();
 }]]></Action>
 				</Event>
@@ -4990,7 +6390,7 @@ if (getIndex() == 1) {
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[// (προαιρετικό debug για να δεις ότι τρέχει)
+					<Action><![CDATA[// (optional debug to verify it runs)
 // traceln("TX absorb event fired t=" + time());
 
 List<Information_Molecules> nearby = agentsInRange(main.information_Moleculeses, txAbsorbRadius);
@@ -4999,30 +6399,30 @@ int absorbedNow = 0;
 
 for (Information_Molecules m : nearby) {
 
-    // ΜΟΝΟ feedback
+    // Only process feedback molecules
     if (m.type == null || !m.type.trim().equals("F0")) continue;
 
     if (!m.absorbed && !m.remove) {
 
-        // απορρόφηση
+        // absorb molecule
         m.stop();
         m.set_absorbed(true);
 		m.oval.setFillColor(Color.GREEN);
-        // ΚΑΘΑΡΙΣΜΑ (αν το χρησιμοποιείς στο project σου)
+        // Mark for removal
         m.remove = true;
 
-        // γωνία άφιξης γύρω από Tx (fixed global axis)
+        // arrival angle around Tx (fixed global axis)
         double angle   = atan2(-(m.getY() - getY()), m.getX() - getX());
         double degrees = toDegrees(angle);
         if (degrees < 0) degrees += 360;
 
-        double sectorWidth = 360.0 / txNumSectors;   // 45 deg όταν txNumSectors=8
+        double sectorWidth = 360.0 / txNumSectors;   // e.g. 45 deg when txNumSectors=8
         int sector = (int)(degrees / sectorWidth);
 
         if (sector < 0) sector = 0;
         if (sector >= txNumSectors) sector = txNumSectors - 1;
-        // 🎨 ΧΡΩΜΑ ΑΝΑ SECTOR
-		// 🎨 ΕΝΤΟΝΑ ΧΡΩΜΑΤΑ ΑΝΑ SECTOR (ΧΩΡΙΣ ΚΟΚΚΙΝΟ & ΠΡΑΣΙΝΟ)
+        // Color per sector
+        // Distinct colors per sector (excluding red and green)
 		switch (sector) {
     		case 0: m.oval.setFillColor(Color.BLUE); break;
     		case 1: m.oval.setFillColor(Color.CYAN); break;
@@ -5373,7 +6773,7 @@ if (absorbedNow > 0) {
 		<ActiveObjectClass>
 			<Id>1741955927177</Id>
 			<Name><![CDATA[REceiver_BioNanomachine]]></Name>
-			<StartupCode><![CDATA[// Αρχικοποίηση πινάκων ανάλογα με τα sectors
+			<StartupCode><![CDATA[// Initialize arrays based on sector count
 sectorAbsorptions_Total  = new double[numSectors];
 sectorAbsorptions_Type0  = new double[numSectors];
 sectorAbsorptions_Type1  = new double[numSectors];
@@ -5382,19 +6782,19 @@ sectorArrivalTimeSum     = new double[numSectors];
 sectorArrivalCount       = new int[numSectors];
 cumSectorCount_Type0 = new int[numSectors];
 countType0_dt = new int[numSectors];
-// --- absorption geometry init ---
-absorbR = inRangeRadiusPx;   // το ίδιο R που είχες πριν (π.χ. 40 px)
+// --- absorption geometry initialization ---
+absorbR = inRangeRadiusPx;   // same R as before (e.g. 40 px)
 
 // Square with SAME AREA as circle of radius R:
-// Area(circle)=πR^2, Area(square)=side^2 => side=R*sqrt(π)
+// Area(circle)=pi*R^2, Area(square)=side^2 => side=R*sqrt(pi)
 squareHalfSide = 0.5 * absorbR * Math.sqrt(Math.PI);
 
-// Candidate radius that surely contains the whole square (to get candidates fast):
+// Candidate radius that surely contains the whole square:
 // half diagonal = halfSide*sqrt(2)
 squareSearchR = squareHalfSide * Math.sqrt(2.0);
 // =========================================
 // Equilateral Triangle with SAME AREA as circle of radius absorbR
-// Area(circle) = π R^2
+// Area(circle) = pi * R^2
 // Area(triangle) = (sqrt(3)/4) * s^2
 // => s = sqrt( 4A / sqrt(3) )
 // =========================================
@@ -6120,11 +7520,16 @@ for (Information_Molecules m : nearbyMolecules) {
             // cumulative sector profile (used for feedback distribution)
             cumSectorCount_Type0[sector] += 1;
 
+            // per-sector dt counter (feeds dsS0..dsS19 TimePlots)
+            if (countType0_dt != null && sector >= 0 && sector < countType0_dt.length) {
+                countType0_dt[sector]++;
+            }
+
             // threshold detection counter (in-range logic)
             main.absorbedType0SinceLastReport++;
 
             // IMPORTANT: This is the ONLY counter we need for CSV correctness
-            // (Event export will compute Δt by difference from previous snapshot)
+            // (Event export will compute dt by difference from previous snapshot)
             if (main.sumType0_all != null && sector >= 0 && sector < main.sumType0_all.length) {
                 main.sumType0_all[sector] += 1;
             }
@@ -6328,7 +7733,7 @@ return inside;]]></Body>
     traceln("=== Sector profile ===");
     for (int s = 0; s < 36; s++) {
 
-        int count = sectorArrivalCount[s];  // <-- ΕΔΩ η αλλαγή
+        int count = sectorArrivalCount[s];
 
         double meanT = (count > 0)
             ? sectorArrivalTimeSum[s] / count
@@ -6357,7 +7762,7 @@ return inside;]]></Body>
 }
 
 
-// πόσα feedback μόρια θα στείλουμε σε αυτό το feedback pulse
+// number of feedback molecules to send in this feedback pulse
 int totalFeedback = main.bacteriaPerPulse;
 if (totalFeedback <= 0) return;
 
@@ -6369,7 +7774,7 @@ if (cumSectorCount_Type0 == null || cumSectorCount_Type0.length != S) {
     return;
 }
 
-// 1) sum απορροφήσεων Type0 ανά sector
+// 1) Sum of Type0 absorptions per sector
 int sumCum = 0;
 int activeSectors = 0;
 for (int s = 0; s < S; s++) {
@@ -6382,7 +7787,7 @@ if (sumCum <= 0) {
     return;
 }
 
-// 2) αναλογική κατανομή totalFeedback στα sectors
+// 2) Proportional distribution of totalFeedback across sectors
 int[] nPerSector = new int[S];
 double[] frac = new double[S];
 
@@ -6391,9 +7796,9 @@ int assigned = 0;
 for (int s = 0; s < S; s++) {
 
     if (cumSectorCount_Type0[s] <= 0) {
-        // ΚΟΨΙΜΟ: αν δεν απορρόφησε τίποτα, ΔΕΝ στέλνει τίποτα
+        // Skip: if no absorptions, send nothing
         nPerSector[s] = 0;
-        frac[s] = -1e9;   // ώστε να μην επιλεγεί ποτέ στα "remaining"
+        frac[s] = -1e9;   // ensures this sector is never selected for remainder
         continue;
     }
 
@@ -6405,31 +7810,31 @@ for (int s = 0; s < S; s++) {
     assigned += n;
 }
 
-// 3) μοίρασμα υπολοίπων ώστε να γίνει ακριβώς totalFeedback
+// 3) Distribute remainder to reach exactly totalFeedback
 int remaining = totalFeedback - assigned;
 
-// IMPORTANT: το remaining ΠΡΕΠΕΙ να μοιραστεί ΜΟΝΟ σε cum>0 sectors
+// IMPORTANT: remaining MUST be distributed only to sectors with cum>0
 while (remaining > 0) {
 
     int best = -1;
 
     for (int s = 0; s < S; s++) {
-        if (cumSectorCount_Type0[s] <= 0) continue; // <-- ΚΡΙΣΙΜΟ
+        if (cumSectorCount_Type0[s] <= 0) continue; // IMPORTANT: skip sectors with no absorptions
         if (best == -1 || frac[s] > frac[best]) best = s;
     }
 
-    if (best == -1) break; // safety (δεν θα συμβεί αν sumCum>0)
+    if (best == -1) break; // safety (won't happen if sumCum>0)
 
     nPerSector[best] += 1;
 
-    // ΜΗΝ κάνεις frac=-1 (αυτό δημιουργεί λάθος κατανομή)
-    // Απλά το μειώνουμε κατά 1 ώστε να μπορεί να ξαναεπιλεγεί αν χρειαστεί.
+    // Do NOT set frac=-1 (that would corrupt the distribution)
+    // Just decrement by 1 so the sector can be selected again if needed.
     frac[best] -= 1.0;
 
     remaining--;
 }
 
-// ---- DEBUG: δες καθαρά ποιος στέλνει και γιατί ----
+// ---- DEBUG: show clearly which sectors send and why ----
 traceln("---- FEEDBACK SPAWN SUMMARY t=" + time()
         + " | totalFeedback=" + totalFeedback
         + " | S=" + S
@@ -6442,10 +7847,10 @@ for (int s = 0; s < S; s++) {
     }
 }
 
-// 4) spawn από το αντίστοιχο sector
+// 4) Spawn molecules from the corresponding sector
 double sectorWidthDeg = 360.0 / S;
 
-// radius του circle του receiver στο animation (π.χ. 40)
+// Receiver body radius in the animation (e.g. 40 px)
 double receiverBodyRadiusPx = 40;
 double rReleasePx = receiverBodyRadiusPx + 2;
 
@@ -6467,7 +7872,7 @@ for (int s = 0; s < S; s++) {
         double xSpawn = getX() + rReleasePx * Math.cos(theta);
         double ySpawn = getY() - rReleasePx * Math.sin(theta);
 
-        // ΧΡΗΣΙΜΟΠΟΙΕΙΣ ΤΟ ΣΩΣΤΟ creation που έχεις ήδη στον Tx:
+        // Use the same molecule creation as in the Transmitter:
         Information_Molecules m = main.add_information_Moleculeses();
         m.jumpTo(xSpawn, ySpawn);
 
@@ -7602,7 +9007,7 @@ speed = main.globalMoleculeSpeed;]]></Action>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
 					<Action><![CDATA[if (absorbed) {
-    setColor(red); // κόκκινο όταν απορροφηθεί
+    setColor(red); // turn red when absorbed
     main.remove_information_Moleculeses(this);
 }]]></Action>
 				</Event>
@@ -7668,7 +9073,7 @@ speed = main.globalMoleculeSpeed;]]></Action>
 						</RecurrenceCode>
 						<Condition><![CDATA[false]]></Condition>
 					</Properties>
-					<Action><![CDATA[// εκτέλεσε βήμα κίνησης ΜΟΝΟ αν είμαστε στο state Run
+					<Action><![CDATA[// Execute movement step ONLY if in Run state
 if (statechart.isStateActive(Run)) {
     run();
 }]]></Action>
@@ -7705,10 +9110,10 @@ Heading = newHeading;]]></Body>
 double dt = main.modelDt;
 double step = speed * dt * main.pxPerMeter;
 
-// μικρή τυχαία διακύμανση στη διεύθυνση (0 = καθόλου, 180 = πλήρως τυχαία)
-Heading += uniform(-15, 15);   // π.χ. ±15° τυχαία απόκλιση κάθε tick
+// Small random heading deviation (0 = none, 180 = fully random)
+Heading += uniform(-15, 15);   // e.g. ±15° random deviation per tick
 
-// ενημέρωση θέσης
+// Update position
 double newX = getX() + step * cos(toRadians(Heading));
 double newY = getY() + step * sin(toRadians(Heading));
 
@@ -7728,80 +9133,80 @@ moveTo(newX, newY);
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[/**
- * Συνάρτηση ανίχνευσης και χειρισμού ελαστικών συγκρούσεων μεταξύ μορίων.
- * Περιλαμβάνει:
- * 1. Εντοπισμό κοντινών μορίων μέσω spatial grid για βελτιωμένη απόδοση.
- * 2. Υπολογισμό αποστάσεων και γωνίας μεταξύ μορίων για να διαπιστωθεί εάν υπάρχει σύγκρουση.
- * 3. Ελαστική αλλαγή πορείας ±Φ/2 με βάση τη διχοτόμο, ή τυχαία ώθηση για αποφυγή ping-pong.
- * 4. Ενημέρωση headings και μετατόπιση μορίων.
+ * Detects and handles elastic collisions between molecules.
+ * Includes:
+ * 1. Finding nearby molecules via spatial grid for improved performance.
+ * 2. Computing distance and angle between molecules to detect collisions.
+ * 3. Elastic heading change ±phi/2 based on bisector, or random push to avoid ping-pong.
+ * 4. Updating headings and displacing molecules.
  */
 
-if (main.collisionsEnabled) { // ✅ Έλεγχος εάν το σύστημα επιτρέπει συγκρούσεις
+if (main.collisionsEnabled) { // Check if collision handling is enabled
 
-    // === 1. Λήψη κοντινών μορίων από το spatial grid ===
-    ArrayList<Information_Molecules> nearby = new ArrayList<>(); // Λίστα για τα κοντινά μόρια
+    // === 1. Get nearby molecules from the spatial grid ===
+    ArrayList<Information_Molecules> nearby = new ArrayList<>(); // List of nearby molecules
 
-    // Υπολογισμός του κελιού (στήλης και γραμμής) στο οποίο βρίσκεται το μόριο
+    // Compute the grid cell (column and row) of this molecule
     int myCol = (int) ((getX() - main.minX) / main.gridSize);
     int myRow = (int) ((getY() - main.minY) / main.gridSize);
 
-    // Έλεγχος σε γειτονικά κελιά (3x3 περιοχή γύρω από το μόριο)
+    // Check neighboring cells (3x3 area around the molecule)
     for (int dx = -1; dx <= 1; dx++) {
         for (int dy = -1; dy <= 1; dy++) {
-            int col = myCol + dx; // Στήλη προς έλεγχο
-            int row = myRow + dy; // Γραμμή προς έλεγχο
+            int col = myCol + dx; // Column to check
+            int row = myRow + dy; // Row to check
 
-            // Έλεγχος ότι το κελί είναι εντός των ορίων του grid
+            // Check that the cell is within grid bounds
             if (col >= 0 && col < main.cols && row >= 0 && row < main.rows) {
-                ArrayList<Information_Molecules> cell = main.spatialGrid[col][row]; // Παίρνουμε τα μόρια από αυτό το κελί
+                ArrayList<Information_Molecules> cell = main.spatialGrid[col][row]; // Get molecules in this cell
                 if (cell != null)
-                    nearby.addAll(cell); // Προσθήκη όλων των μορίων από αυτό το κελί στη λίστα "nearby"
+                    nearby.addAll(cell); // Add all molecules from this cell to nearby list
             }
         }
     }
 
-    // === 2. Έλεγχος για συγκρούσεις με τα κοντινά μόρια ===
+    // === 2. Check for collisions with nearby molecules ===
     for (Information_Molecules other : nearby) {
-        if (other == this) continue; // Αγνόηση του εαυτού
+        if (other == this) continue; // Skip self
 
-        // Υπολογισμός διαφοράς στις συντεταγμένες μεταξύ των δύο μορίων
+        // Compute coordinate difference between the two molecules
         double dx = this.getX() - other.getX();
         double dy = this.getY() - other.getY();
-        double distSquared = dx * dx + dy * dy; // Τετράγωνο της απόστασης (για αποφυγή sqrt)
+        double distSquared = dx * dx + dy * dy; // Squared distance (avoids sqrt)
 
-        // Αν η απόσταση είναι μικρότερη από 4.5, θεωρούμε ότι υπάρχει σύγκρουση
+        // If distance is less than 4.5, consider it a collision
         if (distSquared < 4.5 * 4.5) {
-            main.totalCollisions++; // ➕ Ενημέρωση συνολικού αριθμού συγκρούσεων
+            main.totalCollisions++; // Increment total collision counter
 
-            double dist = Math.sqrt(distSquared); // Απόσταση
-            if (dist == 0) dist = 0.01; // Προστασία από διαίρεση με το μηδέν
+            double dist = Math.sqrt(distSquared); // Distance
+            if (dist == 0) dist = 0.01; // Guard against division by zero
 
-            // Μονάδες διεύθυνσης (διανύσματα normal σύγκρουσης)
+            // Unit direction vectors (collision normals)
             double nx = dx / dist;
             double ny = dy / dist;
 
-            // Διανύσματα ταχύτητας βάσει Heading
+            // Velocity vectors based on Heading
             double vAx = Math.cos(toRadians(this.Heading));
             double vAy = Math.sin(toRadians(this.Heading));
             double vBx = Math.cos(toRadians(other.Heading));
             double vBy = Math.sin(toRadians(other.Heading));
 
-            // Εσωτερικό γινόμενο για υπολογισμό γωνίας Φ
+            // Dot product to compute angle phi
             double dotProduct = vAx * vBx + vAy * vBy;
-            double magA = Math.sqrt(vAx * vAx + vAy * vAy); // Μέτρο ταχύτητας this
-            double magB = Math.sqrt(vBx * vBx + vBy * vBy); // Μέτρο ταχύτητας other
-            if (magA == 0 || magB == 0) continue; // Αγνόηση σταματημένων μορίων
+            double magA = Math.sqrt(vAx * vAx + vAy * vAy); // Magnitude of velocity for this
+            double magB = Math.sqrt(vBx * vBx + vBy * vBy); // Magnitude of velocity for other
+            if (magA == 0 || magB == 0) continue; // Skip stationary molecules
 
-            double anglePhiRad = Math.acos(dotProduct / (magA * magB)); // Γωνία Φ σε ακτίνια
-            double anglePhiDeg = toDegrees(anglePhiRad); // Φ σε μοίρες
+            double anglePhiRad = Math.acos(dotProduct / (magA * magB)); // Angle phi in radians
+            double anglePhiDeg = toDegrees(anglePhiRad); // phi in degrees
 
-            // === 3. Αν Φ < 30°, απόφυγε το ping-pong με τυχαία ώθηση ===
+            // === 3. If phi < 30°, avoid ping-pong with a random push ===
             if (anglePhiDeg < 30) {
-                double randAngle1 = uniform(0, 360); // Τυχαία γωνία για το πρώτο μόριο
-                double randAngle2 = randAngle1 + 180; // Αντίθετη κατεύθυνση για το δεύτερο
-                double randPush = 1.0; // Απόσταση ώθησης
+                double randAngle1 = uniform(0, 360); // Random angle for first molecule
+                double randAngle2 = randAngle1 + 180; // Opposite direction for second molecule
+                double randPush = 1.0; // Push distance
 
-                // Εφαρμογή μετατόπισης
+                // Apply displacement
                 this.setXY(
                     this.getX() + randPush * Math.cos(toRadians(randAngle1)),
                     this.getY() + randPush * Math.sin(toRadians(randAngle1))
@@ -7811,44 +9216,44 @@ if (main.collisionsEnabled) { // ✅ Έλεγχος εάν το σύστημα �
                     other.getY() + randPush * Math.sin(toRadians(randAngle2))
                 );
 
-                // Νέες τυχαίες πορείες για αποφυγή συνεχόμενων συγκρούσεων
+                // New random headings to avoid repeated collisions
                 this.Heading = uniform(0, 360);
                 other.Heading = uniform(0, 360);
-                continue; // Προχώρα στο επόμενο ζεύγος
+                continue; // Move to next pair
             }
 
-            // === 4. Υπολογισμός διχοτόμου της γωνίας Φ ===
-            double mx = vAx + vBx; // Άθροισμα x-συνιστωσών
-            double my = vAy + vBy; // Άθροισμα y-συνιστωσών
+            // === 4. Compute bisector of angle phi ===
+            double mx = vAx + vBx; // Sum of x-components
+            double my = vAy + vBy; // Sum of y-components
             double magM = Math.sqrt(mx * mx + my * my);
-            if (magM == 0) { // Αν είναι τελείως αντίθετα
-                mx = -ny; my = nx; // Τεχνητή κάθετη διχοτόμος
+            if (magM == 0) { // Molecules moving in exactly opposite directions
+                mx = -ny; my = nx; // Artificial perpendicular bisector
                 magM = Math.sqrt(mx * mx + my * my);
             }
             double bisectorX = mx / magM;
             double bisectorY = my / magM;
 
-            // Περιστροφή κατά ±Φ/2 γύρω από τη διχοτόμο
+            // Rotate ±phi/2 around the bisector
             double angleOffset = anglePhiRad / 2;
 
-            // Νέο διάνυσμα για το πρώτο μόριο (περιστροφή -Φ/2)
+            // New vector for first molecule (rotate -phi/2)
             double newAx = Math.cos(angleOffset) * bisectorX - Math.sin(angleOffset) * bisectorY;
             double newAy = Math.sin(angleOffset) * bisectorX + Math.cos(angleOffset) * bisectorY;
 
-            // Νέο διάνυσμα για το δεύτερο μόριο (περιστροφή +Φ/2)
+            // New vector for second molecule (rotate +phi/2)
             double newBx = Math.cos(-angleOffset) * bisectorX - Math.sin(-angleOffset) * bisectorY;
             double newBy = Math.sin(-angleOffset) * bisectorX + Math.cos(-angleOffset) * bisectorY;
 
-            // === 5. Ενημέρωση των headings των μορίων ===
+            // === 5. Update molecule headings ===
             this.Heading = toDegrees(Math.atan2(newAy, newAx));
             other.Heading = toDegrees(Math.atan2(newBy, newBx));
 
-            // === 6. Ήπια ώθηση για απομάκρυνση ===
-            double pushDist = 1.4; // Απόσταση ώθησης
+            // === 6. Gentle push to separate molecules ===
+            double pushDist = 1.4; // Push distance
             this.setXY(this.getX() + newAx * pushDist, this.getY() + newAy * pushDist);
             other.setXY(other.getX() + newBx * pushDist, other.getY() + newBy * pushDist);
 
-            // === 7. Αν είναι υπερβολικά κοντά, τυχαία μικρή μετατόπιση επιπλέον ===
+            // === 7. If extremely close, apply additional small random displacement ===
             if (dist < 1.2) {
                 double randAngle1 = uniform(0, 360);
                 double randAngle2 = randAngle1 + 180;
