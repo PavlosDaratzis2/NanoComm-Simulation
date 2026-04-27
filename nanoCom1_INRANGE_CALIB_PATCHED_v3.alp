@@ -9133,142 +9133,95 @@ moveTo(newX, newY);
 					<PresentationFlag>true</PresentationFlag>
 					<ShowLabel>true</ShowLabel>
 					<Body><![CDATA[/**
- * Detects and handles elastic collisions between molecules.
- * Includes:
- * 1. Finding nearby molecules via spatial grid for improved performance.
- * 2. Computing distance and angle between molecules to detect collisions.
- * 3. Elastic heading change ±phi/2 based on bisector, or random push to avoid ping-pong.
- * 4. Updating headings and displacing molecules.
+ * Elastic collision detection and response (equal masses).
+ * Uses collision normal, conserves momentum and kinetic energy.
  */
 
-if (main.collisionsEnabled) { // Check if collision handling is enabled
+if (!main.collisionsEnabled) return;
 
-    // === 1. Get nearby molecules from the spatial grid ===
-    ArrayList<Information_Molecules> nearby = new ArrayList<>(); // List of nearby molecules
+// === 1. Get nearby molecules from spatial grid ===
+ArrayList<Information_Molecules> nearby = new ArrayList<>();
+int myCol = (int) ((getX() - main.minX) / main.gridSize);
+int myRow = (int) ((getY() - main.minY) / main.gridSize);
 
-    // Compute the grid cell (column and row) of this molecule
-    int myCol = (int) ((getX() - main.minX) / main.gridSize);
-    int myRow = (int) ((getY() - main.minY) / main.gridSize);
-
-    // Check neighboring cells (3x3 area around the molecule)
-    for (int dx = -1; dx <= 1; dx++) {
-        for (int dy = -1; dy <= 1; dy++) {
-            int col = myCol + dx; // Column to check
-            int row = myRow + dy; // Row to check
-
-            // Check that the cell is within grid bounds
-            if (col >= 0 && col < main.cols && row >= 0 && row < main.rows) {
-                ArrayList<Information_Molecules> cell = main.spatialGrid[col][row]; // Get molecules in this cell
-                if (cell != null)
-                    nearby.addAll(cell); // Add all molecules from this cell to nearby list
-            }
+for (int dx = -1; dx <= 1; dx++) {
+    for (int dy = -1; dy <= 1; dy++) {
+        int col = myCol + dx;
+        int row = myRow + dy;
+        if (col >= 0 && col < main.cols && row >= 0 && row < main.rows) {
+            ArrayList<Information_Molecules> cell = main.spatialGrid[col][row];
+            if (cell != null) nearby.addAll(cell);
         }
     }
+}
 
-    // === 2. Check for collisions with nearby molecules ===
-    for (Information_Molecules other : nearby) {
-        if (other == this) continue; // Skip self
+double collisionRadius = 4.5;
+double now = time();
 
-        // Compute coordinate difference between the two molecules
-        double dx = this.getX() - other.getX();
-        double dy = this.getY() - other.getY();
-        double distSquared = dx * dx + dy * dy; // Squared distance (avoids sqrt)
+// === 2. Check for collisions ===
+for (Information_Molecules other : nearby) {
+    if (other == this) continue;
+    
+    // Skip if we already processed this pair recently
+    if (other == lastCollisionPartner && (now - lastCollisionTime) < main.modelDt * 1.5) continue;
 
-        // If distance is less than 4.5, consider it a collision
-        if (distSquared < 4.5 * 4.5) {
-            main.totalCollisions++; // Increment total collision counter
+    double dx = other.getX() - this.getX();
+    double dy = other.getY() - this.getY();
+    double distSq = dx * dx + dy * dy;
 
-            double dist = Math.sqrt(distSquared); // Distance
-            if (dist == 0) dist = 0.01; // Guard against division by zero
+    if (distSq >= collisionRadius * collisionRadius) continue;
+    if (distSq < 0.001) distSq = 0.001; // avoid div by zero
 
-            // Unit direction vectors (collision normals)
-            double nx = dx / dist;
-            double ny = dy / dist;
+    double dist = Math.sqrt(distSq);
 
-            // Velocity vectors based on Heading
-            double vAx = Math.cos(toRadians(this.Heading));
-            double vAy = Math.sin(toRadians(this.Heading));
-            double vBx = Math.cos(toRadians(other.Heading));
-            double vBy = Math.sin(toRadians(other.Heading));
+    // === 3. Collision normal (from this to other) ===
+    double nx = dx / dist;
+    double ny = dy / dist;
 
-            // Dot product to compute angle phi
-            double dotProduct = vAx * vBx + vAy * vBy;
-            double magA = Math.sqrt(vAx * vAx + vAy * vAy); // Magnitude of velocity for this
-            double magB = Math.sqrt(vBx * vBx + vBy * vBy); // Magnitude of velocity for other
-            if (magA == 0 || magB == 0) continue; // Skip stationary molecules
+    // === 4. Velocity vectors ===
+    double vAx = this.speed * Math.cos(toRadians(this.Heading));
+    double vAy = this.speed * Math.sin(toRadians(this.Heading));
+    double vBx = other.speed * Math.cos(toRadians(other.Heading));
+    double vBy = other.speed * Math.sin(toRadians(other.Heading));
 
-            double anglePhiRad = Math.acos(dotProduct / (magA * magB)); // Angle phi in radians
-            double anglePhiDeg = toDegrees(anglePhiRad); // phi in degrees
+    // === 5. Relative velocity along collision normal ===
+    double dvx = vAx - vBx;
+    double dvy = vAy - vBy;
+    double dvn = dvx * nx + dvy * ny;
 
-            // === 3. If phi < 30°, avoid ping-pong with a random push ===
-            if (anglePhiDeg < 30) {
-                double randAngle1 = uniform(0, 360); // Random angle for first molecule
-                double randAngle2 = randAngle1 + 180; // Opposite direction for second molecule
-                double randPush = 1.0; // Push distance
+    // If molecules are separating, skip
+    if (dvn <= 0) continue;
 
-                // Apply displacement
-                this.setXY(
-                    this.getX() + randPush * Math.cos(toRadians(randAngle1)),
-                    this.getY() + randPush * Math.sin(toRadians(randAngle1))
-                );
-                other.setXY(
-                    other.getX() + randPush * Math.cos(toRadians(randAngle2)),
-                    other.getY() + randPush * Math.sin(toRadians(randAngle2))
-                );
+    // === 6. Apply elastic collision (equal masses) ===
+    // Each molecule exchanges velocity component along normal
+    double vAx_new = vAx - dvn * nx;
+    double vAy_new = vAy - dvn * ny;
+    double vBx_new = vBx + dvn * nx;
+    double vBy_new = vBy + dvn * ny;
 
-                // New random headings to avoid repeated collisions
-                this.Heading = uniform(0, 360);
-                other.Heading = uniform(0, 360);
-                continue; // Move to next pair
-            }
+    // === 7. Update headings ===
+    this.Heading = toDegrees(Math.atan2(vAy_new, vAx_new));
+    other.Heading = toDegrees(Math.atan2(vBy_new, vBx_new));
 
-            // === 4. Compute bisector of angle phi ===
-            double mx = vAx + vBx; // Sum of x-components
-            double my = vAy + vBy; // Sum of y-components
-            double magM = Math.sqrt(mx * mx + my * my);
-            if (magM == 0) { // Molecules moving in exactly opposite directions
-                mx = -ny; my = nx; // Artificial perpendicular bisector
-                magM = Math.sqrt(mx * mx + my * my);
-            }
-            double bisectorX = mx / magM;
-            double bisectorY = my / magM;
+    // === 8. Update speeds (for unequal initial speeds) ===
+    this.speed = Math.sqrt(vAx_new * vAx_new + vAy_new * vAy_new);
+    other.speed = Math.sqrt(vBx_new * vBx_new + vBy_new * vBy_new);
 
-            // Rotate ±phi/2 around the bisector
-            double angleOffset = anglePhiRad / 2;
-
-            // New vector for first molecule (rotate -phi/2)
-            double newAx = Math.cos(angleOffset) * bisectorX - Math.sin(angleOffset) * bisectorY;
-            double newAy = Math.sin(angleOffset) * bisectorX + Math.cos(angleOffset) * bisectorY;
-
-            // New vector for second molecule (rotate +phi/2)
-            double newBx = Math.cos(-angleOffset) * bisectorX - Math.sin(-angleOffset) * bisectorY;
-            double newBy = Math.sin(-angleOffset) * bisectorX + Math.cos(-angleOffset) * bisectorY;
-
-            // === 5. Update molecule headings ===
-            this.Heading = toDegrees(Math.atan2(newAy, newAx));
-            other.Heading = toDegrees(Math.atan2(newBy, newBx));
-
-            // === 6. Gentle push to separate molecules ===
-            double pushDist = 1.4; // Push distance
-            this.setXY(this.getX() + newAx * pushDist, this.getY() + newAy * pushDist);
-            other.setXY(other.getX() + newBx * pushDist, other.getY() + newBy * pushDist);
-
-            // === 7. If extremely close, apply additional small random displacement ===
-            if (dist < 1.2) {
-                double randAngle1 = uniform(0, 360);
-                double randAngle2 = randAngle1 + 180;
-
-                this.setXY(
-                    this.getX() + 0.5 * Math.cos(toRadians(randAngle1)),
-                    this.getY() + 0.5 * Math.sin(toRadians(randAngle1))
-                );
-                other.setXY(
-                    other.getX() + 0.5 * Math.cos(toRadians(randAngle2)),
-                    other.getY() + 0.5 * Math.sin(toRadians(randAngle2))
-                );
-            }
-        }
+    // === 9. Separate overlapping molecules ===
+    double overlap = collisionRadius - dist;
+    if (overlap > 0) {
+        double sep = overlap / 2 + 0.5;
+        this.setXY(this.getX() - sep * nx, this.getY() - sep * ny);
+        other.setXY(other.getX() + sep * nx, other.getY() + sep * ny);
     }
+
+    // === 10. Mark collision to prevent double-processing ===
+    this.lastCollisionPartner = other;
+    this.lastCollisionTime = now;
+    other.lastCollisionPartner = this;
+    other.lastCollisionTime = now;
+
+    main.totalCollisions++;
 }]]></Body>
 				</Function>
 			</Functions>
@@ -9412,7 +9365,7 @@ if (main.collisionsEnabled) { // Check if collision handling is enabled
 			<Name><![CDATA[Simulation]]></Name>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
 			<MaximumMemory>512</MaximumMemory>
-			<RandomNumberGenerationType>fixedSeed</RandomNumberGenerationType>
+			<RandomNumberGenerationType>randomSeed</RandomNumberGenerationType>
 			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
 			<SeedValue>1</SeedValue>
 			<SelectionModeForSimultaneousEvents>LIFO</SelectionModeForSimultaneousEvents>
