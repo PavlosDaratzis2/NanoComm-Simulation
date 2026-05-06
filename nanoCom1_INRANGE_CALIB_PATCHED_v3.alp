@@ -40,11 +40,28 @@ for (int s = 0; s < S; s++) {
 // (3) Start of time window
 tWindowStart = time();
 
-// (4) Open writer
+// (4) Build unique filename: <shape>_<timestamp>.csv  inside the shape subfolder
+java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss");
+String timestamp = sdf.format(new java.util.Date());
+
+// Absolute base path — folder where the .alp project file lives
+String basePath = "/Users/pavlosdaratzis/Desktop/Nanocomm-final";
+
+// Derive shape name and subfolder automatically from absorptionShapeId
+// (0 = circle, 1 = box, 2 = triangle) — no need to set manually
+String subFolder;
+if (absorptionShapeId == 0)      { simShape = "circle";   subFolder = "cicle_csv";    }
+else if (absorptionShapeId == 2) { simShape = "triangle"; subFolder = "triangle_csv"; }
+else                             { simShape = "box";      subFolder = "rectagle_csv"; } // 1 = box (default)
+
+String fname = basePath + "/" + subFolder + "/" + simShape + "_" + timestamp + ".csv";
+csvFile = new java.io.File(fname);
+
+// (5) Open writer
 try {
     csvOut = new java.io.PrintWriter(
         new java.io.BufferedWriter(
-            new java.io.FileWriter(csvFile, false) // overwrite
+            new java.io.FileWriter(csvFile, false) // false = new file every run
         )
     );
 
@@ -80,7 +97,9 @@ for (int s = 0; s < S; s++) {
 footer += "," + grandTotal; // last column: overall total
 
 csvOut.println(footer);
-csvOut.flush();]]></DestroyCode>
+csvOut.flush();
+csvOut.close(); // flush buffer and release file handle
+csvOut = null;]]></DestroyCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1741955706135</Id>
@@ -1180,7 +1199,22 @@ csvOut.flush();]]></DestroyCode>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[java.io.File]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[new java.io.File("sector_counts_dt.csv")]]></Code>
+							<Code><![CDATA[null]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1769112838779</Id>
+					<Name><![CDATA[simShape]]></Name>
+					<X>-570</X><Y>1480</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[String]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA["circle"]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -1270,7 +1304,7 @@ csvOut.flush();]]></DestroyCode>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[2]]></Code>
+							<Code><![CDATA[1]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -6810,7 +6844,47 @@ traceln("[TRI] absorbR=" + absorbR
   + " A=" + A
   + " triSide=" + triSide
   + " triHeight=" + triHeight
-  + " triSearchR=" + triSearchR);]]></StartupCode>
+  + " triSearchR=" + triSearchR);
+
+// =========================================
+// DYNAMIC SHAPE VISIBILITY based on absorptionShapeId
+// Create shapes named: shapeCircle, shapeSquare, shapeTriangle
+// =========================================
+try {
+    int shapeId = main.absorptionShapeId;
+    
+    // Circle (Oval)
+    if (shapeCircle != null) {
+        shapeCircle.setVisible(shapeId == 0);
+        if (shapeId == 0) {
+            shapeCircle.setRadiusX(absorbR);
+            shapeCircle.setRadiusY(absorbR);
+        }
+    }
+    
+    // Diamond / Rhombus (Polyline, tip toward transmitter +X)
+    if (shapeSquare != null) {
+        shapeSquare.setVisible(shapeId == 1);
+        if (shapeId == 1) {
+            double r = squareHalfSide * Math.sqrt(2.0); // half-diagonal
+            shapeSquare.setX(r);
+            shapeSquare.setY(0);
+            shapeSquare.setPoint(0,      0,  0);   // right tip (toward transmitter)
+            shapeSquare.setPoint(1,     -r,  r);   // bottom
+            shapeSquare.setPoint(2, -2 * r,  0);   // left tip
+            shapeSquare.setPoint(3,     -r, -r);   // top
+        }
+    }
+    
+    // Triangle (Polyline)
+    if (shapeTriangle != null) {
+        shapeTriangle.setVisible(shapeId == 2);
+    }
+    
+    traceln("[SHAPE] Active shape ID = " + shapeId);
+} catch (Exception e) {
+    traceln("[SHAPE] Warning: Shape visibility setup skipped - shapes not found");
+}]]></StartupCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1741955927182</Id>
@@ -7923,9 +7997,11 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
         return (dx*dx + dy*dy) <= (absorbR*absorbR);
     }
 
-    // 1) SQUARE (centered)
+    // 1) DIAMOND / RHOMBUS (square rotated 45°, tip pointing toward transmitter at +X)
+    // L1-norm check: |dx| + |dy| <= half-diagonal (= squareHalfSide * sqrt(2))
+    // This gives the same area as the original square
     if (id == 1) {
-        return Math.abs(dx) <= squareHalfSide && Math.abs(dy) <= squareHalfSide;
+        return Math.abs(dx) + Math.abs(dy) <= squareHalfSide * Math.sqrt(2.0);
     }
 
     // 2) TRIANGLE (centered, tip to +X)
@@ -8466,9 +8542,61 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 			</Presentation>
 
 				</Group>
+				<Oval>
+					<Id>1900000000001</Id>
+					<Name><![CDATA[shapeCircle]]></Name>
+					<X>0</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16776961</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<RadiusX>40</RadiusX>
+					<RadiusY>40</RadiusY>
+					<Rotation>0.0</Rotation>
+					<FillColor>855638271</FillColor>
+					<FillMaterial>null</FillMaterial>
+				</Oval>
+				<Polyline>
+					<Id>1900000000002</Id>
+					<Name><![CDATA[shapeSquare]]></Name>
+					<X>50.2</X><Y>0</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>true</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>false</ShowLabel>
+					<DrawMode>SHAPE_DRAW_2D3D</DrawMode>
+					<EmbeddedIcon>false</EmbeddedIcon>
+					<Z>0</Z>
+					<ZHeight>10</ZHeight>
+					<LineWidth>2</LineWidth>
+					<LineColor>-16744448</LineColor>
+					<LineMaterial>null</LineMaterial>
+					<LineStyle>SOLID</LineStyle>
+					<BeginArrowSize>1</BeginArrowSize>
+					<BeginArrowStyle>0</BeginArrowStyle>
+					<EndArrowSize>1</EndArrowSize>
+					<EndArrowStyle>0</EndArrowStyle>
+					<FillColor>855625983</FillColor>
+					<FillMaterial>null</FillMaterial>
+					<Points>
+					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-50.2</X><Y>50.2</Y><Z>0</Z></Point>
+					   <Point><X>-100.4</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-50.2</X><Y>-50.2</Y><Z>0</Z></Point>
+					</Points>
+					<Closed>true</Closed>
+				</Polyline>
 				<Polyline>
 					<Id>1769606992398</Id>
-					<Name><![CDATA[polyline]]></Name>
+					<Name><![CDATA[shapeTriangle]]></Name>
 					<X>-31.1024</X><Y>-53.87</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
