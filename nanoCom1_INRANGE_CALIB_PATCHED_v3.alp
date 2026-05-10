@@ -79,27 +79,48 @@ try {
 }
 
 traceln("CSV path = " + csvFile.getAbsolutePath());]]></StartupCode>
-			<DestroyCode><![CDATA[if (csvOut == null) return;
-if (sumType0_all == null) return;
-
-int S = sumType0_all.length;
-
-int grandTotal = 0;
-
-// TOTAL in tStart column, empty tEnd column, then sectors
-String footer = "TOTAL,"; // leaves tEnd empty
-
-for (int s = 0; s < S; s++) {
-    footer += "," + sumType0_all[s];
-    grandTotal += sumType0_all[s];
+			<DestroyCode><![CDATA[// ── Write TOTAL row to CSV (only if CSV was opened successfully) ──────────
+if (csvOut != null && sumType0_all != null) {
+    int S = sumType0_all.length;
+    int grandTotal = 0;
+    String footer = "TOTAL,";
+    for (int s = 0; s < S; s++) {
+        footer += "," + sumType0_all[s];
+        grandTotal += sumType0_all[s];
+    }
+    footer += "," + grandTotal;
+    csvOut.println(footer);
+    csvOut.flush();
+    csvOut.close();
+    csvOut = null;
 }
 
-footer += "," + grandTotal; // last column: overall total
+// ── Auto-restart: ALWAYS runs, regardless of CSV state ───────────────────
+int _runsDone = Integer.parseInt(
+    System.getProperty("nanocom.runsDone", "0")) + 1;
+System.setProperty("nanocom.runsDone", String.valueOf(_runsDone));
 
-csvOut.println(footer);
-csvOut.flush();
-csvOut.close(); // flush buffer and release file handle
-csvOut = null;]]></DestroyCode>
+traceln(">>> Run " + _runsDone + " of " + totalRuns + " complete — CSV saved.");
+
+if (_runsDone < totalRuns) {
+    final com.anylogic.engine.Experiment _exp = getEngine().getExperiment();
+    Thread _restartThread = new Thread(new Runnable() {
+        public void run() {
+            try { Thread.sleep(1200); } catch (InterruptedException e) {}
+            // Run on the Swing EDT so the UI resets properly
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    _exp.run();
+                }
+            });
+        }
+    });
+    _restartThread.setDaemon(true);
+    _restartThread.start();
+} else {
+    System.setProperty("nanocom.runsDone", "0");
+    traceln("=== ALL " + totalRuns + " RUNS COMPLETE. Batch finished. ===");
+}]]></DestroyCode>
 			<Generic>false</Generic>
 			<GenericParameter>
 				<Id>1741955706135</Id>
@@ -1219,6 +1240,21 @@ csvOut = null;]]></DestroyCode>
 					</Properties>
 				</Variable>
 				<Variable Class="PlainVariable">
+					<Id>1769113117398</Id>
+					<Name><![CDATA[totalRuns]]></Name>
+					<X>-570</X><Y>1455</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[int]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA[15]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
 					<Id>1769113117397</Id>
 					<Name><![CDATA[dtExport]]></Name>
 					<X>-570</X><Y>1540</Y>
@@ -1304,7 +1340,7 @@ csvOut = null;]]></DestroyCode>
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[1]]></Code>
+							<Code><![CDATA[2]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -1451,8 +1487,13 @@ for (Information_Molecules m : information_Moleculeses) {
 // ---- 0) Track current run N dynamically ----
 if (currentNtx0 <= 0) currentNtx0 = -1;
 
-// ---- 1) Raw signal: molecules in range (integer) ----
-int yRaw = rEceiver_BioNanomachine.reportMoleculesA(); // raw integer count
+// ---- 1) Raw signal: molecules absorbed this tick (integer) ----
+// NOTE: reportMoleculesA() counted molecules still present in the zone.
+// Since absorbed molecules are now removed immediately from the simulation,
+// that function always returns 0. We use absorbedMoleculesSinceLastReportA
+// instead, which is updated by the receiver event every tick and counts
+// how many molecules were actually absorbed (regardless of removal).
+int yRaw = rEceiver_BioNanomachine.absorbedMoleculesSinceLastReportA;
 winAbs0 = (double) yRaw;                               // store raw as double
 
 // ---- 1b) EWMA smoothing (gives fractional values like 11.66) ----
@@ -6819,29 +6860,25 @@ countType0_dt = new int[numSectors];
 // --- absorption geometry initialization ---
 absorbR = inRangeRadiusPx;   // same R as before (e.g. 40 px)
 
-// Square with SAME AREA as circle of radius R:
-// Area(circle)=pi*R^2, Area(square)=side^2 => side=R*sqrt(pi)
-squareHalfSide = 0.5 * absorbR * Math.sqrt(Math.PI);
+// Diamond with SAME PERIMETER as circle (P = 2*pi*R):
+// Perimeter(diamond) = 8 * squareHalfSide = 2*pi*R
+// => squareHalfSide = pi*R/4
+squareHalfSide = absorbR * Math.PI / 4.0;
 
-// Candidate radius that surely contains the whole square:
-// half diagonal = halfSide*sqrt(2)
+// Candidate search radius = half-diagonal of diamond
 squareSearchR = squareHalfSide * Math.sqrt(2.0);
 // =========================================
-// Equilateral Triangle with SAME AREA as circle of radius absorbR
-// Area(circle) = pi * R^2
-// Area(triangle) = (sqrt(3)/4) * s^2
-// => s = sqrt( 4A / sqrt(3) )
+// Equilateral Triangle with SAME PERIMETER as circle (P = 2*pi*R):
+// Perimeter(triangle) = 3 * triSide = 2*pi*R
+// => triSide = 2*pi*R/3
 // =========================================
-double A = Math.PI * absorbR * absorbR;
-
-triSide   = Math.sqrt( (4.0 * A) / Math.sqrt(3.0) );
+triSide   = 2.0 * Math.PI * absorbR / 3.0;
 triHeight = (Math.sqrt(3.0) / 2.0) * triSide;
 
 // Candidate radius for triangle (distance from centroid to vertex)
 // For equilateral triangle: Rcircum = s / sqrt(3)
 triSearchR = triSide / Math.sqrt(3.0);
 traceln("[TRI] absorbR=" + absorbR
-  + " A=" + A
   + " triSide=" + triSide
   + " triHeight=" + triHeight
   + " triSearchR=" + triSearchR);
@@ -6876,9 +6913,20 @@ try {
         }
     }
     
-    // Triangle (Polyline)
+    // Triangle (Polyline) — update vertices dynamically
     if (shapeTriangle != null) {
         shapeTriangle.setVisible(shapeId == 2);
+        if (shapeId == 2) {
+            double s = triSide;
+            double h = triHeight;
+            double Rc = triSearchR; // circumradius = s/sqrt(3)
+            // Anchor at vertex A = (-Rc/2, -s/2), tip C at +X
+            shapeTriangle.setX(-Rc / 2.0);
+            shapeTriangle.setY(-s  / 2.0);
+            shapeTriangle.setPoint(0,  0,       0      ); // A (left-top)
+            shapeTriangle.setPoint(1,  0,       s      ); // B (left-bottom)
+            shapeTriangle.setPoint(2,  h,       s / 2.0); // C (tip, +X)
+        }
     }
     
     traceln("[SHAPE] Active shape ID = " + shapeId);
@@ -7552,6 +7600,7 @@ for (Information_Molecules x : nearbyMolecules) {
 
 // === 2) ABSORB MOLECULES ===
 List<Information_Molecules> absorbedMoleculesA = new ArrayList<>();
+List<Information_Molecules> toRemove = new ArrayList<>(); // for immediate removal
 
 for (Information_Molecules m : nearbyMolecules) {
 
@@ -7563,9 +7612,10 @@ for (Information_Molecules m : nearbyMolecules) {
     // 2.1 Capacity: based ONLY on DATA molecules
     if (!m.absorbed && !m.remove && dataNearbyCount <= main.receptorSize) {
 
-        // 2.2 Absorb molecule
+        // 2.2 Absorb molecule — mark for removal
         m.stop();
         m.set_absorbed(true);
+        toRemove.add(m);
 
         // 2.3 Compute angle & sector (AnyLogic inverted Y)
         double angle   = atan2(-(m.getY() - getY()), m.getX() - getX());
@@ -7641,6 +7691,11 @@ if (main.passedThresholdA && main.passeddownThresholdA) {
     // main.NUMBER_OF_MESSAGES_RECEIVED++;
     main.passedThresholdA = false;
     main.passeddownThresholdA = false;
+}
+
+// === 5) REMOVE absorbed molecules from simulation ===
+for (Information_Molecules m : toRemove) {
+    main.remove_information_Moleculeses(m);
 }
 
 
@@ -8567,7 +8622,7 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 				<Polyline>
 					<Id>1900000000002</Id>
 					<Name><![CDATA[shapeSquare]]></Name>
-					<X>50.2</X><Y>0</Y>
+					<X>44.4288</X><Y>0</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8588,16 +8643,16 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 					<FillMaterial>null</FillMaterial>
 					<Points>
 					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
-					   <Point><X>-50.2</X><Y>50.2</Y><Z>0</Z></Point>
-					   <Point><X>-100.4</X><Y>0</Y><Z>0</Z></Point>
-					   <Point><X>-50.2</X><Y>-50.2</Y><Z>0</Z></Point>
+					   <Point><X>-44.4288</X><Y>44.4288</Y><Z>0</Z></Point>
+					   <Point><X>-88.8577</X><Y>0</Y><Z>0</Z></Point>
+					   <Point><X>-44.4288</X><Y>-44.4288</Y><Z>0</Z></Point>
 					</Points>
 					<Closed>true</Closed>
 				</Polyline>
 				<Polyline>
 					<Id>1769606992398</Id>
 					<Name><![CDATA[shapeTriangle]]></Name>
-					<X>-31.1024</X><Y>-53.87</Y>
+					<X>-24.1840</X><Y>-41.8879</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8618,8 +8673,8 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 					<FillMaterial>null</FillMaterial>
 					<Points>
 					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
-					   <Point><X>0</X><Y>107.74</Y><Z>0</Z></Point>
-					   <Point><X>93.3</X><Y>53.87</Y><Z>0</Z></Point>
+					   <Point><X>0</X><Y>83.7758</Y><Z>0</Z></Point>
+					   <Point><X>72.5520</X><Y>41.8879</Y><Z>0</Z></Point>
 					</Points>
 					<Closed>true</Closed>
 				</Polyline>
@@ -9492,7 +9547,7 @@ for (Information_Molecules other : nearby) {
 			<Id>1741955706138</Id>
 			<Name><![CDATA[Simulation]]></Name>
 			<CommandLineArguments><![CDATA[]]></CommandLineArguments>
-			<MaximumMemory>512</MaximumMemory>
+			<MaximumMemory>8192</MaximumMemory>
 			<RandomNumberGenerationType>randomSeed</RandomNumberGenerationType>
 			<CustomGeneratorCode>new Random()</CustomGeneratorCode>
 			<SeedValue>1</SeedValue>
@@ -9528,14 +9583,14 @@ for (Information_Molecules other : nearby) {
 			</Parameters>
 			<PresentationProperties>
 				<EnableZoomAndPanning>true</EnableZoomAndPanning>
-				<ExecutionMode><![CDATA[realTimeScaled]]></ExecutionMode>
+				<ExecutionMode><![CDATA[virtualTime]]></ExecutionMode>
 				<Title><![CDATA[Biological_Nanonetworks_25 : Simulation]]></Title>
 				<EnableDeveloperPanel>true</EnableDeveloperPanel>
 				<ShowDeveloperPanelOnStart>false</ShowDeveloperPanelOnStart>
 				<RealTimeScale>1.0</RealTimeScale>
 			</PresentationProperties>
 			<ModelTimeProperties>
-				<StopOption><![CDATA[Never]]></StopOption>
+				<StopOption><![CDATA[Stop at specified time]]></StopOption>
 				<InitialDate><![CDATA[1741910400000]]></InitialDate>
 				<InitialTime><![CDATA[0.0]]></InitialTime>
 				<FinalDate><![CDATA[1744588800000]]></FinalDate>
