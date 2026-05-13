@@ -57,7 +57,10 @@ else                             { simShape = "box";      subFolder = "rectagle_
 String fname = basePath + "/" + subFolder + "/" + simShape + "_" + timestamp + ".csv";
 csvFile = new java.io.File(fname);
 
-// (5) Open writer
+// (5) Δημιουργία φακέλου αν δεν υπάρχει
+csvFile.getParentFile().mkdirs();
+
+// (6) Open writer
 try {
     csvOut = new java.io.PrintWriter(
         new java.io.BufferedWriter(
@@ -95,31 +98,38 @@ if (csvOut != null && sumType0_all != null) {
     csvOut = null;
 }
 
-// ── Auto-restart: ALWAYS runs, regardless of CSV state ───────────────────
+// ── Auto-restart ──────────────────────────────────────────────────────────
 int _runsDone = Integer.parseInt(
     System.getProperty("nanocom.runsDone", "0")) + 1;
 System.setProperty("nanocom.runsDone", String.valueOf(_runsDone));
 
-traceln(">>> Run " + _runsDone + " of " + totalRuns + " complete — CSV saved.");
+traceln(">>> Run " + _runsDone + " / " + totalRuns + " complete.");
 
 if (_runsDone < totalRuns) {
     final com.anylogic.engine.Experiment _exp = getEngine().getExperiment();
     Thread _restartThread = new Thread(new Runnable() {
         public void run() {
-            try { Thread.sleep(1200); } catch (InterruptedException e) {}
-            // Run on the Swing EDT so the UI resets properly
-            javax.swing.SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    _exp.run();
-                }
-            });
+            try {
+                // Wait for the engine to fully finish shutdown before restarting.
+                // 4 seconds is conservative but reliable.
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {}
+
+            // Call run() directly from this background thread.
+            // AnyLogic's run() marshals to EDT internally — calling invokeLater
+            // on top of it caused the "no animation" issue in previous attempts.
+            try {
+                _exp.run();
+            } catch (Exception e) {
+                traceln("Auto-restart error: " + e);
+            }
         }
     });
     _restartThread.setDaemon(true);
     _restartThread.start();
 } else {
     System.setProperty("nanocom.runsDone", "0");
-    traceln("=== ALL " + totalRuns + " RUNS COMPLETE. Batch finished. ===");
+    traceln("=== ALL " + totalRuns + " RUNS COMPLETE. ===");
 }]]></DestroyCode>
 			<Generic>false</Generic>
 			<GenericParameter>
@@ -1250,7 +1260,7 @@ if (_runsDone < totalRuns) {
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[15]]></Code>
+							<Code><![CDATA[20]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -1340,7 +1350,22 @@ if (_runsDone < totalRuns) {
 					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
 						<Type><![CDATA[int]]></Type>        
 						<InitialValue Class="CodeValue">
-							<Code><![CDATA[2]]></Code>
+							<Code><![CDATA[1]]></Code>
+						</InitialValue>
+					</Properties>
+				</Variable>
+				<Variable Class="PlainVariable">
+					<Id>1799000000001</Id>
+					<Name><![CDATA[sectorMode]]></Name>
+					<X>240</X><Y>255</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Properties SaveInSnapshot="true" Constant="false" AccessType="public" StaticVariable="false">
+						<Type><![CDATA[String]]></Type>        
+						<InitialValue Class="CodeValue">
+							<Code><![CDATA["arclength"]]></Code>
 						</InitialValue>
 					</Properties>
 				</Variable>
@@ -8106,6 +8131,129 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
     // default fallback
     return absorbR;]]></Body>
 				</Function>
+				<Function AccessType="default" StaticFunction="false">
+					<ReturnModificator>RETURNS_VALUE</ReturnModificator>
+					<ReturnType><![CDATA[int]]></ReturnType>
+					<Id>1799000000002</Id>
+					<Name><![CDATA[computeArcLengthSector]]></Name>
+					<X>-40</X><Y>-290</Y>
+					<Label><X>10</X><Y>0</Y></Label>
+					<PublicFlag>false</PublicFlag>
+					<PresentationFlag>true</PresentationFlag>
+					<ShowLabel>true</ShowLabel>
+					<Parameter>
+						<Name><![CDATA[mx_rel]]></Name>
+						<Type><![CDATA[double]]></Type>
+					</Parameter>
+					<Parameter>
+						<Name><![CDATA[my_rel]]></Name>
+						<Type><![CDATA[double]]></Type>
+					</Parameter>
+					<Body><![CDATA[
+// ══════════════════════════════════════════════════════════════════════════
+// computeArcLengthSector
+// Κατατάσσει μόριο σε sector βάσει μήκους τόξου CCW από ref-point (+X tip).
+// mx_rel, my_rel : θέση μορίου σε screen-coords σχετικά με κέντρο δέκτη
+// Επιστρέφει: sector index 0..numSectors-1
+// ══════════════════════════════════════════════════════════════════════════
+
+    // Μετατροπή AnyLogic screen-coords (Y↓) → math-coords (Y↑)
+    double mx = mx_rel;
+    double my = -my_rel;
+
+    int    n    = numSectors;                // 20
+    double P    = 2.0 * Math.PI * absorbR;  // ολική περίμετρος ≈ 251.33 px
+    double sLen = P / n;                     // μήκος τόξου ανά sector
+
+    double arcFromRef = 0.0;
+    int    id         = main.absorptionShapeId;
+
+    // ── ΚΥΚΛΟΣ (id=0) ──────────────────────────────────────────────────────────
+    if (id == 0) {
+        // Τόξο = γωνία × R  (αρχή στο +X, κατεύθυνση CCW)
+        double ang = Math.atan2(my, mx);
+        if (ang < 0) ang += 2.0 * Math.PI;
+        arcFromRef = ang * absorbR;
+
+    // ── ΔΙΑΜΑΝΤΙ (id=1) ────────────────────────────────────────────────────────
+    } else if (id == 1) {
+        // Άκρο αναφοράς: (a, 0)  όπου  a = squareSearchR (ημι-διαγώνιος)
+        // Σύνορο: |x|+|y| = a  (τετράγωνο 45°)
+        // Πλευρά = a√2,  περίμετρος = 4a√2 = 2πR
+        double a    = squareSearchR;
+        double sq2  = Math.sqrt(2.0);
+        double side = a * sq2;               // μήκος μιας πλευράς
+
+        // Ακτινική προβολή μορίου στο σύνορο
+        double norm = Math.abs(mx) + Math.abs(my);
+        double xi   = (norm > 1e-9) ? mx * a / norm : a;
+        double yi   = (norm > 1e-9) ? my * a / norm : 0.0;
+
+        // Μήκος τόξου από (a,0) CCW:
+        // Q1 (xi≥0, yi≥0) : (a,0)→(0,a)    arc = yi√2
+        // Q2 (xi≤0, yi≥0) : (0,a)→(-a,0)   arc = side + (−xi)√2
+        // Q3 (xi≤0, yi≤0) : (-a,0)→(0,−a)  arc = 2·side + (−yi)√2
+        // Q4 (xi≥0, yi≤0) : (0,−a)→(a,0)   arc = 3·side + xi√2
+        if      (xi >= 0 && yi >= 0) arcFromRef = yi * sq2;
+        else if (xi <= 0 && yi >= 0) arcFromRef = side + (-xi) * sq2;
+        else if (xi <= 0 && yi <= 0) arcFromRef = 2.0 * side + (-yi) * sq2;
+        else                          arcFromRef = 3.0 * side + xi * sq2;
+
+    // ── ΤΡΙΓΩΝΟ (id=2) ─────────────────────────────────────────────────────────
+    } else {
+        // Ισόπλευρο τρίγωνο, άκρο στο +X (math-coords)
+        // Κορυφές CCW: C=(Rc,0), A=(−Rc/2,s/2), B=(−Rc/2,−s/2)
+        //   Rc = triSearchR (περιγεγραμμένη R = s/√3),  s = triSide
+        // Ακμές: edge0=C→A, edge1=A→B, edge2=B→C (μήκος κάθε ακμής = s)
+        double Rc = triSearchR;
+        double s  = triSide;
+
+        double Cx =  Rc,     Cy =  0.0;
+        double Ax = -Rc/2.0, Ay =  s/2.0;
+        double Bx = -Rc/2.0, By = -s/2.0;
+
+        double[] x0s = { Cx, Ax, Bx };
+        double[] y0s = { Cy, Ay, By };
+        double[] x1s = { Ax, Bx, Cx };
+        double[] y1s = { Ay, By, Cy };
+
+        // Τομή ακτίνας origin→(mx,my) με κάθε ακμή
+        //   Ακτίνα:  P = t·(mx, my),  t > 0
+        //   Τμήμα:   P = (x0,y0) + u·(dvx,dvy),  u ∈ [0,1]
+        //   det = my·dvx − mx·dvy
+        //   t   = (y0·dvx − x0·dvy) / det
+        //   u   = (mx·y0  − my·x0 ) / det
+        // Μήκος τόξου από C: arc = (e + u) · s
+        arcFromRef = 0.0;
+        for (int e = 0; e < 3; e++) {
+            double ex0 = x0s[e], ey0 = y0s[e];
+            double dvx  = x1s[e] - ex0;
+            double dvy  = y1s[e] - ey0;
+            double det  = my * dvx - mx * dvy;
+            if (Math.abs(det) < 1e-12) continue;   // παράλληλη ακτίνα
+
+            double t = (ey0 * dvx - ex0 * dvy) / det;
+            double u = (mx  * ey0 - my  * ex0) / det;
+            if (t < -1e-9 || u < -1e-9 || u > 1.0 + 1e-9) continue;
+
+            arcFromRef = (e + u) * s;
+            break;
+        }
+        // Αν καμία ακμή δεν βρέθηκε (δεν πρέπει να συμβεί):
+        // arcFromRef = 0  →  sector 0 (περιοχή άκρης)
+    }
+
+    // Περιοδικότητα: arcFromRef ∈ [0, P)
+    arcFromRef = arcFromRef % P;
+    if (arcFromRef < 0) arcFromRef += P;
+
+    // Αντιστοίχηση arc-length → sector index
+    int sec = (int)(arcFromRef / sLen);
+    if (sec < 0)  sec = 0;
+    if (sec >= n) sec = n - 1;
+    return sec;
+]]></Body>
+				</Function>
 			</Functions>
 			<AgentLinks>
 				<AgentLink>
@@ -8652,7 +8800,7 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 				<Polyline>
 					<Id>1769606992398</Id>
 					<Name><![CDATA[shapeTriangle]]></Name>
-					<X>-24.1840</X><Y>-41.8879</Y>
+					<X>-24.184</X><Y>-41.8879</Y>
 					<Label><X>10</X><Y>0</Y></Label>
 					<PublicFlag>true</PublicFlag>
 					<PresentationFlag>true</PresentationFlag>
@@ -8674,7 +8822,7 @@ traceln("sendCumulativeFeedback0 DONE created=" + created
 					<Points>
 					   <Point><X>0</X><Y>0</Y><Z>0</Z></Point>
 					   <Point><X>0</X><Y>83.7758</Y><Z>0</Z></Point>
-					   <Point><X>72.5520</X><Y>41.8879</Y><Z>0</Z></Point>
+					   <Point><X>72.552</X><Y>41.8879</Y><Z>0</Z></Point>
 					</Points>
 					<Closed>true</Closed>
 				</Polyline>
